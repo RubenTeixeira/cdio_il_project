@@ -5,15 +5,14 @@
  */
 package persistence;
 
-import java.sql.ResultSet;
-
 /**
  *
  * @author vascopinho
  */
-public interface SQLConnection {
-
-    public ResultSet executeQuery(String query);
-    public boolean closeConnection();
+public interface Settings {
+    String user = "CDIOIL15_17";
+    String password = "qwerty";
+    String url = "gandalf.dei.isep.ipp.pt";
+    String sid = "pdborcl";
     
 }

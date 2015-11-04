@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistence.SQLConnection;
 
-public class OracleDb implements SQLConnection {
+public class OracleDb implements SQLConnection, Settings {
 
     private String username;
     private String password;
@@ -45,13 +45,13 @@ public class OracleDb implements SQLConnection {
         } catch (ClassNotFoundException e) {
             System.err.print("ClassNotFoundException: " + e.getMessage());
         } catch (SQLException ex) {
-            Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, "N\u00e3o foi possivel estabelecer liga\u00e7\u00e3o a base de dados", ex);
+            Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, "Não foi possivel estabelecer ligação a base de dados", ex);
         }
     }
 
     public ResultSet executeQuery(String query) {
         if (this.con == null) {
-            throw new IllegalAccessError("Conex\u00e3o inixistente a base de dados!");
+            throw new IllegalAccessError("Conexão inixistente à base de dados!");
         }
         Statement c_st = null;
         try {
@@ -78,6 +78,10 @@ public class OracleDb implements SQLConnection {
 
     public static SQLConnection getInstance(String username, String password, String url, String sid) {
         return new OracleDb(username, password, url, sid);
+    }
+    
+    public static SQLConnection getInstance() {
+        return new OracleDb(Settings.user, Settings.password, Settings.url, Settings.sid);
     }
 
     public static int getPort() {
