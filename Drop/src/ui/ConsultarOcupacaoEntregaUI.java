@@ -28,27 +28,32 @@ public class ConsultarOcupacaoEntregaUI {
         System.out.println(iniciarConsultaEntregasRecolhasDroppoint);
 
         System.out.println("Seleccione id do DropPoint: \n");
-        controller.seleccionarDroppoint(utils.ReadFromKeyboard.read());
+        int droppoint = utils.ReadFromKeyboard.read();
+        controller.seleccionarDroppoint(droppoint);
 
         int op = 0;
 
         do {
-            System.out.println("Seleccione uma das opções: \n"
+            System.out.println("---------DropPoint: " + droppoint + "---------\n"
+                    + "Seleccione uma das opções: \n"
                     + "1. Consultar Entregas\n"
                     + "2. Consultas Recolhas\n"
                     + "3. Consultar Ocupação\n"
-                    + "4. Sair\n");
+                    + "4. Voltar\n");
             op = utils.ReadFromKeyboard.read();
             switch (op) {
                 case 1:
-                    controller.getListaRegistoEntregues();
+                    System.out.println(controller.getListaRegistoEntregues());
+                    utils.ReadFromKeyboard.pressEnter();
                     break;
 
                 case 2:
-                    controller.getListaRegistoRecolhidas();
+                    System.out.println(controller.getListaRegistoRecolhidas());
+                    utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 3:
-                    controller.getOcupacao();
+                    System.out.println(controller.getOcupacao());
+                    utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 4:
                     break;

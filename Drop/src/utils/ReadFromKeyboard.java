@@ -18,5 +18,11 @@ public class ReadFromKeyboard {
     public static int read() {
         return in.nextInt();
     }
+    
+    public static void pressEnter(){
+        System.out.println("Carregue ENTER para continuar");
+        in.nextLine();
+        in.nextLine();
+    }
 
 }

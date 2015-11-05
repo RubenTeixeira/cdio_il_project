@@ -14,20 +14,18 @@ import persistence.SQLConnection;
  *
  * @author vascopinho
  */
-
-
 public class ConsultarOcupacaoEntregasController {
 
     private static SQLConnection con;
     private ResultSet rs;
-    private int idDropPoint ;
+    private int idDropPoint;
     private Gestao gestao;
 
     public ConsultarOcupacaoEntregasController() {
         this.gestao = new Gestao();
     }
-    
-    public List<String> iniciarConsultaEntregasRecolhasDroppoint()  {
+
+    public List<String> iniciarConsultaEntregasRecolhasDroppoint() {
         return gestao.listarDropPoint();
     }
 
@@ -36,15 +34,16 @@ public class ConsultarOcupacaoEntregasController {
     }
 
     public List<String> getListaRegistoEntregues() {
-       return gestao.listarEntregas(this.idDropPoint);
+        return gestao.listarEntregas(this.idDropPoint);
     }
 
     public List<String> getListaRegistoRecolhidas() {
         return gestao.listarRecolhidas(this.idDropPoint);
     }
 
-    public void getOcupacao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getOcupacao() {
+        return gestao.consultarOcupacao(this.idDropPoint);
+        
     }
 
 }
