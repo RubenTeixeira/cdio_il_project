@@ -3,16 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package persistence;
+package utils;
+
+import java.util.Scanner;
 
 /**
  *
  * @author vascopinho
  */
-public interface Settings {
-    String user = "CDIOIL15_03";
-    String password = "qwerty";
-    String url = "gandalf.dei.isep.ipp.pt";
-    String sid = "pdborcl";
-    
+public class ReadFromKeyboard {
+
+    public static Scanner in = new Scanner(System.in);
+
+    public static int read() {
+        return in.nextInt();
+    }
+
 }

@@ -6,7 +6,6 @@
 package ui;
 
 import controller.ConsultarOcupacaoEntregasController;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -14,12 +13,49 @@ import java.util.List;
  * @author vascopinho
  */
 public class ConsultarOcupacaoEntregaUI {
-    
-    public static void main(String[] args) throws SQLException{
-        ConsultarOcupacaoEntregasController consultarOcupacaoEntregasController = new controller.ConsultarOcupacaoEntregasController();
-        List<String> iniciarConsultaEntregasRecolhasDroppoint = consultarOcupacaoEntregasController.iniciarConsultaEntregasRecolhasDroppoint();
-        System.out.println(iniciarConsultaEntregasRecolhasDroppoint);
+
+    private controller.ConsultarOcupacaoEntregasController controller;
+
+    public ConsultarOcupacaoEntregaUI() {
+        controller = new ConsultarOcupacaoEntregasController();
+        run();
     }
-    
-    
+
+    private void run()  {
+       
+        
+        List<String> iniciarConsultaEntregasRecolhasDroppoint = controller.iniciarConsultaEntregasRecolhasDroppoint();
+        System.out.println(iniciarConsultaEntregasRecolhasDroppoint);
+
+        System.out.println("Seleccione id do DropPoint: \n");
+        controller.seleccionarDroppoint(utils.ReadFromKeyboard.read());
+
+        int op = 0;
+
+        do {
+            System.out.println("Seleccione uma das opções: \n"
+                    + "1. Consultar Entregas\n"
+                    + "2. Consultas Recolhas\n"
+                    + "3. Consultar Ocupação\n"
+                    + "4. Sair\n");
+            op = utils.ReadFromKeyboard.read();
+            switch (op) {
+                case 1:
+                    controller.getListaRegistoEntregues();
+                    break;
+
+                case 2:
+                    controller.getListaRegistoRecolhidas();
+                    break;
+                case 3:
+                    controller.getOcupacao();
+                    break;
+                case 4:
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+            }
+        } while (op != 4);
+    }
+
 }

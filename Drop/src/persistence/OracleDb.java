@@ -9,15 +9,14 @@ package persistence;
  *
  * @author vascopinho
  */
-import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.SQLConnection;
 
 public class OracleDb implements SQLConnection, Settings {
 
@@ -30,6 +29,15 @@ public class OracleDb implements SQLConnection, Settings {
     private static String driver = "oracle.jdbc.driver.OracleDriver";
     private static String connector_type = "jdbc:oracle:thin";
 
+    /**
+     * Inicializa a informação necessária para ligar à base de dados. Construtor
+     * com acesso privado. Utilizar getInstance().
+     *
+     * @param username
+     * @param password
+     * @param url
+     * @param sid
+     */
     private OracleDb(String username, String password, String url, String sid) {
         this.username = username;
         this.password = password;
@@ -38,6 +46,9 @@ public class OracleDb implements SQLConnection, Settings {
         this.createConnection();
     }
 
+    /**
+     * Regista o driver a utilizar e cria um objecto do tipo Connection
+     */
     private void createConnection() {
         try {
             Class.forName(driver);
@@ -49,6 +60,12 @@ public class OracleDb implements SQLConnection, Settings {
         }
     }
 
+    /**
+     * Executa um comando SQL retornando o ResultSet do resultado
+     *
+     * @param query
+     * @return
+     */
     public ResultSet executeQuery(String query) {
         if (this.con == null) {
             throw new IllegalAccessError("Conexão inixistente à base de dados!");
@@ -65,6 +82,11 @@ public class OracleDb implements SQLConnection, Settings {
         }
     }
 
+    /**
+     * Termina a ligação
+     *
+     * @return booleano
+     */
     public boolean closeConnection() {
         boolean flag = false;
         try {
@@ -76,22 +98,65 @@ public class OracleDb implements SQLConnection, Settings {
         return flag;
     }
 
+    /**
+     * Retorna nova instância do tipo SQLConnection
+     *
+     * @param username
+     * @param password
+     * @param url
+     * @param sid
+     * @return SQLConnection
+     */
     public static SQLConnection getInstance(String username, String password, String url, String sid) {
         return new OracleDb(username, password, url, sid);
     }
-    
+
+    /**
+     * Retorna nova instância do tipo SQLConnection Informação recolhida da
+     * interface Settings.
+     *
+     * @return SQLConnection
+     */
     public static SQLConnection getInstance() {
         return new OracleDb(Settings.user, Settings.password, Settings.url, Settings.sid);
     }
 
+    /**
+     * Retorna nova instância do tipo SQLConnection. Informação recolhida do
+     * ficheiro settings.txt. Formato do ficheiro: user;password;url;sid
+     *
+     * @param file
+     * @return SQLConnection
+     */
+    public static SQLConnection getInstance(String file) {
+        List<String> readFromFile = utils.ReadAndWriteFile.readFromFile(file);
+
+        return getInstance(readFromFile.get(0), readFromFile.get(1), readFromFile.get(2), readFromFile.get(3));
+    }
+
+    /**
+     * Devolve a porta do firewall utilizada para a conexão. Default: 1521.
+     *
+     * @return
+     */
     public static int getPort() {
         return port;
     }
 
+    /**
+     * Define a porta a usar para a conexão.
+     *
+     * @param port
+     */
     public static void setPort(int port) {
         OracleDb.port = port;
     }
 
+    /**
+     * Permite consultar estado do objecto.
+     *
+     * @return String
+     */
     public String toString() {
         return "OracleDb{username=" + this.username + ", password=" + this.password + ", url=" + this.url + ", sid=" + this.sid + ", con=" + this.con + '}';
     }
