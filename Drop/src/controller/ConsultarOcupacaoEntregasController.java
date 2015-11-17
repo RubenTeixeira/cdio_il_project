@@ -25,7 +25,7 @@ public class ConsultarOcupacaoEntregasController {
         this.gestao = new Gestao();
     }
 
-    public List<String> iniciarConsultaEntregasRecolhasDroppoint() {
+    public String iniciarConsultaEntregasRecolhasDroppoint() {
         return gestao.listarDropPoint();
     }
 
@@ -33,11 +33,11 @@ public class ConsultarOcupacaoEntregasController {
         this.idDropPoint = id;
     }
 
-    public List<String> getListaRegistoEntregues() {
+    public String getListaRegistoEntregues() {
         return gestao.listarEntregas(this.idDropPoint);
     }
 
-    public List<String> getListaRegistoRecolhidas() {
+    public String getListaRegistoRecolhidas() {
         return gestao.listarRecolhidas(this.idDropPoint);
     }
 

@@ -7,7 +7,6 @@ package ui;
 
 import static java.lang.System.exit;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,8 +20,8 @@ public class main {
     static Scanner in = new Scanner(System.in);
     
     public static void main(String[] args) throws SQLException{
-        List<String> readFromFile = utils.ReadAndWriteFile.readFromFile("settings.txt");
-        System.out.println(readFromFile);
+        utils.ReadAndWriteFile.readFromFile("settings.txt");
+        
         int op = 0;
        
         do{

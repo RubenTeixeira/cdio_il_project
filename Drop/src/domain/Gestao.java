@@ -34,22 +34,22 @@ public class Gestao {
      *
      * @return Lista do tipo String dos DropPoints do Sistema
      */
-    public List<String> listarDropPoint() {
+    public String listarDropPoint() {
         ResultSet executeQuery = bd.executeQuery("SELECT DropPoint.idDropPoint, Morada.rua FROM DropPoint INNER JOIN Morada ON Morada.idMorada=DropPoint.idDropPoint");
         List<String> aux = new ArrayList<>();
         try {
-
+            String str = "";
             while (executeQuery.next()) {
-                String temp = "DropPoint ID:" + String.valueOf(executeQuery.getString("idDropPoint"))
+                str += "DropPoint ID:" + String.valueOf(executeQuery.getString("idDropPoint"))
                         + " com morada:" + executeQuery.getString("rua") + "\n";
-                aux.add(temp);
+//                aux.add(temp);
 
             }
             if (aux.isEmpty()) {
                 aux.add("Não Existe.");
             }
 
-            return aux;
+            return str;
 
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +65,7 @@ public class Gestao {
      * @param idDropPoint
      * @return Lista do tipo String das entregas
      */
-    public List<String> listarEntregas(int idDropPoint) {
+    public String listarEntregas(int idDropPoint) {
         List<String> aux = new ArrayList<>();
 
         ResultSet executeQuery = bd.executeQuery("select e.DATAENT, p.idprateleira, e.idtoken "
@@ -74,18 +74,19 @@ public class Gestao {
                 + "   and p.idarmario = a.idarmario"
                 + "   and a.iddroppoint = d.iddroppoint"
                 + "   and d.iddroppoint = " + idDropPoint);
-        try {
-            while (executeQuery.next()) {
-                String str = "";
 
-                str = "Data de entrega: " + executeQuery.getString("dataent") + ". ID prateleira: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+        try {
+            String str = "";
+            while (executeQuery.next()) {
+
+                str += "Data de entrega: " + executeQuery.getString("dataent") + ". ID prateleira: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
                 aux.add(str);
             }
-            if (aux.isEmpty()) {
-                aux.add("Não Existe.");
+            if (str.isEmpty()) {
+                str = "Não Existe.";
             }
 
-            return aux;
+            return str;
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -99,29 +100,29 @@ public class Gestao {
      * @param idDropPoint
      * @return Lista do tipo String das recolhas
      */
-    public List<String> listarRecolhidas(int idDropPoint) {
+    public String listarRecolhidas(int idDropPoint) {
         List<String> aux = new ArrayList<>();
 
         ResultSet executeQuery = bd.executeQuery("select r.DATAREC, p.idprateleira, r.idtoken "
                 + "  from recolha r, entrega e, prateleira p, armario a, droppoint d"
-                + " where r.identrega = e.idtoken"
+                + "  where r.identrega = e.idtoken"
                 + "   and e.idprateleira = p.idprateleira"
                 + "   and p.idarmario = a.idarmario"
                 + "   and a.iddroppoint = d.iddroppoint"
                 + "   and d.iddroppoint = " + idDropPoint);
         try {
+            String str = "";
             while (executeQuery.next()) {
-                String str = "";
 
-                str = "Data de entrega: " + executeQuery.getString("DATAREC") + ". ID prateleira: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
-                aux.add(str);
+                str += "Data de recolha: " + executeQuery.getString("DATAREC") + ". ID prateleira: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+
             }
 
-            if (aux.isEmpty()) {
-                aux.add("Não Existe.");
+            if (str.isEmpty()) {
+                str = "Não Existe.";
             }
 
-            return aux;
+            return str;
 
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
@@ -144,10 +145,10 @@ public class Gestao {
         }
 
         ResultSet executeQuery2 = bd.executeQuery("SELECT COUNT(idPrateleira) FROM (SELECT iddroppoint, idPrateleira FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (idarmario)) USING (idDroppoint)) WHERE iddroppoint =" + idDropPoint + ")"
-                + "INNER JOIN "
-                + "(SELECT idprateleira FROM Prateleira NATURAL JOIN Entrega WHERE idprateleira NOT IN ("
-                + "      SELECT idprateleira FROM\n"
-                + "        Entrega JOIN Recolha ON Entrega.idToken = Recolha.idEntrega)) USING (idprateleira)");
+                + "     INNER JOIN "
+                + "     (SELECT idprateleira FROM Prateleira NATURAL JOIN Entrega WHERE idprateleira NOT IN ("
+                + "     SELECT idprateleira FROM"
+                + "     Entrega JOIN Recolha ON Entrega.idToken = Recolha.idEntrega)) USING (idprateleira)");
         try {
             while (executeQuery2.next()) {
                 String ocupada = "";

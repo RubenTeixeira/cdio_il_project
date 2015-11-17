@@ -24,7 +24,7 @@ public class ConsultarOcupacaoEntregaUI {
     private void run()  {
        
         
-        List<String> iniciarConsultaEntregasRecolhasDroppoint = controller.iniciarConsultaEntregasRecolhasDroppoint();
+        String iniciarConsultaEntregasRecolhasDroppoint = controller.iniciarConsultaEntregasRecolhasDroppoint();
         System.out.println(iniciarConsultaEntregasRecolhasDroppoint);
 
         System.out.println("Seleccione id do DropPoint: \n");
