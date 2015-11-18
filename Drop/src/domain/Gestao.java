@@ -163,15 +163,41 @@ public class Gestao {
 
         return null;
     }
-    
+    /**
+     * Retrieves respective shell from DB in order to deliver or retrieve to/from it
+     * @param token identification token from the user
+     * @return Prateleira
+     */
     public Prateleira procurarPrateleiras(String token) {
         
+        String tipoToken = getTipoToken(token);
+        
+        if (tipoToken.equalsIgnoreCase("cliente"))
+            return getPrateleiraCliente(token);
+        
+        if (tipoToken.equalsIgnoreCase("estafeta"))
+            return getPrateleiraEstafeta(token);
+        
+        return null;
+    }
+    
+    private Prateleira getPrateleiraCliente(String token) {
+        String qry = "A PREENCHER...!!!!!!!";
+        return getPrateleira(qry);
+    }
+    
+    private Prateleira getPrateleiraEstafeta(String token) {
         String qry = "";
-        Prateleira prat = new Prateleira();
+        return getPrateleira(qry);
+    }
+    
+    private Prateleira getPrateleira(String query) {
+        Prateleira prat = null;
         
         try {
-            ResultSet rs = this.bd.executeQuery(qry);
+            ResultSet rs = this.bd.executeQuery(query);
             if (rs.next()) {
+                prat = new Prateleira();
                 prat.setId(rs.getInt("ID_PRATELEIRA"));
                 prat.setDesc(rs.getString("NUMERO_PRATELEIRA"));
             }
@@ -179,7 +205,6 @@ public class Gestao {
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return prat;
     }
     
@@ -192,6 +217,23 @@ public class Gestao {
     public void setDataFecho(int id) {
         String qry = "";
         this.bd.executeQuery(qry);
+    }
+
+    private String getTipoToken(String token) {
+        
+        String qry = "SELECT tt.descricao from "
+                + "token t, tipo_token tt"
+                + "where t.id_tipo_token = tt.id_tipo_token"
+                + "and t.codigo = 'token'";
+        ResultSet rs = this.bd.executeQuery(qry);
+        
+        try {
+            if (rs.next())
+                return rs.getString("descricao");
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }
