@@ -163,5 +163,21 @@ public class Gestao {
 
         return null;
     }
+    
+    public List<String> procurarPrateleiras(String token) {
+        List<String> results = new ArrayList<>();
+        String qry = "";
+        ResultSet rs = this.bd.executeQuery(qry);
+        
+        try {
+            while (rs.next())
+                results.add(rs.getString("ID_PRATELEIRA")+rs.getString("NUMERO_PRATELEIRA"));
+                
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return results;
+    }
 
 }
