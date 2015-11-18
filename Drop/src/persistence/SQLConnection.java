@@ -5,6 +5,7 @@
  */
 package persistence;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 public interface SQLConnection {
 
     public ResultSet executeQuery(String query);
+    public PreparedStatement prepareStatement(String prepare);
     public boolean closeConnection();
     
 }
