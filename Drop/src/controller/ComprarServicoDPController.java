@@ -12,8 +12,8 @@ public class ComprarServicoDPController {
         this.gestao = new Gestao();
     }
     
-    public void adicionarCliente(Cliente cliente){
-        
+    public Cliente loginCliente(String username,String password){
+        return null;
     }
     
 }
