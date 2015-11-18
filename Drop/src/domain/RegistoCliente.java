@@ -20,8 +20,13 @@ public class RegistoCliente {
 
     private SQLConnection conn;
 
-    private String insert = "Insert Into Cliente (email,telemovel,username,password) VALUES (?,?,?,?))";
-    private String update = "Update Cliente (email,telemovel,username,password) VALUES (?,?,?,?))";
+    private String insert = "Insert Into CLIENTE (IDCLIENTE,NOME,NIF,USERNAME,PASS,MORADA)"
+                            + " VALUES (?,?,?,?))";
+    
+    private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
+                            + " WHERE IDCLIENTE =?";
+    
+    private String delete =  "DELETE FROM CLIENTE WHERE IDCLIENTE=?";
 
     public RegistoCliente() {
         conn = OracleDb.getInstance();
@@ -30,12 +35,12 @@ public class RegistoCliente {
     public boolean registarCliente(Cliente novoCliente) {
         PreparedStatement prepareStatement = conn.prepareStatement(insert);
         try {
-            
+
             prepareStatement.setString(1, novoCliente.getEmail());
             prepareStatement.setInt(2, novoCliente.getTelemovel());
             prepareStatement.setString(3, novoCliente.getUsername());
             prepareStatement.setString(4, novoCliente.getPassword());
-            
+
             return prepareStatement.execute();
         } catch (SQLException ex) {
             Logger.getLogger(RegistoCliente.class.getName()).log(Level.SEVERE, null, ex);
