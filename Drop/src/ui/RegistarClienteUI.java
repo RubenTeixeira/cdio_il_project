@@ -35,7 +35,7 @@ public class RegistarClienteUI {
 
         Morada morada=new Morada(rua,codigoPostal,localidade);
         
-        Cliente cliente=new Cliente(email,telemovel,username,password,morada);
+        //Cliente cliente=new Cliente(email,telemovel,username,password,morada);
         
     }
 }
