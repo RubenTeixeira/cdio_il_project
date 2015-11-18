@@ -167,10 +167,14 @@ public class Gestao {
      * Retrieves respective shell from DB in order to deliver or retrieve to/from it
      * @param token identification token from the user
      * @return Prateleira
+     * @throws domain.TokenNotFoundException
      */
-    public Prateleira procurarPrateleiras(String token) {
+    public Prateleira procurarPrateleiras(String token) throws TokenNotFoundException {
         
         String tipoToken = getTipoToken(token);
+
+        if (tipoToken == null)
+            throw new TokenNotFoundException("Token não encontrado ou inválido."); 
         
         if (tipoToken.equalsIgnoreCase("cliente"))
             return getPrateleiraCliente(token);
@@ -181,16 +185,31 @@ public class Gestao {
         return null;
     }
     
+    /**
+     * Retrieves shell where a delivery for this client exists (calls getPrateleira())
+     * @param token identification token from the user
+     * @return Prateleira
+     */
     private Prateleira getPrateleiraCliente(String token) {
         String qry = "A PREENCHER...!!!!!!!";
         return getPrateleira(qry);
     }
-    
+
+    /**
+     * Retrieves empty shell for delivery purpose (calls getPrateleira())
+     * @param token identification token from the user
+     * @return Prateleira
+     */
     private Prateleira getPrateleiraEstafeta(String token) {
         String qry = "";
         return getPrateleira(qry);
     }
-    
+
+    /**
+     * Actual shell retrieval
+     * @param query SQL Select statement
+     * @return Prateleira
+     */
     private Prateleira getPrateleira(String query) {
         Prateleira prat = null;
         
@@ -208,6 +227,10 @@ public class Gestao {
         return prat;
     }
     
+    /**
+     * Saves opened date on the DB
+     * @param id delivery/picking identification
+     */
     public void setDataAbertura(int id) {
         String qry = "";
         this.bd.executeQuery(qry);
@@ -219,12 +242,17 @@ public class Gestao {
         this.bd.executeQuery(qry);
     }
 
+    /**
+     * Retrieves token type from DB (cliente/estafeta/...)
+     * @param token identification token
+     * @return token type
+     */
     private String getTipoToken(String token) {
         
-        String qry = "SELECT tt.descricao from "
-                + "token t, tipo_token tt"
-                + "where t.id_tipo_token = tt.id_tipo_token"
-                + "and t.codigo = 'token'";
+        String qry = "SELECT a.descricao from token t, tipo_token a"
+                + " where t.id_tipo_token = a.id_tipo_token"
+                + " and t.codigo = '"+token+"';";
+
         ResultSet rs = this.bd.executeQuery(qry);
         
         try {
