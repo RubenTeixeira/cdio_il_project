@@ -31,15 +31,14 @@ class AbrirPrateleiraUI {
             System.out.println("Prateleira impossivel de localizar para o token inserido\n");
         } else {
             System.out.println(prateleira + "\n");
-            System.out.println("Pretende abrir a prateleira indicada?");
-            boolean open = utils.ReadFromKeyboard.confirma();
+            
+            boolean open = utils.ReadFromKeyboard.confirma("Pretende abrir a prateleira indicada?(S/N)");
 
             if(open) {
                 this.controller.abrePrateleira();
             }
             
-            System.out.println("Pretende fechar a prateleira indicada?");
-            boolean close = utils.ReadFromKeyboard.confirma();
+            boolean close = utils.ReadFromKeyboard.confirma("Pretende fechar a prateleira? (S/N)");
 
             if(close) {
                 this.controller.fechaPrateleira();

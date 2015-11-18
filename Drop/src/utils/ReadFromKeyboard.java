@@ -29,4 +29,15 @@ public class ReadFromKeyboard {
         in.nextLine();
     }
 
+    public static boolean confirma(String message) {
+
+        System.out.println(message);
+        String strConfirma;
+        do {
+            strConfirma = utils.ReadFromKeyboard.readString();
+        } while (!strConfirma.equalsIgnoreCase("s") && !strConfirma.equalsIgnoreCase("n"));
+
+        return strConfirma.equalsIgnoreCase("s");
+    }
+
 }
