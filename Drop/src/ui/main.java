@@ -32,24 +32,28 @@ public class main {
                     try {
                         new ConsultarOcupacaoEntregaUI();
                     } catch (RuntimeException e) {
-                            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e);
+                            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e.getMessage());
                     }
                     break;
-                
+                    
                 case 2:
+                    new ComprarServicoDPUI();
+                
+                case 3:
                     exit(0);
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
-        }while(op != 2);
+        }while(op != 3);
         
     }
     
     public static void menu(){
         String menu="---------MENU---------\n"
                 + "1. Gestão DropPoint\n"
-                + "2. Sair";
+                + "2. Comprar serviço DropPoint\n"
+                + "3. Sair";
         System.out.println(menu);
     }
 }

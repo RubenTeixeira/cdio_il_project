@@ -1,0 +1,19 @@
+
+package controller;
+
+import domain.Cliente;
+import domain.Gestao;
+
+public class ComprarServicoDPController {
+
+    private Gestao gestao;
+    
+    public ComprarServicoDPController() {
+        this.gestao = new Gestao();
+    }
+    
+    public void adicionarCliente(Cliente cliente){
+        
+    }
+    
+}
