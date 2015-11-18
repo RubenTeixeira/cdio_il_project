@@ -164,20 +164,34 @@ public class Gestao {
         return null;
     }
     
-    public List<String> procurarPrateleiras(String token) {
-        List<String> results = new ArrayList<>();
+    public Prateleira procurarPrateleiras(String token) {
+        
         String qry = "";
-        ResultSet rs = this.bd.executeQuery(qry);
+        Prateleira prat = new Prateleira();
         
         try {
-            while (rs.next())
-                results.add(rs.getString("ID_PRATELEIRA")+rs.getString("NUMERO_PRATELEIRA"));
+            ResultSet rs = this.bd.executeQuery(qry);
+            if (rs.next()) {
+                prat.setId(rs.getInt("ID_PRATELEIRA"));
+                prat.setDesc(rs.getString("NUMERO_PRATELEIRA"));
+            }
                 
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return results;
+        return prat;
+    }
+    
+    public void setDataAbertura(int id) {
+        String qry = "";
+        this.bd.executeQuery(qry);
+        
     }
 
+    public void setDataFecho(int id) {
+        String qry = "";
+        this.bd.executeQuery(qry);
+    }
+    
 }
