@@ -11,6 +11,7 @@ package persistence;
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -81,6 +82,19 @@ public class OracleDb implements SQLConnection, Settings {
             return null;
         }
     }
+    
+    @Override
+    public PreparedStatement prepareStatement(String prStat){
+        if(this.con!=null){
+            try {
+                return con.prepareStatement(prStat);
+            } catch (SQLException ex) {
+                Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
 
     /**
      * Termina a ligação
