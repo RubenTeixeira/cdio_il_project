@@ -49,5 +49,10 @@ public class Prateleira {
         final Prateleira other = (Prateleira) obj;
         return this.id == other.id;
     }
+
+    @Override
+    public String toString() {
+        return this.desc;
+    }
     
 }
