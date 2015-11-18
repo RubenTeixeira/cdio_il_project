@@ -26,10 +26,10 @@ public class Prateleira {
 
     /* Getter methods*/
     public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
+    public void setDesc(String desc) {this.desc = desc;}
     /* Setter methods*/
     public String getDesc() {return desc;}
-    public void setDesc(String desc) {this.desc = desc;}
+    public void setId(int id) {this.id = id;}
 
     @Override
     public int hashCode() {
@@ -49,8 +49,5 @@ public class Prateleira {
         final Prateleira other = (Prateleira) obj;
         return this.id == other.id;
     }
-    
-    
-    
     
 }
