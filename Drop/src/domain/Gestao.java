@@ -169,12 +169,12 @@ public class Gestao {
      * @return Prateleira
      * @throws domain.TokenNotFoundException
      */
-    public Prateleira procurarPrateleiras(String token) throws TokenNotFoundException {
+    public Prateleira procurarPrateleiras(String token){
         
         String tipoToken = getTipoToken(token);
 
         if (tipoToken == null)
-            throw new TokenNotFoundException("Token não encontrado ou inválido."); 
+            return null; 
         
         if (tipoToken.equalsIgnoreCase("cliente"))
             return getPrateleiraCliente(token);
@@ -249,12 +249,12 @@ public class Gestao {
      */
     private String getTipoToken(String token) {
         
-        String qry = "SELECT a.descricao from token t, tipo_token a"
+        String qry = "select a.descricao from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
-                + " and t.codigo = '"+token+"';";
+                + " and t.codigo = '"+token+"'";
 
         ResultSet rs = this.bd.executeQuery(qry);
-        
+        System.out.println("Going to execute following query:\n"+qry);
         try {
             if (rs.next())
                 return rs.getString("descricao");

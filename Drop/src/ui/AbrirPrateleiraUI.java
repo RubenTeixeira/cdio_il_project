@@ -28,7 +28,7 @@ class AbrirPrateleiraUI {
         String prateleira = this.controller.iniciaAberturaPrateleira(token);
 
         if(prateleira == null) {
-            System.out.println("Prateleira impossivel de localizar para o token inserido\n");
+            System.out.println("Prateleira impossivel de localizar para o token inserido ou token inválido\n");
         } else {
             System.out.println(prateleira + "\n");
             
