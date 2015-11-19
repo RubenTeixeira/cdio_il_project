@@ -82,10 +82,10 @@ public class OracleDb implements SQLConnection, Settings {
             return null;
         }
     }
-    
+
     @Override
-    public PreparedStatement prepareStatement(String prStat){
-        if(this.con!=null){
+    public PreparedStatement prepareStatement(String prStat) {
+        if (this.con != null) {
             try {
                 return con.prepareStatement(prStat);
             } catch (SQLException ex) {
@@ -94,7 +94,6 @@ public class OracleDb implements SQLConnection, Settings {
         }
         return null;
     }
-    
 
     /**
      * Termina a ligação

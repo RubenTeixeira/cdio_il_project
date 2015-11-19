@@ -8,7 +8,6 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
     private String username;
     private String password;
     private Morada morada;
-
     private String email;
     private int telemovel;
 

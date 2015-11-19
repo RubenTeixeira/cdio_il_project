@@ -9,8 +9,8 @@ package persistence;
  *
  * @author vascopinho
  */
-public interface Settings {
-    String user = "CDIOIL15_G3";
+public interface Setting {
+    String user = "CDIOIL15_17";
     String password = "qwerty";
     String url = "gandalf.dei.isep.ipp.pt";
     String sid = "pdborcl";

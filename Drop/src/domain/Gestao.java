@@ -5,7 +5,9 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +31,26 @@ public class Gestao {
         this.bd = persistence.OracleDb.getInstance();
     }
 
+    public SQLConnection getBd() {
+        return bd;
+    }
+
+    public void setBd(SQLConnection bd) {
+        this.bd = bd;
+    }
+
     /**
      * Permite listar DropPoints
      *
      * @return Lista do tipo String dos DropPoints do Sistema
      */
     public String listarDropPoint() {
-        ResultSet executeQuery = bd.executeQuery("SELECT DropPoint.idDropPoint, Morada.rua FROM DropPoint INNER JOIN Morada ON Morada.idMorada=DropPoint.idDropPoint");
+        ResultSet executeQuery = bd.executeQuery("SELECT DropPoint.id_DropPoint, Morada.rua FROM DropPoint INNER JOIN Morada ON Morada.idmorada=DropPoint.id_DropPoint");
         List<String> aux = new ArrayList<>();
         try {
             String str = "";
             while (executeQuery.next()) {
-                str += "DropPoint ID:" + String.valueOf(executeQuery.getString("idDropPoint"))
+                str += "DropPoint ID:" + String.valueOf(executeQuery.getString("id_DropPoint"))
                         + " com morada:" + executeQuery.getString("rua") + "\n";
 //                aux.add(temp);
 
@@ -57,6 +67,129 @@ public class Gestao {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * Devolve lista do tipo de prateleiras refrigeradas.
+     *
+     * @return lista
+     */
+    public String ListarPreferenciasTemperatura() {
+        ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_TEMPERATURA");
+        String op = "";
+
+        try {
+
+            while (executeQuery.next()) {
+
+                op += "Prateleira ID: " + executeQuery.getString("ID_TEMPERATURA") + " "
+                        + executeQuery.getString("DESCRICAO") + " com temperaturas entre ["
+                        + executeQuery.getString("TEMP_MAX") + "|" + executeQuery.getString("TEMP_MIN") + "]\n";
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar os tipo de prateleira", ex);
+        }
+
+        return op;
+    }
+
+    /**
+     * Devolve lista do tipo de dimensoes disponiveis.
+     *
+     * @return String
+     */
+    public String ListarPreferenciasDimensao() {
+        ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_DIMENSAO");
+        String op = "";
+
+        try {
+
+            while (executeQuery.next()) {
+
+                op += "Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
+                        + executeQuery.getString("DESCRICAO") + " ,com dimensoes de altura, lasgura,comprimento respectivamente de"
+                        + executeQuery.getString("ALTURA") + "x" + executeQuery.getString("LARGURA") + "x"
+                        + executeQuery.getString("COMPRIMENTO") + "\n";
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar as dimensões.", ex);
+        }
+
+        return op;
+    }
+
+    /**
+     * Dados os parametros, este adiciona a reserva do cliente.
+     *
+     * @param idCliente
+     * @param idDropPoint
+     * @param idTemperatura
+     * @param idDimensao
+     * @return int
+     */
+    public int reservaPrateleira(int idCliente, int idDropPoint, int idTemperatura, int idDimensao) {
+        String m = "SELECT * FROM RESERVA ORDER BY ID_RESERVA";
+        ResultSet executeQuery = bd.executeQuery(m);
+        int lastId = 0;
+        try {
+            while (executeQuery.next()) {
+                lastId = Integer.valueOf(executeQuery.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String query = "INSERT INTO Reserva(ID_RESERVA,ID_CLIENTE,ID_DROPPOINT,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
+        PreparedStatement prepareStatement = bd.prepareStatement(query);
+
+        try {
+            prepareStatement.setInt(1, (lastId + 1));
+            prepareStatement.setInt(2, idCliente);
+            prepareStatement.setInt(3, idDropPoint);
+            prepareStatement.setInt(4, idTemperatura);
+            prepareStatement.setInt(5, idDimensao);
+
+            prepareStatement.execute();
+
+            return lastId + 1;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel fazer o registo da reserva", ex);
+        }
+        return 0;
+    }
+
+    /**
+     * Dado o id da reserva, este procura seu token ao qual e corresponde
+     * devolvendo codigo.
+     *
+     * @param idReserva
+     * @return String
+     */
+    public String tokemReferentReservaId(int idReserva) {
+        String select = "Select * from TOKEN WHERE id_reserva=?";
+        PreparedStatement prepareStatement = bd.prepareStatement(select);
+        String token = "";
+
+        try {
+            prepareStatement.setInt(1, idReserva);
+
+            ResultSet executeQuery = prepareStatement.executeQuery();
+
+            while (executeQuery.next()) {
+                token += "O seu token é " + executeQuery.getString("CODIGO");
+            }
+            return token;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return token;
     }
 
     /**
@@ -167,10 +300,12 @@ public class Gestao {
     public Prateleira procurarPrateleira(TransaccaoPrateleira trans, Token token){
         
         return getPrateleira(trans.getQueryPrateleira(token));
+
     }
 
     /**
      * Actual shell retrieval
+     *
      * @param query SQL Select statement
      * @return Prateleira
      */
@@ -178,7 +313,7 @@ public class Gestao {
         System.out.println("Perguntando à db:");
         System.out.println(query);
         Prateleira prat = null;
-        
+
         try {
             ResultSet rs = this.bd.executeQuery(query);
             if (rs.next()) {
@@ -186,12 +321,13 @@ public class Gestao {
                 prat.setId(rs.getInt("ID_PRATELEIRA"));
                 prat.setDesc(rs.getString("NUMERO_PRATELEIRA"));
             }
-                
+
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return prat;
     }
+
     
     public void setDataAbertura(TransaccaoPrateleira trans) {
         trans.setDateOpen();
@@ -201,14 +337,17 @@ public class Gestao {
         trans.setDateClose();
         fecharTransaccao(trans);
     }
+
     
     private boolean fecharTransaccao(TransaccaoPrateleira trans) {
         String qry = trans.getQueryGetId();
+
         ResultSet rs = this.bd.executeQuery(qry);
-        
+
         try {
             if (rs.next())
                 trans.setId(rs.getInt("id"));
+
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -222,6 +361,7 @@ public class Gestao {
         
         return rs2 != null;
     }
+
  
     public Token getToken(String token) {
         Token tokenObj = null;
@@ -257,4 +397,10 @@ public class Gestao {
 
 
     
+
+
+    public void closeConection() {
+        bd.closeConnection();
+    }
+
 }

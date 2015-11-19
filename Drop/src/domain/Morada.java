@@ -2,14 +2,23 @@ package domain;
 
 public class Morada {
 
+    private int id;
     private String rua;
     private String codigoPostal;
     private String localidade;
 
     public Morada(String rua, String codigoPostal, String localidade) {
-        this.rua = rua;
-        this.codigoPostal = codigoPostal;
-        this.localidade = localidade;
+        this.setRua(rua);
+        this.setCodigoPostal(codigoPostal);
+        this.setLocalidade(localidade);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRua() {
