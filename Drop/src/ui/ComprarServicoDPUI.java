@@ -25,6 +25,7 @@ public class ComprarServicoDPUI {
         if (!isLogin) {
             do {
                 System.out.println(menu);
+                System.out.print(":");
                 op = utils.ReadFromKeyboard.read();
 
                 switch (op) {
@@ -32,7 +33,7 @@ public class ComprarServicoDPUI {
 
                         do {
 
-                            System.out.println("Insira Username:");
+                            System.out.println("\nInsira Username:");
                             String user = utils.ReadFromKeyboard.readString();
                             System.out.println("Insira Password:");
                             String password = utils.ReadFromKeyboard.readString();
@@ -52,6 +53,39 @@ public class ComprarServicoDPUI {
 
             } while (op != 3 && isLogin != true);
         }
+
+        if (controller.clienteComLoginFeito()) {
+
+            System.out.println("--------------LISTA DE DROPPOINTS----------------------------");
+            System.out.println(controller.listarDropPoints());
+
+            System.out.println("Selecione ID de DropPoint:");
+            controller.SelecionarDropPoint(utils.ReadFromKeyboard.read());
+
+            System.out.println("--------------TIPOS DE PRATELEIRAS--------------------------");
+            System.out.println(controller.listarPreferenciasTemp());
+            System.out.println("Selecione ID do tipo de prateleira:");
+            controller.SelecionarPreferenciasTemp(utils.ReadFromKeyboard.read());
+
+            System.out.println("--------------TIPOS DE DIMENSOES----------------------------");
+            System.out.println(controller.listarPreferenciasDim());
+            System.out.println("Selecione ID da dimensao da prateleira:");
+            controller.SelecionarPreferenciasDim(utils.ReadFromKeyboard.read());
+
+            System.out.println("Confirma reserva s/n?");
+            String confirma = utils.ReadFromKeyboard.readString();
+
+            if (confirma.equalsIgnoreCase("s") || confirma.equalsIgnoreCase("Sim")) {
+                if (controller.confirmarRegisto()) {
+                    System.out.println("Registo com sucesso!");
+                    System.out.println(controller.tokenCliente());
+                }
+
+            }
+
+        }
+
+        controller.closeConection();
 
     }
 
