@@ -14,33 +14,44 @@ public class ComprarServicoDPUI {
     }
 
     private void run() {
-        String menu = "Selccione das seguintes opções \n"
-                + "1. Cliente registado"
-                + "2. Cliente por registar"
-                + "3. Sair";
+
+        String menu = "---------------------Selccione das seguintes opções------------------\n"
+                + "1. Cliente registado\n"
+                + "2. Cliente por registar\n"
+                + "3. Sair\n";
         int op;
+        boolean isLogin = controller.clienteComLoginFeito();
 
-        do {
-            op = utils.ReadFromKeyboard.read();
-            System.out.println(menu);
+        if (!isLogin) {
+            do {
+                System.out.println(menu);
+                op = utils.ReadFromKeyboard.read();
 
-            switch (op) {
-                case 1:
-                   // do {
-                        
-                   // } while (login() != true);
+                switch (op) {
+                    case 1:
 
-                    break;
-                case 2:
-                    new RegistarClienteUI();
-                    break;
+                        do {
 
-                default:
-                    System.out.println("Opção Inválida");
-                    break;
-            }
+                            System.out.println("Insira Username:");
+                            String user = utils.ReadFromKeyboard.readString();
+                            System.out.println("Insira Password:");
+                            String password = utils.ReadFromKeyboard.readString();
+                            isLogin = controller.loginCliente(user, password);
 
-        } while (op != 3);
+                        } while (isLogin != true);
+
+                        break;
+                    case 2:
+                        new RegistarClienteUI();
+                        break;
+
+                    default:
+                        System.out.println("Opção Inválida");
+                        break;
+                }
+
+            } while (op != 3 && isLogin != true);
+        }
 
     }
 
