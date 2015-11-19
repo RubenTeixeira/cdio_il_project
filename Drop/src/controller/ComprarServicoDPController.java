@@ -9,18 +9,23 @@ public class ComprarServicoDPController {
     private Gestao gestao;
     private RegistoCliente registoCliente;
     private Cliente login;
-    
+    private int idDropPoint;
+    private int idPrerenciasTemp;
+    private int idPrerenciasDim;
+    private int idToken;
+
     public ComprarServicoDPController() {
         this.gestao = new Gestao();
-        registoCliente = new RegistoCliente();
+        registoCliente = new RegistoCliente(this.gestao.getBd());
+       
     }
 
     public boolean loginCliente(String username, String password) {
         login = registoCliente.login(username, password);
         return (login != null);
     }
-    
-    public boolean clienteComLoginFeito(){
+
+    public boolean clienteComLoginFeito() {
         return login != null;
     }
 
@@ -29,15 +34,38 @@ public class ComprarServicoDPController {
     }
 
     public void SelecionarDropPoint(int idDP) {
-
+        this.idDropPoint = idDP;
     }
 
-    public void SelecionarPreferencias() {
-
+    public String listarPreferenciasTemp() {
+        return this.gestao.ListarPreferenciasTemperatura();
     }
 
-    public void confirmarRegisto() {
+    public void SelecionarPreferenciasTemp(int temp) {
+        this.idPrerenciasTemp = temp;
+    }
 
+    public String listarPreferenciasDim() {
+        return this.gestao.ListarPreferenciasDimensao();
+    }
+
+    public void SelecionarPreferenciasDim(int dim) {
+        this.idPrerenciasDim = dim;
+    }
+
+    public boolean confirmarRegisto() {
+        idToken = gestao.reservaPrateleira(login.getId(), idDropPoint, idPrerenciasTemp, idPrerenciasDim);
+
+        return idToken != 0;
+    }
+
+    public String tokenCliente() {
+        return gestao.tokemReferentReservaId(idToken);
+    }
+
+    public void closeConection() {
+        gestao.closeConection();
+        registoCliente.closeConection();
     }
 
 }
