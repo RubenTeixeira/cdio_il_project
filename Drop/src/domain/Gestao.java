@@ -310,8 +310,6 @@ public class Gestao {
      * @return Prateleira
      */
     private Prateleira getPrateleira(String query) {
-        System.out.println("Perguntando à db:");
-        System.out.println(query);
         Prateleira prat = null;
 
         try {
@@ -355,8 +353,7 @@ public class Gestao {
             return false;
         
         qry = trans.getQueryInsert();
-        System.out.println("Going to insert with:");
-        System.out.println(qry);
+
         ResultSet rs2 = this.bd.executeQuery(qry);
         
         return rs2 != null;
