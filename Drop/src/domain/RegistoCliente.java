@@ -20,29 +20,58 @@ import persistence.SQLConnection;
 public class RegistoCliente {
 
     private SQLConnection conn;
+
+    private String nextId = "select nvl(max(id_cliente),0)+1 from cliente";
     private String delete = "DELETE FROM CLIENTE WHERE IDCLIENTE=?";
     private String login = "SELECT * FROM CLIENTE WHERE USERNAME=? AND UPASSWORD=?";
-    private String insert = "Insert Into CLIENTE (IDCLIENTE,NOME,NIF,USERNAME,UPASSWORD,MORADA,EMAIL,TELEMOVEL)"
-            + " VALUES (?,?,?,?,?,?,?,?))";
+    private String insert = "Insert Into CLIENTE (id_Cliente,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,IDMORADA)"
+            + " VALUES (?,?,?,?,?,?,?,?)";
     private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
             + " WHERE IDCLIENTE =?";
 
+    public RegistoCliente(SQLConnection conn) {
+        this.conn = conn;
+    }
+    
     public RegistoCliente() {
         conn = OracleDb.getInstance();
+    }
+
+    public SQLConnection getConn() {
+        return conn;
+    }
+
+    public void setConn(SQLConnection conn) {
+        this.conn = conn;
+    }
+    
+    private int nextClientId() {
+        ResultSet executeQuery = conn.executeQuery(nextId);
+        int nextId=0;
+        try {
+            while(executeQuery.next()){
+                nextId=executeQuery.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistoCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return nextId;
     }
 
     public boolean registarCliente(Cliente novoCliente) {
         PreparedStatement prepareStatement = conn.prepareStatement(insert);
         try {
 
-            prepareStatement.setInt(1, 66);
+            prepareStatement.setInt(1, nextClientId());
             prepareStatement.setString(2, novoCliente.getNome());
             prepareStatement.setInt(3, novoCliente.getNIF());
-            prepareStatement.setString(4, novoCliente.getUsername());
-            prepareStatement.setString(5, novoCliente.getPassword());
-            prepareStatement.setInt(6, 1);
-            prepareStatement.setString(7, novoCliente.getEmail());
-            prepareStatement.setInt(8, novoCliente.getTelemovel());
+            prepareStatement.setString(4, novoCliente.getEmail());
+            prepareStatement.setInt(5, novoCliente.getTelemovel());
+            prepareStatement.setString(6, novoCliente.getUsername());
+            prepareStatement.setString(7, novoCliente.getPassword());
+            prepareStatement.setInt(8, novoCliente.getId());
 
             return prepareStatement.execute();
 
@@ -80,6 +109,10 @@ public class RegistoCliente {
 
     public Cliente novoCliente(int id, String nome, int NIF, String username, String password, Morada morada, String email, int telemovel) {
         return new Cliente(id, nome, NIF, username, password, morada, email, telemovel);
+    }
+    
+    public void closeConection(){
+        conn.closeConnection();
     }
 
 }
