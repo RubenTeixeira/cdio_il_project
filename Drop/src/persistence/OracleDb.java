@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OracleDb implements SQLConnection, Settings {
+public class OracleDb implements SQLConnection, Setting {
 
     private String username;
     private String password;
@@ -127,12 +127,12 @@ public class OracleDb implements SQLConnection, Settings {
 
     /**
      * Retorna nova instância do tipo SQLConnection Informação recolhida da
-     * interface Settings.
+ interface Setting.
      *
      * @return SQLConnection
      */
     public static SQLConnection getInstance() {
-        return new OracleDb(Settings.user, Settings.password, Settings.url, Settings.sid);
+        return new OracleDb(Setting.user, Setting.password, Setting.url, Setting.sid);
     }
 
     /**
