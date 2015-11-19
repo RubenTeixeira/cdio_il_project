@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OracleDb implements SQLConnection, Setting {
+public class OracleDb implements SQLConnection, Settings {
 
     private String username;
     private String password;
@@ -82,10 +82,10 @@ public class OracleDb implements SQLConnection, Setting {
             return null;
         }
     }
-    
+
     @Override
-    public PreparedStatement prepareStatement(String prStat){
-        if(this.con!=null){
+    public PreparedStatement prepareStatement(String prStat) {
+        if (this.con != null) {
             try {
                 return con.prepareStatement(prStat);
             } catch (SQLException ex) {
@@ -94,7 +94,6 @@ public class OracleDb implements SQLConnection, Setting {
         }
         return null;
     }
-    
 
     /**
      * Termina a ligação
@@ -127,12 +126,12 @@ public class OracleDb implements SQLConnection, Setting {
 
     /**
      * Retorna nova instância do tipo SQLConnection Informação recolhida da
- interface Setting.
+     * interface Settings.
      *
      * @return SQLConnection
      */
     public static SQLConnection getInstance() {
-        return new OracleDb(Setting.user, Setting.password, Setting.url, Setting.sid);
+        return new OracleDb(Settings.user, Settings.password, Settings.url, Settings.sid);
     }
 
     /**
