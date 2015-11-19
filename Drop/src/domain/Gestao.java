@@ -38,7 +38,7 @@ public class Gestao {
     public void setBd(SQLConnection bd) {
         this.bd = bd;
     }
-    
+
     /**
      * Permite listar DropPoints
      *
@@ -70,8 +70,9 @@ public class Gestao {
     }
 
     /**
-     * Lista as opcoe
-     * @return lista 
+     * Devolve lista do tipo de prateleiras refrigeradas.
+     *
+     * @return lista
      */
     public String ListarPreferenciasTemperatura() {
         ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_TEMPERATURA");
@@ -90,11 +91,15 @@ public class Gestao {
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar os tipo de prateleira", ex);
         }
-       
 
         return op;
     }
 
+    /**
+     * Devolve lista do tipo de dimensoes disponiveis.
+     *
+     * @return String
+     */
     public String ListarPreferenciasDimensao() {
         ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_DIMENSAO");
         String op = "";
@@ -113,69 +118,79 @@ public class Gestao {
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar as dimensões.", ex);
         }
-     
 
         return op;
     }
-    
-    
-    public int reservaPrateleira(int idCliente,int idDropPoint,int idTemperatura,int idDimensao){
-        String m="SELECT * FROM RESERVA ORDER BY ID_RESERVA";
+
+    /**
+     * Dados os parametros, este adiciona a reserva do cliente.
+     *
+     * @param idCliente
+     * @param idDropPoint
+     * @param idTemperatura
+     * @param idDimensao
+     * @return int
+     */
+    public int reservaPrateleira(int idCliente, int idDropPoint, int idTemperatura, int idDimensao) {
+        String m = "SELECT * FROM RESERVA ORDER BY ID_RESERVA";
         ResultSet executeQuery = bd.executeQuery(m);
-        int lastId=0;
+        int lastId = 0;
         try {
-            while(executeQuery.next()){
+            while (executeQuery.next()) {
                 lastId = Integer.valueOf(executeQuery.getString(1));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        String query="INSERT INTO Reserva(ID_RESERVA,ID_CLIENTE,ID_DROPPOINT,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
+
+        String query = "INSERT INTO Reserva(ID_RESERVA,ID_CLIENTE,ID_DROPPOINT,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
         PreparedStatement prepareStatement = bd.prepareStatement(query);
-        
-        
+
         try {
-            prepareStatement.setInt(1, (lastId+1));
+            prepareStatement.setInt(1, (lastId + 1));
             prepareStatement.setInt(2, idCliente);
             prepareStatement.setInt(3, idDropPoint);
             prepareStatement.setInt(4, idTemperatura);
             prepareStatement.setInt(5, idDimensao);
-            
+
             prepareStatement.execute();
-            
-            
-            
-            return lastId+1;
-            
+
+            return lastId + 1;
+
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel fazer o registo da reserva", ex);
         }
         return 0;
     }
-    
-    public String tokemReferentReservaId(int idReserva){
-        String select="Select * from TOKEN WHERE id_reserva=?";
+
+    /**
+     * Dado o id da reserva, este procura seu token ao qual e corresponde
+     * devolvendo codigo.
+     *
+     * @param idReserva
+     * @return String
+     */
+    public String tokemReferentReservaId(int idReserva) {
+        String select = "Select * from TOKEN WHERE id_reserva=?";
         PreparedStatement prepareStatement = bd.prepareStatement(select);
-        String token="";
-        
+        String token = "";
+
         try {
             prepareStatement.setInt(1, idReserva);
-            
+
             ResultSet executeQuery = prepareStatement.executeQuery();
-            
-            while(executeQuery.next()){
-                token +="O seu token é " + executeQuery.getString("CODIGO");
+
+            while (executeQuery.next()) {
+                token += "O seu token é " + executeQuery.getString("CODIGO");
             }
             return token;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return token;
     }
-   
 
     /**
      * Permite listar as entregas de um DropPoint

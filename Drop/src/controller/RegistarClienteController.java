@@ -1,7 +1,6 @@
 package controller;
 
 import domain.Cliente;
-import domain.Gestao;
 import domain.Morada;
 import domain.RegistoCliente;
 import domain.RegistoMorada;
@@ -15,7 +14,7 @@ public class RegistarClienteController {
 
     public RegistarClienteController() {
         this.registoCliente = new RegistoCliente();
-        this.registoMorada = new RegistoMorada(registoCliente.getConn());
+        this.registoMorada = new RegistoMorada(registoCliente.getConnection());
     }
     
     public boolean novaMorada(String rua, String codigoPostal, String localidade){

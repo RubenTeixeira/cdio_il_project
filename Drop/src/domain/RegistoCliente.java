@@ -19,8 +19,12 @@ import persistence.SQLConnection;
  */
 public class RegistoCliente {
 
-    private SQLConnection conn;
+    private SQLConnection connection;
 
+    /**
+     * Define-se queries que serao utilizadas pelos metodos.
+     *
+     */
     private String nextId = "select nvl(max(id_cliente),0)+1 from cliente";
     private String delete = "DELETE FROM CLIENTE WHERE IDCLIENTE=?";
     private String login = "SELECT * FROM CLIENTE WHERE USERNAME=? AND UPASSWORD=?";
@@ -29,39 +33,69 @@ public class RegistoCliente {
     private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
             + " WHERE IDCLIENTE =?";
 
+    /**
+     * Construtor que recebe objecto do tipo SQLConnection
+     *
+     * @param SQLConnection
+     */
     public RegistoCliente(SQLConnection conn) {
-        this.conn = conn;
+        this.setConnection(conn);
     }
-    
+
+    /**
+     * Construtor responsavel por cria uma conexao.
+     *
+     */
     public RegistoCliente() {
-        conn = OracleDb.getInstance();
+        connection = OracleDb.getInstance();
     }
 
-    public SQLConnection getConn() {
-        return conn;
+    /**
+     * Devolve conecxao utilizada.
+     *
+     * @return SQLConnection
+     */
+    public SQLConnection getConnection() {
+        return connection;
     }
 
-    public void setConn(SQLConnection conn) {
-        this.conn = conn;
+    /**
+     * Permite definir conexao
+     *
+     * @param conn
+     */
+    public void setConnection(SQLConnection conn) {
+        this.connection = conn;
     }
-    
+
+    /**
+     * Devolve o proximo id a ser utilizador pela base de dados.
+     *
+     * @return int
+     */
     private int nextClientId() {
-        ResultSet executeQuery = conn.executeQuery(nextId);
-        int nextId=0;
+        ResultSet executeQuery = connection.executeQuery(nextId);
+        int nextId = 0;
         try {
-            while(executeQuery.next()){
-                nextId=executeQuery.getInt(1);
+            while (executeQuery.next()) {
+                nextId = executeQuery.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(RegistoCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         return nextId;
     }
 
+    /**
+     * Dado um objecto tipo cliente, este e processado e guardado na base de
+     * dados.
+     *
+     * @param novoCliente
+     * @return boolean
+     */
     public boolean registarCliente(Cliente novoCliente) {
-        PreparedStatement prepareStatement = conn.prepareStatement(insert);
+        PreparedStatement prepareStatement = connection.prepareStatement(insert);
         try {
 
             prepareStatement.setInt(1, nextClientId());
@@ -82,9 +116,17 @@ public class RegistoCliente {
         return false;
     }
 
+    /**
+     * Dado o username e password, verfica se existe algum cliente com
+     * respectivas credencias.
+     *
+     * @param username
+     * @param password
+     * @return Cliente
+     */
     public Cliente login(String username, String password) {
         try {
-            PreparedStatement prepareStatement = conn.prepareStatement(login);
+            PreparedStatement prepareStatement = connection.prepareStatement(login);
             prepareStatement.setString(1, username);
             prepareStatement.setString(2, password);
 
@@ -107,12 +149,28 @@ public class RegistoCliente {
         return null;
     }
 
+    /**
+     * Devolve novo objecto do tipo Cliente
+     *
+     * @param id
+     * @param nome
+     * @param NIF
+     * @param username
+     * @param password
+     * @param morada
+     * @param email
+     * @param telemovel
+     * @return Cliente
+     */
     public Cliente novoCliente(int id, String nome, int NIF, String username, String password, Morada morada, String email, int telemovel) {
         return new Cliente(id, nome, NIF, username, password, morada, email, telemovel);
     }
-    
-    public void closeConection(){
-        conn.closeConnection();
+
+    /**
+     * Termina a ligação utilizada pela base de dados.
+     */
+    public void closeConection() {
+        connection.closeConnection();
     }
 
 }

@@ -18,34 +18,67 @@ import persistence.SQLConnection;
  * @author nuno
  */
 public class RegistoMorada {
-    private SQLConnection conn;
 
-    private String insert="INSERT INTO Morada (IDMORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
+    private SQLConnection connection;
 
-    
+    private String insert = "INSERT INTO Morada (IDMORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
+
+    /**
+     * Construtor responsavel por cria uma conexao.
+     *
+     */
     public RegistoMorada() {
-        this.conn=OracleDb.getInstance();
+        this.connection = OracleDb.getInstance();
     }
 
+    /**
+     * Construtor que recebe objecto do tipo SQLConnection
+     *
+     * @param SQLConnection
+     */
     public RegistoMorada(SQLConnection conn) {
-        this.conn = conn;
+        this.connection = conn;
     }
-    
-    public boolean registarMorada(Morada morada){
-        String m="SELECT * FROM MORADA ORDER BY idmorada";
-        ResultSet executeQuery = conn.executeQuery(m);
-        int lastId=0;
+
+    /**
+     * Devolve conecxao utilizada.
+     *
+     * @return SQLConnection
+     */
+    public SQLConnection getConnection() {
+        return connection;
+    }
+
+    /**
+     * Permite definir conexao
+     *
+     * @param connection
+     */
+    public void setConnection(SQLConnection connection) {
+        this.connection = connection;
+    }
+
+    /**
+     * Dado um objecto do tipo morada, seus atributos são processados de forma a
+     * serem introduzidos na base de dados.
+     *
+     * @param morada
+     * @return boolean
+     */
+    public boolean registarMorada(Morada morada) {
+        String m = "SELECT * FROM MORADA ORDER BY idmorada";
+        ResultSet executeQuery = connection.executeQuery(m);
+        int lastId = 0;
         try {
-            while(executeQuery.next()){
+            while (executeQuery.next()) {
                 lastId = Integer.valueOf(executeQuery.getString(1));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-         PreparedStatement prepareStatement = conn.prepareStatement(insert);
-         
+
+        PreparedStatement prepareStatement = connection.prepareStatement(insert);
+
         try {
             prepareStatement.setInt(1, lastId);
             prepareStatement.setString(2, morada.getRua());
@@ -53,19 +86,31 @@ public class RegistoMorada {
             prepareStatement.setString(4, morada.getLocalidade());
             morada.setId(lastId);
             return prepareStatement.execute();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(RegistoMorada.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-       return false;
+
+        return false;
     }
-    
-    public Morada novaMorada(String rua, String codigoPostal, String localidade){
+
+    /**
+     * Devolve novo objecto do tipo morada.
+     *
+     * @param rua
+     * @param codigoPostal
+     * @param localidade
+     * @return Morada
+     */
+    public Morada novaMorada(String rua, String codigoPostal, String localidade) {
         return new Morada(rua, codigoPostal, localidade);
     }
-    
-    
-    
-    
+
+    /**
+     * Termina a ligação utilizada pela base de dados.
+     */
+    public void closeConnection() {
+        this.connection.closeConnection();
+    }
+
 }
