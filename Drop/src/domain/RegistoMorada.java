@@ -66,6 +66,7 @@ public class RegistoMorada {
      * @return boolean
      */
     public boolean registarMorada(Morada morada) {
+        //FICA POR REVER NEXT ID
         String m = "SELECT * FROM MORADA ORDER BY idmorada";
         ResultSet executeQuery = connection.executeQuery(m);
         int lastId = 0;

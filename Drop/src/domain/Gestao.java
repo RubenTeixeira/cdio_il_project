@@ -5,11 +5,15 @@
  */
 package domain;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,6 +136,7 @@ public class Gestao {
      * @return int
      */
     public int reservaPrateleira(int idCliente, int idDropPoint, int idTemperatura, int idDimensao) {
+        //FICA POR REVER NEXT ID
         String m = "SELECT * FROM RESERVA ORDER BY ID_RESERVA";
         ResultSet executeQuery = bd.executeQuery(m);
         int lastId = 0;
@@ -171,26 +176,27 @@ public class Gestao {
      * @return String
      */
     public String tokemReferentReservaId(int idReserva) {
-        String select = "Select * from TOKEN WHERE id_reserva=?";
-        PreparedStatement prepareStatement = bd.prepareStatement(select);
-        String token = "";
+//        //FICA POR REVER NEXT ID
+//        String m = "SELECT * FROM TOKEN";
+//        ResultSet executeQuery = bd.executeQuery(m);
+//        int lastId = 0;
+//        try {
+//            while (executeQuery.next()) {
+//                lastId = Integer.valueOf(executeQuery.getString(1));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        /////////////////////////////////////
+        ////////// A REVER GERACAO DE TOKENS/////////////
+        
+//        String select = "Insert into TOKEN(id_token,data_geracao,data_validade,id_tipo_token,ativo,id_reserva,codigo) VALUES (?,?,?,?,?,?,?)";
+//       // PreparedStatement prepareStatement = bd.prepareStatement(select);
+       String token = "";
 
-        try {
-            prepareStatement.setInt(1, idReserva);
-
-            ResultSet executeQuery = prepareStatement.executeQuery();
-
-            while (executeQuery.next()) {
-                token += "O seu token é " + executeQuery.getString("CODIGO");
-            }
-            return token;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        token += "O seu token é " + Calendar.getInstance().toString().hashCode();
         return token;
-    }
+ }
 
     /**
      * Permite listar as entregas de um DropPoint
