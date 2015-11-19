@@ -6,6 +6,7 @@
             <name>Drop</name>
             <source-roots>
                 <root id="src.dir"/>
+                <root id="src.settings.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
