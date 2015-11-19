@@ -5,7 +5,9 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,14 @@ public class Gestao {
         this.bd = persistence.OracleDb.getInstance();
     }
 
+    public SQLConnection getBd() {
+        return bd;
+    }
+
+    public void setBd(SQLConnection bd) {
+        this.bd = bd;
+    }
+    
     /**
      * Permite listar DropPoints
      *
@@ -58,6 +68,115 @@ public class Gestao {
         }
         return null;
     }
+
+    /**
+     * Lista as opcoe
+     * @return lista 
+     */
+    public String ListarPreferenciasTemperatura() {
+        ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_TEMPERATURA");
+        String op = "";
+
+        try {
+
+            while (executeQuery.next()) {
+
+                op += "Prateleira ID: " + executeQuery.getString("ID_TEMPERATURA") + " "
+                        + executeQuery.getString("DESCRICAO") + " com temperaturas entre ["
+                        + executeQuery.getString("TEMP_MAX") + "|" + executeQuery.getString("TEMP_MIN") + "]\n";
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar os tipo de prateleira", ex);
+        }
+       
+
+        return op;
+    }
+
+    public String ListarPreferenciasDimensao() {
+        ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_DIMENSAO");
+        String op = "";
+
+        try {
+
+            while (executeQuery.next()) {
+
+                op += "Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
+                        + executeQuery.getString("DESCRICAO") + " ,com dimensoes de altura, lasgura,comprimento respectivamente de"
+                        + executeQuery.getString("ALTURA") + "x" + executeQuery.getString("LARGURA") + "x"
+                        + executeQuery.getString("COMPRIMENTO") + "\n";
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel buscar as dimensões.", ex);
+        }
+     
+
+        return op;
+    }
+    
+    
+    public int reservaPrateleira(int idCliente,int idDropPoint,int idTemperatura,int idDimensao){
+        String m="SELECT * FROM RESERVA ORDER BY ID_RESERVA";
+        ResultSet executeQuery = bd.executeQuery(m);
+        int lastId=0;
+        try {
+            while(executeQuery.next()){
+                lastId = Integer.valueOf(executeQuery.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String query="INSERT INTO Reserva(ID_RESERVA,ID_CLIENTE,ID_DROPPOINT,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
+        PreparedStatement prepareStatement = bd.prepareStatement(query);
+        
+        
+        try {
+            prepareStatement.setInt(1, (lastId+1));
+            prepareStatement.setInt(2, idCliente);
+            prepareStatement.setInt(3, idDropPoint);
+            prepareStatement.setInt(4, idTemperatura);
+            prepareStatement.setInt(5, idDimensao);
+            
+            prepareStatement.execute();
+            
+            
+            
+            return lastId+1;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel fazer o registo da reserva", ex);
+        }
+        return 0;
+    }
+    
+    public String tokemReferentReservaId(int idReserva){
+        String select="Select * from TOKEN";
+        PreparedStatement prepareStatement = bd.prepareStatement(select);
+        String token="";
+        
+        try {
+            //prepareStatement.setInt(1, idReserva);
+            
+            ResultSet executeQuery = prepareStatement.executeQuery();
+            
+            while(executeQuery.next()){
+                token +="O seu token é " + executeQuery.getString("CODIGO");
+                System.out.println("IDRes " + executeQuery.getString("id_reserva"));
+            }
+            return token;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return token;
+    }
+   
 
     /**
      * Permite listar as entregas de um DropPoint
@@ -163,30 +282,37 @@ public class Gestao {
 
         return null;
     }
+
     /**
-     * Retrieves respective shell from DB in order to deliver or retrieve to/from it
+     * Retrieves respective shell from DB in order to deliver or retrieve
+     * to/from it
+     *
      * @param token identification token from the user
      * @return Prateleira
-     * @throws domain.TokenNotFoundException
      */
-    public Prateleira procurarPrateleiras(String token){
-        
+    public Prateleira procurarPrateleiras(String token) {
+
         String tipoToken = getTipoToken(token);
 
-        if (tipoToken == null)
-            return null; 
-        
-        if (tipoToken.equalsIgnoreCase("cliente"))
+        if (tipoToken == null) {
+            return null;
+        }
+
+        if (tipoToken.equalsIgnoreCase("cliente")) {
             return getPrateleiraCliente(token);
-        
-        if (tipoToken.equalsIgnoreCase("estafeta"))
+        }
+
+        if (tipoToken.equalsIgnoreCase("estafeta")) {
             return getPrateleiraEstafeta(token);
-        
+        }
+
         return null;
     }
-    
+
     /**
-     * Retrieves shell where a delivery for this client exists (calls getPrateleira())
+     * Retrieves shell where a delivery for this client exists (calls
+     * getPrateleira())
+     *
      * @param token identification token from the user
      * @return Prateleira
      */
@@ -197,6 +323,7 @@ public class Gestao {
 
     /**
      * Retrieves empty shell for delivery purpose (calls getPrateleira())
+     *
      * @param token identification token from the user
      * @return Prateleira
      */
@@ -207,12 +334,13 @@ public class Gestao {
 
     /**
      * Actual shell retrieval
+     *
      * @param query SQL Select statement
      * @return Prateleira
      */
     private Prateleira getPrateleira(String query) {
         Prateleira prat = null;
-        
+
         try {
             ResultSet rs = this.bd.executeQuery(query);
             if (rs.next()) {
@@ -220,21 +348,22 @@ public class Gestao {
                 prat.setId(rs.getInt("ID_PRATELEIRA"));
                 prat.setDesc(rs.getString("NUMERO_PRATELEIRA"));
             }
-                
+
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return prat;
     }
-    
+
     /**
      * Saves opened date on the DB
+     *
      * @param id delivery/picking identification
      */
     public void setDataAbertura(int id) {
         String qry = "";
         this.bd.executeQuery(qry);
-        
+
     }
 
     public void setDataFecho(int id) {
@@ -244,24 +373,30 @@ public class Gestao {
 
     /**
      * Retrieves token type from DB (cliente/estafeta/...)
+     *
      * @param token identification token
      * @return token type
      */
     private String getTipoToken(String token) {
-        
+
         String qry = "select a.descricao from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
-                + " and t.codigo = '"+token+"'";
+                + " and t.codigo = '" + token + "'";
 
         ResultSet rs = this.bd.executeQuery(qry);
-        System.out.println("Going to execute following query:\n"+qry);
+        System.out.println("Going to execute following query:\n" + qry);
         try {
-            if (rs.next())
+            if (rs.next()) {
                 return rs.getString("descricao");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
+    public void closeConection() {
+        bd.closeConnection();
+    }
+
 }
