@@ -35,12 +35,12 @@ public class Gestao {
      * @return Lista do tipo String dos DropPoints do Sistema
      */
     public String listarDropPoint() {
-        ResultSet executeQuery = bd.executeQuery("SELECT DropPoint.idDropPoint, Morada.rua FROM DropPoint INNER JOIN Morada ON Morada.idMorada=DropPoint.idDropPoint");
+        ResultSet executeQuery = bd.executeQuery("SELECT DropPoint.id_DropPoint, Morada.rua FROM DropPoint INNER JOIN Morada ON Morada.idmorada=DropPoint.id_DropPoint");
         List<String> aux = new ArrayList<>();
         try {
             String str = "";
             while (executeQuery.next()) {
-                str += "DropPoint ID:" + String.valueOf(executeQuery.getString("idDropPoint"))
+                str += "DropPoint ID:" + String.valueOf(executeQuery.getString("id_DropPoint"))
                         + " com morada:" + executeQuery.getString("rua") + "\n";
 //                aux.add(temp);
 
