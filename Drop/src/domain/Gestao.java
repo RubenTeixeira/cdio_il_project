@@ -155,18 +155,17 @@ public class Gestao {
     }
     
     public String tokemReferentReservaId(int idReserva){
-        String select="Select * from TOKEN";
+        String select="Select * from TOKEN WHERE id_reserva=?";
         PreparedStatement prepareStatement = bd.prepareStatement(select);
         String token="";
         
         try {
-            //prepareStatement.setInt(1, idReserva);
+            prepareStatement.setInt(1, idReserva);
             
             ResultSet executeQuery = prepareStatement.executeQuery();
             
             while(executeQuery.next()){
                 token +="O seu token é " + executeQuery.getString("CODIGO");
-                System.out.println("IDRes " + executeQuery.getString("id_reserva"));
             }
             return token;
             
