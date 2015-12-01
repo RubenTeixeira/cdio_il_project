@@ -21,6 +21,7 @@ public class RegistoMorada {
 
     private SQLConnection connection;
 
+    private String nextId ="select nvl(max(IDMORADA),0)+1 from Morada";
     private String insert = "INSERT INTO Morada (IDMORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
 
     /**
@@ -57,6 +58,21 @@ public class RegistoMorada {
     public void setConnection(SQLConnection connection) {
         this.connection = connection;
     }
+    
+    
+    private int nextId(){
+        ResultSet executeQuery = connection.executeQuery(nextId);
+        
+         int lastId = 0;
+        try {
+            while (executeQuery.next()) {
+                lastId = Integer.valueOf(executeQuery.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lastId;
+    }
 
     /**
      * Dado um objecto do tipo morada, seus atributos são processados de forma a
@@ -66,26 +82,15 @@ public class RegistoMorada {
      * @return boolean
      */
     public boolean registarMorada(Morada morada) {
-        //FICA POR REVER NEXT ID
-        String m = "SELECT * FROM MORADA ORDER BY idmorada";
-        ResultSet executeQuery = connection.executeQuery(m);
-        int lastId = 0;
-        try {
-            while (executeQuery.next()) {
-                lastId = Integer.valueOf(executeQuery.getString(1));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         PreparedStatement prepareStatement = connection.prepareStatement(insert);
+        int id=nextId();
 
         try {
-            prepareStatement.setInt(1, lastId);
+            prepareStatement.setInt(1, id);
             prepareStatement.setString(2, morada.getRua());
             prepareStatement.setString(3, morada.getCodigoPostal());
             prepareStatement.setString(4, morada.getLocalidade());
-            morada.setId(lastId);
+            morada.setId(id);
             return prepareStatement.execute();
 
         } catch (SQLException ex) {
