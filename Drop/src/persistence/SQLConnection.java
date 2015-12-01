@@ -7,6 +7,7 @@ package persistence;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
  */
 public interface SQLConnection {
 
+    public GenericDAO getDAO(Table t) throws SQLException;
     public ResultSet executeQuery(String query);
     public PreparedStatement prepareStatement(String prepare);
     public boolean closeConnection();

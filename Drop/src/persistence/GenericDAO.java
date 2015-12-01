@@ -6,6 +6,8 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -18,6 +20,8 @@ public abstract class GenericDAO<T> {
     //public abstract int count() throws SQLException; 
     public abstract boolean insertNew(T obj);
     public abstract boolean update(T obj);
+    public abstract void delete(T obj);
+    public abstract T get(int id);
     
 
     protected final String tableName;
@@ -27,5 +31,4 @@ public abstract class GenericDAO<T> {
         this.tableName = tableName;
         this.con = con;
     }
-
 }

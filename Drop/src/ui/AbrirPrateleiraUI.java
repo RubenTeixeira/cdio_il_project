@@ -16,7 +16,7 @@ class AbrirPrateleiraUI {
     private controller.AbrirPrateleiraController controller;
 
     public AbrirPrateleiraUI() {
-        controller = new AbrirPrateleiraController();
+        controller = new AbrirPrateleiraController("settings/settings.txt");
         run();
     }
 

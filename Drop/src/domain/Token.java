@@ -57,6 +57,15 @@ public class Token {
     public void setIdReserva(int idReserva) {
         this.idReserva = idReserva;
     }
+
+    public TransaccaoPrateleira novaTransaccao() {
+        if (this.tipo.equalsIgnoreCase("estafeta")) {
+            return new Entrega(this.idReserva,this.id);
+        } else if (this.tipo.equalsIgnoreCase("cliente")) {
+            return new Recolha(this.id);
+        }
+        return null;
+    }
     
     
     

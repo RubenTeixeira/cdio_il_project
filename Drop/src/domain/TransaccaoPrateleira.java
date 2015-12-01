@@ -10,10 +10,6 @@ package domain;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public interface TransaccaoPrateleira {
-    
-    String getQueryPrateleira(Token token);
-    String getQueryInsert();
-    String getQueryGetId();
     void setDateOpen();
     void setDateClose();
     void setIdToken(int idToken);

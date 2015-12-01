@@ -16,12 +16,14 @@ import java.sql.SQLException;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public class PrateleiraDAO extends GenericDAO<Prateleira> {
+    
+    private final static String TABLENAME = "PRATELEIRA";
 
     public PrateleiraDAO(Connection con) {
         super(con, TABLENAME);
     }
 
-    public Prateleira procurarPrateleiraEntrega(String token) throws SQLException {
+    public Prateleira procurarPrateleiraEntrega(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
                 "  from prateleira p, reserva r, armario a" +
@@ -39,7 +41,7 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
         return procurarPrateleira(query);
     }
     
-    public Prateleira procurarPrateleiraRecolha(String token) throws SQLException {
+    public Prateleira procurarPrateleiraRecolha(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
                 "  from prateleira p, entrega e, reserva r, TOKEN T" +
@@ -53,7 +55,7 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
         
     }
     
-    private Prateleira procurarPrateleira(String query) throws SQLException {
+    private Prateleira procurarPrateleira(String query) {
         Prateleira prateleira = null;
         PreparedStatement stmnt;
         
@@ -66,21 +68,33 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
                 prateleira.setDesc(res.getString("NUMERO_PRATELEIRA"));
             }
         } catch (SQLException e) {
-            throw e;
         }
         return prateleira;
     }
 
-    private final static String TABLENAME = "PRATELEIRA";
 
     @Override
     public boolean insertNew(Prateleira obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Nao e necessario por enquanto
+        return true;
     }
 
     @Override
     public boolean update(Prateleira obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "";
+        //...
+        return true;
+    }
+
+    @Override
+    public void delete(Prateleira obj) {
+        //...
+    }
+
+    @Override
+    public Prateleira get(int id) {
+        // esqueleto...
+        return new Prateleira();
     }
 
 }
