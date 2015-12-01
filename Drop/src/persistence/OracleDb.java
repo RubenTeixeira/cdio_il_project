@@ -48,6 +48,36 @@ public class OracleDb implements SQLConnection, Settings {
     }
 
     /**
+     * Devolve o objecto DAO responsavel pela tabela fornecida
+     * @param t Tabela
+     * @return DAO
+     * @throws SQLException 
+     */
+    public GenericDAO getDAO(Table t) throws SQLException {
+        try {
+            if (this.con == null || this.con.isClosed()) {
+                this.createConnection();
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+
+        switch (t) {
+//            case RECOLHA:
+//                return new RecolhaDAO(this.con);
+//            case ENTREGA:
+//                return new EntregaDAO(this.con);
+//            case TOKEN:
+//                return new TokenDAO(this.con);
+            case PRATELEIRA:
+                return new PrateleiraDAO(this.con);
+            default:
+                throw new SQLException("Trying to link to an unexistant table.");
+        }
+
+    }
+
+    /**
      * Regista o driver a utilizar e cria um objecto do tipo Connection
      */
     private void createConnection() {
