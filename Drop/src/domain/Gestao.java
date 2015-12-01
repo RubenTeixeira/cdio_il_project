@@ -5,16 +5,14 @@
  */
 package domain;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistence.SQLConnection;
@@ -136,10 +134,10 @@ public class Gestao {
      * @return int
      */
     public int reservaPrateleira(int idCliente, int idDropPoint, int idTemperatura, int idDimensao) {
-        //FICA POR REVER NEXT ID
-        String m = "SELECT * FROM RESERVA ORDER BY ID_RESERVA";
+        String m = "select nvl(max(ID_RESERVA),0)+1 FROM RESERVA";
         ResultSet executeQuery = bd.executeQuery(m);
         int lastId = 0;
+        
         try {
             while (executeQuery.next()) {
                 lastId = Integer.valueOf(executeQuery.getString(1));
@@ -148,19 +146,20 @@ public class Gestao {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String query = "INSERT INTO Reserva(ID_RESERVA,ID_CLIENTE,ID_DROPPOINT,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
+        String query = "INSERT INTO Reserva(ID_RESERVA,ID_DROPPOINT,ID_CLIENTE,ID_TEMPERATURA,ID_TIPO_DIMENSAO) VALUES (?,?,?,?,?)";
         PreparedStatement prepareStatement = bd.prepareStatement(query);
 
         try {
-            prepareStatement.setInt(1, (lastId + 1));
-            prepareStatement.setInt(2, idCliente);
-            prepareStatement.setInt(3, idDropPoint);
+            
+            prepareStatement.setInt(1, lastId);
+            prepareStatement.setInt(2, idDropPoint);
+            prepareStatement.setInt(3, idCliente);
             prepareStatement.setInt(4, idTemperatura);
             prepareStatement.setInt(5, idDimensao);
 
             prepareStatement.execute();
 
-            return lastId + 1;
+            return lastId;
 
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel fazer o registo da reserva", ex);
@@ -176,27 +175,53 @@ public class Gestao {
      * @return String
      */
     public String tokemReferentReservaId(int idReserva) {
-//        //FICA POR REVER NEXT ID
-//        String m = "SELECT * FROM TOKEN";
-//        ResultSet executeQuery = bd.executeQuery(m);
-//        int lastId = 0;
-//        try {
-//            while (executeQuery.next()) {
-//                lastId = Integer.valueOf(executeQuery.getString(1));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        /////////////////////////////////////
-        ////////// A REVER GERACAO DE TOKENS/////////////
-        
-//        String select = "Insert into TOKEN(id_token,data_geracao,data_validade,id_tipo_token,ativo,id_reserva,codigo) VALUES (?,?,?,?,?,?,?)";
-//       // PreparedStatement prepareStatement = bd.prepareStatement(select);
-       String token = "";
+        String m = "select nvl(max(id_token),0)+1 FROM TOKEN";
+        ResultSet executeQuery = bd.executeQuery(m);
+        int lastId = 0;
+        try {
+            while (executeQuery.next()) {
+                lastId = Integer.valueOf(executeQuery.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        token += "O seu token é " + Calendar.getInstance().toString().hashCode();
-        return token;
- }
+        String select = "Insert into TOKEN(id_token,data_geracao,data_validade,id_tipo_token,ativo,id_reserva,codigo) VALUES (?,?,?,?,?,?,?)";
+        PreparedStatement prepareStatement = bd.prepareStatement(select);
+
+        try {
+            
+            Calendar instance = Calendar.getInstance();
+            
+            Date now = new Date(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_WEEK));
+            Date validade = new Date(instance.get(Calendar.YEAR), (instance.get(Calendar.MONTH)+1), instance.get(Calendar.DAY_OF_WEEK));
+            String token = UUID.randomUUID().toString();
+            prepareStatement.setInt(1, lastId);
+            prepareStatement.setDate(2, now);
+            prepareStatement.setDate(3, validade);
+            prepareStatement.setInt(4, 1);
+            prepareStatement.setInt(5, 1);
+            prepareStatement.setInt(6, idReserva);
+            prepareStatement.setString(7, token);
+
+            prepareStatement.execute();
+
+            token=UUID.randomUUID().toString();;
+
+            prepareStatement.setInt(1,lastId+1);
+            prepareStatement.setInt(4, 2);
+            prepareStatement.setString(7, token);
+
+            prepareStatement.execute();
+            
+            return token;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Não foi possivel efectuar a reserva.", ex);
+        }
+
+        return null;
+    }
 
     /**
      * Permite listar as entregas de um DropPoint
@@ -302,9 +327,9 @@ public class Gestao {
 
         return null;
     }
-    
-    public Prateleira procurarPrateleira(TransaccaoPrateleira trans, Token token){
-        
+
+    public Prateleira procurarPrateleira(TransaccaoPrateleira trans, Token token) {
+
         return getPrateleira(trans.getQueryPrateleira(token));
 
     }
@@ -332,7 +357,6 @@ public class Gestao {
         return prat;
     }
 
-    
     public void setDataAbertura(TransaccaoPrateleira trans) {
         trans.setDateOpen();
     }
@@ -342,39 +366,40 @@ public class Gestao {
         fecharTransaccao(trans);
     }
 
-    
     private boolean fecharTransaccao(TransaccaoPrateleira trans) {
         String qry = trans.getQueryGetId();
 
         ResultSet rs = this.bd.executeQuery(qry);
 
         try {
-            if (rs.next())
+            if (rs.next()) {
                 trans.setId(rs.getInt("id"));
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (!trans.valido())
+        if (!trans.valido()) {
             return false;
-        
+        }
+
         qry = trans.getQueryInsert();
 
         ResultSet rs2 = this.bd.executeQuery(qry);
-        
+
         return rs2 != null;
     }
 
- 
     public Token getToken(String token) {
         Token tokenObj = null;
         String qry = "select t.id_token, a.descricao, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
-                + " and t.codigo = '"+token+"'";
+                + " and t.codigo = '" + token + "'";
         ResultSet rs = this.bd.executeQuery(qry);
         try {
-            if (rs.next())
+            if (rs.next()) {
                 tokenObj = new Token(rs.getInt("id_token"), token, rs.getString("descricao"), rs.getInt("id_reserva"));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -383,24 +408,21 @@ public class Gestao {
 
     public int getIdEntregaCorrespondente(Token token) {
         String qry = "select e.id_entrega from token t, reserva r, entrega e"
-                    + "     where t.id_reserva = r.id_reserva"
-                    + "         and r.id_reserva = e.id_reserva"
-                    + "         and t.codigo = '"+token.getCodigo()+"'";
-        
+                + "     where t.id_reserva = r.id_reserva"
+                + "         and r.id_reserva = e.id_reserva"
+                + "         and t.codigo = '" + token.getCodigo() + "'";
+
         ResultSet rs = this.bd.executeQuery(qry);
-        
+
         try {
-            if (rs.next())
+            if (rs.next()) {
                 return rs.getInt("id_entrega");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return -1;
     }
-
-
-    
-
 
     public void closeConection() {
         bd.closeConnection();
