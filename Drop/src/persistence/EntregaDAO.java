@@ -118,7 +118,7 @@ public class EntregaDAO extends GenericDAO<Entrega> {
             stmnt = this.con.prepareStatement(qry);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
-                return rs.getString("email");
+                return rs.getString("codigo");
             }
         } catch (SQLException ex) {
         }
