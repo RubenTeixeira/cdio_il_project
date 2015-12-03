@@ -3,6 +3,7 @@ package controller;
 import domain.Cliente;
 import domain.Gestao;
 import domain.RegistoCliente;
+import java.util.List;
 
 public class ComprarServicoDPController {
 
@@ -37,7 +38,7 @@ public class ComprarServicoDPController {
         this.idDropPoint = idDP;
     }
 
-    public String listarPreferenciasTemp() {
+    public List<String> listarPreferenciasTemp() {
         return this.gestao.ListarPreferenciasTemperatura();
     }
 
@@ -45,7 +46,7 @@ public class ComprarServicoDPController {
         this.idPrerenciasTemp = temp;
     }
 
-    public String listarPreferenciasDim() {
+    public List<String> listarPreferenciasDim() {
         return this.gestao.ListarPreferenciasDimensao();
     }
 
