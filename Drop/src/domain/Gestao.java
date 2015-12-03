@@ -85,7 +85,7 @@ public class Gestao {
             while (executeQuery.next()) {
 
                 op.add("Prateleira ID: " + executeQuery.getString("ID_TEMPERATURA") + " "
-                        + executeQuery.getString("DESCRICAO") + " com temperaturas entre ["
+                        + executeQuery.getString("DESCRICAO") + "["
                         + executeQuery.getString("TEMP_MAX") + "|" + executeQuery.getString("TEMP_MIN"));
 
             }
@@ -111,7 +111,7 @@ public class Gestao {
             while (executeQuery.next()) {
 
                 op.add("Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
-                        + executeQuery.getString("DESCRICAO") + " ,com dimensoes de altura, lasgura,comprimento respectivamente de"
+                        + executeQuery.getString("DESCRICAO") 
                         + executeQuery.getString("ALTURA") + "x" + executeQuery.getString("LARGURA") + "x"
                         + executeQuery.getString("COMPRIMENTO"));
 
