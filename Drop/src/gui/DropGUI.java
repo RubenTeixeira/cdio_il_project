@@ -101,7 +101,15 @@ public class DropGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarServicoActionPerformed
-
+        dropChoosed = (DropPoint) listDropPoints.getSelectedValue();
+        if (dropChoosed != null)
+        {
+            seeInfoDPController.selectDropPoint(dropChoosed);
+            new ComprarServicoGUI(this, dropChoosed);
+        }else
+        {
+            JOptionPane.showMessageDialog(this, "Tem de selecionar um DropPoint para poder ver a sua informação", "Erro ao selecionar", JOptionPane.INFORMATION_MESSAGE, null);
+        }
     }//GEN-LAST:event_btnComprarServicoActionPerformed
 
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed

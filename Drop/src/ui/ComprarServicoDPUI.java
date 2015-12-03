@@ -1,8 +1,6 @@
 package ui;
 
 import controller.ComprarServicoDPController;
-import domain.Cliente;
-import domain.Morada;
 
 public class ComprarServicoDPUI {
 
@@ -75,7 +73,7 @@ public class ComprarServicoDPUI {
             System.out.println("Confirma reserva s/n?");
             String confirma = utils.ReadFromKeyboard.readString();
 
-            if (confirma.equalsIgnoreCase("s") || confirma.equalsIgnoreCase("Sim")) {
+            if (confirma.equalsIgnoreCase("s") || confirma.equalsIgnoreCase("sim")) {
                 if (controller.confirmarRegisto()) {
                     System.out.println("Registo com sucesso!");
                     System.out.println(controller.tokenCliente());
