@@ -16,14 +16,14 @@ import java.sql.SQLException;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public class TokenDAO extends GenericDAO<Token> {
-    
+
     private final static String TABLENAME = "TOKEN";
 
     public TokenDAO(Connection con) {
         super(con, TABLENAME);
     }
-    
-    public Token getByCodigo(String codigo)  {
+
+    public Token getByCodigo(String codigo) {
         Token tokenObj = null;
         String qry = "select t.id_token, a.descricao, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
@@ -40,6 +40,20 @@ public class TokenDAO extends GenericDAO<Token> {
         } catch (SQLException e) {
         }
         return tokenObj;
+    }
+
+    public int getNextId() {
+        String query = "select nvl(max(id_token),0)+1 as id from token";
+        PreparedStatement stmnt;
+        try {
+            stmnt = this.con.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException ex) {
+        }
+        return -1;
     }
 
     @Override
@@ -61,5 +75,5 @@ public class TokenDAO extends GenericDAO<Token> {
     public Token get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
