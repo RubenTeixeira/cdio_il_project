@@ -195,7 +195,7 @@ public class Gestao {
             
             Date now = new Date(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_WEEK));
             Date validade = new Date(instance.get(Calendar.YEAR), (instance.get(Calendar.MONTH)+1), instance.get(Calendar.DAY_OF_WEEK));
-            String token = UUID.randomUUID().toString();
+            String token = UUID.randomUUID().toString().substring(0, 8);
             prepareStatement.setInt(1, lastId);
             prepareStatement.setDate(2, now);
             prepareStatement.setDate(3, validade);
@@ -206,11 +206,10 @@ public class Gestao {
 
             prepareStatement.execute();
 
-            token=UUID.randomUUID().toString();;
-
+            String token1=UUID.randomUUID().toString().substring(0, 8);
             prepareStatement.setInt(1,lastId+1);
             prepareStatement.setInt(4, 2);
-            prepareStatement.setString(7, token);
+            prepareStatement.setString(7, token1);
 
             prepareStatement.execute();
             
