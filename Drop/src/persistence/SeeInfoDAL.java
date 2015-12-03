@@ -50,7 +50,7 @@ public class SeeInfoDAL {
                 lstDroPoint.add(drop);
             }
         } catch (Exception ex) {
-            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, "Error trying to create DropPoints", ex);
+            Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create DropPoints", ex);
         }
         return lstDroPoint;
     }
@@ -86,7 +86,7 @@ public class SeeInfoDAL {
                         rs.getInt("PRATELEIRAS_DISPONIVEIS"));
             }
         } catch (Exception ex) {
-            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return info;
     }
@@ -103,7 +103,7 @@ public class SeeInfoDAL {
                         rs.getString("LOCALIDADE"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return adress;
     }
@@ -118,7 +118,7 @@ public class SeeInfoDAL {
                         rs.getString("LONGITUDE"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return adress;
     }
