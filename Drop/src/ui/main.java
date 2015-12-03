@@ -20,7 +20,7 @@ public class main {
     static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) throws SQLException {
-        utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
+        //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
         int op = 0;
 
@@ -42,6 +42,7 @@ public class main {
                     
                 case 3:
                     new AbrirPrateleiraUI();
+                    
                     break;
                 case 4:
                     exit(0);
