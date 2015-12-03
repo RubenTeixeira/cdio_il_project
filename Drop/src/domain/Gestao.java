@@ -76,17 +76,17 @@ public class Gestao {
      *
      * @return lista
      */
-    public String ListarPreferenciasTemperatura() {
+    public List<String> ListarPreferenciasTemperatura() {
         ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_TEMPERATURA");
-        String op = "";
+        List<String> op = new ArrayList<>();
 
         try {
 
             while (executeQuery.next()) {
 
-                op += "Prateleira ID: " + executeQuery.getString("ID_TEMPERATURA") + " "
+                op.add("Prateleira ID: " + executeQuery.getString("ID_TEMPERATURA") + " "
                         + executeQuery.getString("DESCRICAO") + " com temperaturas entre ["
-                        + executeQuery.getString("TEMP_MAX") + "|" + executeQuery.getString("TEMP_MIN") + "]\n";
+                        + executeQuery.getString("TEMP_MAX") + "|" + executeQuery.getString("TEMP_MIN"));
 
             }
 
@@ -102,18 +102,18 @@ public class Gestao {
      *
      * @return String
      */
-    public String ListarPreferenciasDimensao() {
+    public List<String> ListarPreferenciasDimensao() {
         ResultSet executeQuery = bd.executeQuery("SELECT * FROM CLASSE_DIMENSAO");
-        String op = "";
+        List<String> op = new ArrayList<>();
 
         try {
 
             while (executeQuery.next()) {
 
-                op += "Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
+                op.add("Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
                         + executeQuery.getString("DESCRICAO") + " ,com dimensoes de altura, lasgura,comprimento respectivamente de"
                         + executeQuery.getString("ALTURA") + "x" + executeQuery.getString("LARGURA") + "x"
-                        + executeQuery.getString("COMPRIMENTO") + "\n";
+                        + executeQuery.getString("COMPRIMENTO"));
 
             }
 
