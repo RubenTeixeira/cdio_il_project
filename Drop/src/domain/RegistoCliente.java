@@ -95,6 +95,11 @@ public class RegistoCliente {
      * @return boolean
      */
     public boolean registarCliente(Cliente novoCliente) {
+        
+        if(!novoCliente.valida()){
+            return false;
+        }
+        
         PreparedStatement prepareStatement = connection.prepareStatement(insert);
         try {
 
@@ -110,7 +115,7 @@ public class RegistoCliente {
             return prepareStatement.execute();
 
         } catch (SQLException ex) {
-            Logger.getLogger(RegistoCliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegistoCliente.class.getName()).log(Level.SEVERE, "Not possible to register :"+ novoCliente, ex);
         }
 
         return false;
