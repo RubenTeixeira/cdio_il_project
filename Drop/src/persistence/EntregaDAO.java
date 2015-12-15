@@ -7,7 +7,6 @@ package persistence;
 
 import domain.Entrega;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,28 +27,27 @@ public class EntregaDAO extends GenericDAO<Entrega> {
                 + "     where t.id_reserva = r.id_reserva"
                 + "         and r.id_reserva = e.id_reserva"
                 + "         and t.codigo = '" + token + "'";
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(qry);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
                 return rs.getInt("id_entrega");
+            } catch (SQLException ex) {
             }
-        } catch (SQLException ex) {
         }
         return -1;
+        
     }
 
     public int getNextId() {
         String query = "select nvl(max(id_entrega),0)+1 as id from entrega";
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(query);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
                 return rs.getInt("id");
+            } catch (SQLException ex) {
             }
-        } catch (SQLException ex) {
         }
         return -1;
     }
@@ -61,16 +59,8 @@ public class EntregaDAO extends GenericDAO<Entrega> {
                 + " VALUES (" + obj.getIdEntrega() + "," + obj.getIdPrat() + "," + obj.getIdReservation() + "," + obj.getIdToken() + ","
                 + "TO_DATE('" + obj.getDateOpen() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getDateClose() + "', 'dd-mm-yyyy HH24:MI'))";
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(query);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException ex) {
-        }
-        return false;
+        ResultSet rs = executeQuery(query);
+        return rs != null;
     }
 
     @Override
@@ -94,16 +84,15 @@ public class EntregaDAO extends GenericDAO<Entrega> {
         String qry = "select c.email from cliente c, reserva r"
                 + "     where r.id_reserva = " + idReservation
                 + "AND r.id_cliente = c.id_cliente";
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(qry);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
                 return rs.getString("email");
+            } catch (SQLException ex) {
             }
-        } catch (SQLException ex) {
         }
-        return "";
+        return null;
     }
 
     public String getTokenRecolha(Entrega entrega) {
@@ -113,16 +102,15 @@ public class EntregaDAO extends GenericDAO<Entrega> {
                 + "     where t.id_reserva = " + idReservation
                 + "AND t.id_tipo_token = 2"
                 + "AND t.ativo = 1";
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(qry);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
                 return rs.getString("codigo");
+            } catch (SQLException ex) {
             }
-        } catch (SQLException ex) {
         }
-        return "";
+        return null;
     }
 
 }

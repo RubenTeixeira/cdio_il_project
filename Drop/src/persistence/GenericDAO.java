@@ -5,10 +5,13 @@
  */
 package persistence;
 
+import domain.Gestao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +20,7 @@ import java.sql.SQLException;
  */
 public abstract class GenericDAO<T> {
 
-    //public abstract int count() throws SQLException; 
+
     public abstract boolean insertNew(T obj);
     public abstract boolean update(T obj);
     public abstract void delete(T obj);
@@ -30,5 +33,20 @@ public abstract class GenericDAO<T> {
     protected GenericDAO(Connection con, String tableName) {
         this.tableName = tableName;
         this.con = con;
+    }
+    
+    public ResultSet executeQuery(String query) {
+        PreparedStatement stmnt;
+        ResultSet rs = null;
+        try {
+            stmnt = this.con.prepareStatement(query);
+            rs = stmnt.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+        }
+        return rs;
     }
 }

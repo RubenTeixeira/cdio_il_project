@@ -6,6 +6,8 @@
 package persistence;
 
 import domain.Token;
+import domain.TokenCliente;
+import domain.TokenEstafeta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +37,7 @@ public class TokenDAO extends GenericDAO<Token> {
             stmnt = this.con.prepareStatement(qry);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
-                tokenObj = new Token(rs.getInt("id_token"), codigo, rs.getString("descricao"), rs.getInt("id_reserva"));
+                tokenObj = createToken(rs.getInt("id_token"), codigo, rs.getString("descricao"), rs.getInt("id_reserva"));
             }
         } catch (SQLException e) {
         }
@@ -74,6 +76,23 @@ public class TokenDAO extends GenericDAO<Token> {
     @Override
     public Token get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Token createToken(int idToken, String codigo, String description, int idReservation) {
+        Token token;
+        
+        switch (description.toLowerCase()) {
+            
+            case "cliente":
+                token = new TokenCliente(idToken, codigo, idReservation);
+                break;
+            case "estafeta":
+                token = new TokenEstafeta(idToken, codigo, idReservation);
+                break;
+            default:
+                return null;
+        }
+        return token;
     }
 
 }

@@ -71,8 +71,8 @@ public class Entrega implements TransaccaoPrateleira {
     public void setIdToken(int idToken) {this.idToken = idToken;}
 
     @Override
-    public boolean valido() {
-        return idEntrega > 0 && idPrat > 0 && idReservation > 0 && idToken > 0 && dateOpen != null && dateClose != null;
+    public boolean valida() {
+        return idPrat > 0 && idReservation > 0 && idToken > 0 && dateOpen != null && dateClose != null;
     }
 
     @Override

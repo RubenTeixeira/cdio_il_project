@@ -23,10 +23,18 @@ public class Recolha implements TransaccaoPrateleira {
     public Recolha() {
     }
 
-    public Recolha(int idRecolha, int idToken) {
+    public Recolha(int idRecolha, int idEntrega, String dateOpen, int idToken) {
         this.idRecolha = idRecolha;
+        this.idEntrega = idEntrega;
+        this.dateOpen = dateOpen;
         this.idToken = idToken;
     }
+
+    public Recolha(int idEntrega, int idToken) {
+        this.idEntrega = idEntrega;
+        this.idToken = idToken;
+    }
+    
 
     public Recolha(int idToken) {
         this.idToken = idToken;
@@ -73,8 +81,8 @@ public class Recolha implements TransaccaoPrateleira {
     }
 
     @Override
-    public boolean valido() {
-        return idEntrega > 0 && idRecolha > 0 && idToken > 0 && dateOpen != null && dateClose != null;
+    public boolean valida() {
+        return idEntrega > 0 && idToken > 0 && dateOpen != null && dateClose != null;
     }
 
     @Override

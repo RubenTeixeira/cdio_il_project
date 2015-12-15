@@ -14,5 +14,5 @@ public interface TransaccaoPrateleira {
     void setDateClose();
     void setIdToken(int idToken);
     void setId(int id);
-    boolean valido();
+    boolean valida();
 }
