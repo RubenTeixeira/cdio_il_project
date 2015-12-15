@@ -21,7 +21,7 @@ public class RegistoMorada {
 
     private SQLConnection connection;
 
-    private String nextId ="select nvl(max(IDMORADA),0)+1 from Morada";
+    private String nextId = "select nvl(max(IDMORADA),0)+1 from Morada";
     private String insert = "INSERT INTO Morada (IDMORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
 
     /**
@@ -58,18 +58,17 @@ public class RegistoMorada {
     public void setConnection(SQLConnection connection) {
         this.connection = connection;
     }
-    
-    
-    private int nextId(){
+
+    private int nextId() {
         ResultSet executeQuery = connection.executeQuery(nextId);
-        
-         int lastId = 0;
+
+        int lastId = 0;
         try {
-            while (executeQuery.next()) {
-                lastId = Integer.valueOf(executeQuery.getString(1));
-            }
+            executeQuery.next();
+            lastId = Integer.valueOf(executeQuery.getString(1));
+            
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Not possible to get next id.", ex);
         }
         return lastId;
     }
@@ -82,8 +81,11 @@ public class RegistoMorada {
      * @return boolean
      */
     public boolean registarMorada(Morada morada) {
+        if(!morada.valida())
+            return false;
+        
         PreparedStatement prepareStatement = connection.prepareStatement(insert);
-        int id=nextId();
+        int id = nextId();
 
         try {
             prepareStatement.setInt(1, id);
@@ -94,7 +96,7 @@ public class RegistoMorada {
             return prepareStatement.execute();
 
         } catch (SQLException ex) {
-            Logger.getLogger(RegistoMorada.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegistoMorada.class.getName()).log(Level.SEVERE, "Not possible to register the folling data: " + morada, ex);
         }
 
         return false;

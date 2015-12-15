@@ -1,14 +1,14 @@
 package ui;
 
 import controller.RegistarClienteController;
-import domain.Morada;
+import persistence.OracleDb;
 
 public class RegistarClienteUI {
 
     private controller.RegistarClienteController controller;
 
     public RegistarClienteUI() {
-        controller = new RegistarClienteController();
+        controller = new RegistarClienteController(OracleDb.getInstance());
         run();
     }
 

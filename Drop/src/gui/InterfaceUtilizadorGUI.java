@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import persistence.OracleDb;
 
 /**
  *
@@ -33,7 +34,7 @@ public class InterfaceUtilizadorGUI extends javax.swing.JFrame {
         dropChoosed = dp;
         idTamanho = tamanho;
         idTemperatura = temperatura;
-        controller = new ComprarServicoDPController();
+        controller = new ComprarServicoDPController(OracleDb.getInstance());
         initComponents();
         fecharJanela();
         setLocationRelativeTo(null);

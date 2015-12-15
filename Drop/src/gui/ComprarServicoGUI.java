@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.*;
+import persistence.OracleDb;
 
 /**
  *
@@ -24,7 +25,7 @@ public class ComprarServicoGUI extends JFrame {
         super("Group Epsilon - Buy Drop Point Service");
         this.parentFrame = parentFrame;
         this.dropChoosed = dp;
-        controller = new ComprarServicoDPController();
+        controller = new ComprarServicoDPController(OracleDb.getInstance());
         fecharJanela();
         initComponents();
 
@@ -100,17 +101,17 @@ public class ComprarServicoGUI extends JFrame {
 
         jLabel2.setText("Tamanho da Prateleira:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(30, 80, 130, 16);
+        jLabel2.setBounds(30, 80, 130, 17);
 
         getContentPane().add(cbTipoPrateleira);
-        cbTipoPrateleira.setBounds(30, 100, 290, 26);
+        cbTipoPrateleira.setBounds(30, 100, 290, 27);
 
         jLabel3.setText("Temperatura desejada:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(30, 130, 130, 16);
+        jLabel3.setBounds(30, 130, 130, 17);
 
         getContentPane().add(cbTipoTemperatura);
-        cbTipoTemperatura.setBounds(30, 150, 290, 26);
+        cbTipoTemperatura.setBounds(30, 150, 290, 27);
 
         seguinteBTN.setText("Seguinte");
         seguinteBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +120,7 @@ public class ComprarServicoGUI extends JFrame {
             }
         });
         getContentPane().add(seguinteBTN);
-        seguinteBTN.setBounds(40, 220, 120, 28);
+        seguinteBTN.setBounds(40, 220, 120, 29);
 
         sairBTN.setText("Sair");
         sairBTN.addActionListener(new java.awt.event.ActionListener() {
