@@ -5,7 +5,7 @@
  */
 package persistence;
 
-import domain.Recolha;
+import domain.PickUp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,11 +15,11 @@ import java.sql.SQLException;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-public class RecolhaDAO extends GenericDAO<Recolha> {
+public class PickUpDAO extends GenericDAO<PickUp> {
     
     private final static String TABLENAME = "RECOLHA";
 
-    public RecolhaDAO(Connection con) {
+    public PickUpDAO(Connection con) {
         super(con, TABLENAME);
     }
     
@@ -38,12 +38,12 @@ public class RecolhaDAO extends GenericDAO<Recolha> {
     }
 
     @Override
-    public boolean insertNew(Recolha obj) {
+    public boolean insertNew(PickUp obj) {
         String query = "INSERT INTO RECOLHA ("
                 + "ID_RECOLHA,ID_ENTREGA,ID_TOKEN_CLIENTE,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA)"
-                + " VALUES ("+obj.getIdRecolha()+","+obj.getIdEntrega()+","+obj.getIdToken()+","
-                + "TO_DATE('"+obj.getDateOpen()+"', 'dd-mm-yyyy HH24:MI'),"
-                + "TO_DATE('"+obj.getDateClose()+"', 'dd-mm-yyyy HH24:MI'))";
+                + " VALUES ("+obj.getPickUpID()+","+obj.getDeliveryID()+","+obj.getTokenID()+","
+                + "TO_DATE('"+obj.getOpenedDate()+"', 'dd-mm-yyyy HH24:MI'),"
+                + "TO_DATE('"+obj.getClosedDate()+"', 'dd-mm-yyyy HH24:MI'))";
         PreparedStatement stmnt;
         try {
             stmnt=this.con.prepareStatement(query);
@@ -57,17 +57,17 @@ public class RecolhaDAO extends GenericDAO<Recolha> {
     }
 
     @Override
-    public boolean update(Recolha obj) {
+    public boolean update(PickUp obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Recolha obj) {
+    public void delete(PickUp obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Recolha get(int id) {
+    public PickUp get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -5,7 +5,7 @@
  */
 package persistence;
 
-import domain.Prateleira;
+import domain.Cell;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,15 +15,15 @@ import java.sql.SQLException;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-public class PrateleiraDAO extends GenericDAO<Prateleira> {
+public class CellDAO extends GenericDAO<Cell> {
     
     private final static String TABLENAME = "PRATELEIRA";
 
-    public PrateleiraDAO(Connection con) {
+    public CellDAO(Connection con) {
         super(con, TABLENAME);
     }
 
-    public Prateleira procurarPrateleiraEntrega(String token) {
+    public Cell findCellForDelivery(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
                 "  from prateleira p, reserva r, armario a" +
@@ -38,10 +38,10 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
                 "                  and t.codigo = '"+token+"' and t.ATIVO = 1)" +
                 "    and ROWNUM = 1";
         
-        return procurarPrateleira(query);
+        return findCell(query);
     }
     
-    public Prateleira procurarPrateleiraRecolha(String token) {
+    public Cell findCellForPickUp(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
                 "  from prateleira p, entrega e, reserva r, TOKEN T" +
@@ -51,21 +51,21 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
                 "  and r.ID_RESERVA = T.ID_RESERVA" +
                 "  and T.CODIGO = '"+token+"' and T.ATIVO = 1";
         
-        return procurarPrateleira(query);
+        return findCell(query);
         
     }
     
-    private Prateleira procurarPrateleira(String query) {
-        Prateleira prateleira = null;
+    private Cell findCell(String query) {
+        Cell prateleira = null;
         PreparedStatement stmnt;
         
         try {
             stmnt = this.con.prepareStatement(query);
             ResultSet res = stmnt.executeQuery();
             if (res.next()) {
-                prateleira = new Prateleira();
+                prateleira = new Cell();
                 prateleira.setId(res.getInt("ID_PRATELEIRA"));
-                prateleira.setDesc(res.getString("NUMERO_PRATELEIRA"));
+                prateleira.setDescription(res.getString("NUMERO_PRATELEIRA"));
             }
         } catch (SQLException e) {
         }
@@ -74,27 +74,27 @@ public class PrateleiraDAO extends GenericDAO<Prateleira> {
 
 
     @Override
-    public boolean insertNew(Prateleira obj) {
+    public boolean insertNew(Cell obj) {
         // Nao e necessario por enquanto
         return true;
     }
 
     @Override
-    public boolean update(Prateleira obj) {
+    public boolean update(Cell obj) {
         String query = "";
         //...
         return true;
     }
 
     @Override
-    public void delete(Prateleira obj) {
+    public void delete(Cell obj) {
         //...
     }
 
     @Override
-    public Prateleira get(int id) {
+    public Cell get(int id) {
         // esqueleto...
-        return new Prateleira();
+        return new Cell();
     }
 
 }

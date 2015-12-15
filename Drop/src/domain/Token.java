@@ -15,12 +15,12 @@ public interface Token {
 
     int getId();
     void setId(int id);
-    String getCodigo();
-    void setCodigo(String codigo);
-    int getIdReserva();
-    void setIdReserva(int idReserva);
-    TransaccaoPrateleira novaTransaccao(SQLConnection manager);
-    Prateleira getPrateleira(SQLConnection manager);
-    void terminar(SQLConnection manager, TransaccaoPrateleira transaccao);
+    String getCode();
+    void setCode(String code);
+    int getReservationId();
+    void setReservationId(int reservationID);
+    CellTransaction newTransaction(SQLConnection manager);
+    Cell getCell(SQLConnection manager);
+    void close(SQLConnection manager, CellTransaction transaction);
  
 }

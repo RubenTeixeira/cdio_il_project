@@ -65,13 +65,13 @@ public class OracleDb implements SQLConnection, Settings {
 
         switch (t) {
             case RECOLHA:
-                return new RecolhaDAO(this.con);
+                return new PickUpDAO(this.con);
             case ENTREGA:
-                return new EntregaDAO(this.con);
+                return new DeliveryDAO(this.con);
             case TOKEN:
                 return new TokenDAO(this.con);
             case PRATELEIRA:
-                return new PrateleiraDAO(this.con);
+                return new CellDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");
         }

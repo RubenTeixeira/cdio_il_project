@@ -35,22 +35,22 @@ public abstract class TokenImpl implements Token {
     }
 
     @Override
-    public String getCodigo() {
+    public String getCode() {
         return codigo;
     }
 
     @Override
-    public void setCodigo(String codigo) {
+    public void setCode(String codigo) {
         this.codigo = codigo;
     }
 
     @Override
-    public int getIdReserva() {
+    public int getReservationId() {
         return idReserva;
     }
 
     @Override
-    public void setIdReserva(int idReserva) {
+    public void setReservationId(int idReserva) {
         this.idReserva = idReserva;
     }
 

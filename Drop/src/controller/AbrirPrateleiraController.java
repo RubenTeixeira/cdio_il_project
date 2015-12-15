@@ -17,8 +17,8 @@ import persistence.*;
  */
 public class AbrirPrateleiraController {
 
-    private TransaccaoPrateleira transaccao;
-    private Prateleira prateleira;
+    private CellTransaction transaccao;
+    private Cell prateleira;
     private Token token;
     private SQLConnection manager;
     private TokenDAO tokenDAO;
@@ -34,8 +34,8 @@ public class AbrirPrateleiraController {
 
     public String iniciaAberturaPrateleira(String tok) {
         this.token = tokenDAO.getByCodigo(tok);
-        this.transaccao = token.novaTransaccao(manager);
-        this.prateleira = token.getPrateleira(manager);
+        this.transaccao = token.newTransaction(manager);
+        this.prateleira = token.getCell(manager);
         return this.prateleira.toString();
     }
 
@@ -49,8 +49,8 @@ public class AbrirPrateleiraController {
     }
 
     private void terminarTransaccao() {
-        if (this.transaccao.valida())
-            this.token.terminar(manager, this.transaccao);
+        if (this.transaccao.validate())
+            this.token.close(manager, this.transaccao);
         else
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Invalid data, please verify.");
     }

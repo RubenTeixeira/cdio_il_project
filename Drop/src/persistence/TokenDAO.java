@@ -6,8 +6,8 @@
 package persistence;
 
 import domain.Token;
-import domain.TokenCliente;
-import domain.TokenEstafeta;
+import domain.TokenClient;
+import domain.TokenCourier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,10 +83,10 @@ public class TokenDAO extends GenericDAO<Token> {
         switch (description.toLowerCase()) {
             
             case "cliente":
-                token = new TokenCliente(idToken, codigo, idReservation);
+                token = new TokenClient(idToken, codigo, idReservation);
                 break;
             case "estafeta":
-                token = new TokenEstafeta(idToken, codigo, idReservation);
+                token = new TokenCourier(idToken, codigo, idReservation);
                 break;
             default:
                 return null;

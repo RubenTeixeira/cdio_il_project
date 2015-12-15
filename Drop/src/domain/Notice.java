@@ -11,13 +11,13 @@ import utils.GoogleMail;
  *
  * @author vascopinho
  */
-public class Notificacao {
+public class Notice {
     private String email;
     private String token;
     
     
 
-    public Notificacao() {
+    public Notice() {
     }
 
     public void setEmail(String email) {
