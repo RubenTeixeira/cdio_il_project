@@ -112,6 +112,23 @@ public class OracleDb implements SQLConnection, Settings {
             return null;
         }
     }
+    
+    @Override
+    public boolean executeUpdate(String query){
+         if (this.con == null) {
+            throw new IllegalAccessError("Conexão inixistente à base de dados!");
+        }
+        Statement c_st = null;
+        try {
+            c_st = this.con.createStatement();
+            ResultSet rs = null;
+             int executeUpdate = c_st.executeUpdate(query);
+            return executeUpdate!=0;
+        } catch (SQLException ex) {
+            Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, "Oops algo de errado aconteceu!", ex);
+            return false;
+        }
+    }
 
     @Override
     public PreparedStatement prepareStatement(String prStat) {

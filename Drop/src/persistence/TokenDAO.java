@@ -32,14 +32,13 @@ public class TokenDAO extends GenericDAO<Token> {
                 + " and t.codigo = '" + codigo + "'";
         System.out.println("QUERY");
         System.out.println(qry);
-        PreparedStatement stmnt;
-        try {
-            stmnt = this.con.prepareStatement(qry);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
                 tokenObj = createToken(rs.getInt("id_token"), codigo, rs.getString("descricao"), rs.getInt("id_reserva"));
+            } catch (SQLException e) {
             }
-        } catch (SQLException e) {
         }
         return tokenObj;
     }

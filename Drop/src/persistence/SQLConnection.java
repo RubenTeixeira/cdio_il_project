@@ -18,6 +18,8 @@ public interface SQLConnection {
     public GenericDAO getDAO(Table t) throws SQLException;
     public ResultSet executeQuery(String query);
     public PreparedStatement prepareStatement(String prepare);
+    public boolean executeUpdate(String query);
     public boolean closeConnection();
+    
     
 }

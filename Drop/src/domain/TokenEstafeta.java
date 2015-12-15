@@ -26,8 +26,11 @@ public class TokenEstafeta extends TokenImpl {
     @Override
     public TransaccaoPrateleira novaTransaccao(SQLConnection manager) {
         Prateleira prateleira = getPrateleira(manager);
-        if (prateleira != null)
+        if (prateleira != null) {
+            System.out.println(prateleira);
             return new Entrega(prateleira.getId(), getIdReserva(), getId());
+            
+        }
         return null;
     }
 
