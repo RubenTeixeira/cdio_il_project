@@ -24,7 +24,7 @@ public class ComprarServicoGUI extends JFrame {
     public ComprarServicoGUI(JFrame parentFrame, DropPoint dp) {
         super("Group Epsilon - Buy Drop Point Service");
         this.parentFrame = parentFrame;
-        this.dropChosen = dp;
+        this.dropChoosed = dp;
         controller = new ComprarServicoDPController(OracleDb.getInstance());
         fecharJanela();
         initComponents();
