@@ -5,6 +5,7 @@
  */
 package domain;
 
+import javax.mail.MessagingException;
 import utils.GoogleMail;
 
 /**
@@ -12,11 +13,15 @@ import utils.GoogleMail;
  * @author vascopinho
  */
 public class Notice {
+    
     private String email;
-    private String token;
-    
-    
+    private String title;
+    private String message;
+    private static final String EMAIL_PATTERN = 
+		"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
+    
     public Notice() {
     }
 
@@ -24,8 +29,36 @@ public class Notice {
         this.email = email;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setToken(String message) {
+        this.message = message;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public boolean dispatchMail() {
+        if (!valid())
+            return false;
+        GoogleMail mail = new GoogleMail();
+        mail.setRecipientEmail(email);
+        mail.setTitle("Token de Abertura");
+        mail.setMessage(this.message);
+        mail.send();
+        System.out.println("Email enviado para: " + email);
+        return true;
     }
     
     public static void enviarEmail(String email, String token){
@@ -37,5 +70,7 @@ public class Notice {
         System.out.println("Email enviado para: " + email);
     }
     
-    
+    private boolean valid() {
+        return this.email.matches(EMAIL_PATTERN) && this.message.length() > 0;
+    }
 }
