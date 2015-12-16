@@ -32,7 +32,7 @@ public class Gestao {
     public Gestao() {
         this.bd = persistence.OracleDb.getInstance();
     }
-    
+
     public Gestao(SQLConnection con) {
         this.setBd(con);
     }
@@ -115,7 +115,7 @@ public class Gestao {
             while (executeQuery.next()) {
 
                 op.add("Prateleira ID: " + executeQuery.getString("ID_TIPO_DIMENSAO") + " do tipo "
-                        + executeQuery.getString("DESCRICAO") 
+                        + executeQuery.getString("DESCRICAO")
                         + executeQuery.getString("ALTURA") + "x" + executeQuery.getString("LARGURA") + "x"
                         + executeQuery.getString("COMPRIMENTO"));
 
@@ -141,7 +141,7 @@ public class Gestao {
         String m = "select nvl(max(ID_RESERVA),0)+1 FROM RESERVA";
         ResultSet executeQuery = bd.executeQuery(m);
         int lastId = 0;
-        
+
         try {
             while (executeQuery.next()) {
                 lastId = Integer.valueOf(executeQuery.getString(1));
@@ -154,7 +154,7 @@ public class Gestao {
         PreparedStatement prepareStatement = bd.prepareStatement(query);
 
         try {
-            
+
             prepareStatement.setInt(1, lastId);
             prepareStatement.setInt(2, idDropPoint);
             prepareStatement.setInt(3, idCliente);
@@ -190,15 +190,30 @@ public class Gestao {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        m = "select free_days from DropPoint INNER JOIN Reserva ON Reserva.id_DropPoint=DropPoint.id_DropPoint WHERE id_reserva=" + idReserva;
+        executeQuery = bd.executeQuery(m);
+        int freeDays = 0;
+        try {
+            while (executeQuery.next()) {
+                freeDays = Integer.valueOf(executeQuery.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         String select = "Insert into TOKEN(id_token,data_geracao,data_validade,id_tipo_token,ativo,id_reserva,codigo) VALUES (?,?,?,?,?,?,?)";
         PreparedStatement prepareStatement = bd.prepareStatement(select);
 
         try {
-            
+
             Calendar instance = Calendar.getInstance();
+
+            Date now = new Date(instance.getTimeInMillis());
+            instance.add(Calendar.MONTH, 1);
+            instance.add(Calendar.DAY_OF_MONTH, freeDays);
             
-            Date now = new Date(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_WEEK));
-            Date validade = new Date(instance.get(Calendar.YEAR), (instance.get(Calendar.MONTH)+1), instance.get(Calendar.DAY_OF_WEEK));
+            Date validade = new Date(instance.getTimeInMillis());
+            System.out.println(validade);
             String token = UUID.randomUUID().toString().substring(0, 8);
             prepareStatement.setInt(1, lastId);
             prepareStatement.setDate(2, now);
@@ -210,13 +225,13 @@ public class Gestao {
 
             prepareStatement.execute();
 
-            String token1=UUID.randomUUID().toString().substring(0, 8);
-            prepareStatement.setInt(1,lastId+1);
+            String token1 = UUID.randomUUID().toString().substring(0, 8);
+            prepareStatement.setInt(1, lastId + 1);
             prepareStatement.setInt(4, 2);
             prepareStatement.setString(7, token1);
 
             prepareStatement.execute();
-            
+
             return token;
 
         } catch (SQLException ex) {
@@ -330,7 +345,6 @@ public class Gestao {
 
         return null;
     }
-
 
     public void closeConection() {
         bd.closeConnection();
