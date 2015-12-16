@@ -1,13 +1,14 @@
 package ui;
 
 import controller.ComprarServicoDPController;
+import persistence.OracleDb;
 
 public class ComprarServicoDPUI {
 
     private controller.ComprarServicoDPController controller;
 
     public ComprarServicoDPUI() {
-        controller = new ComprarServicoDPController();
+        controller = new ComprarServicoDPController(OracleDb.getInstance());
         run();
     }
 

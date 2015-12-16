@@ -32,6 +32,10 @@ public class Gestao {
     public Gestao() {
         this.bd = persistence.OracleDb.getInstance();
     }
+    
+    public Gestao(SQLConnection con) {
+        this.setBd(con);
+    }
 
     public SQLConnection getBd() {
         return bd;

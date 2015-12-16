@@ -6,6 +6,8 @@
 package persistence;
 
 import domain.Token;
+import domain.TokenClient;
+import domain.TokenCourier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,13 +35,15 @@ public class TokenDAO extends GenericDAO<Token> {
         String qry = "select t.id_token, t.data_geracao, t.data_validade, a.descricao, t.ativo, t.codigo, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
                 + " and t.codigo = '" + codigo + "'";
-        try {
-            PreparedStatement stmnt = this.con.prepareStatement(qry);
-            ResultSet rs = stmnt.executeQuery();
-            if (rs.next()) {
-                tokenObj = new Token(rs.getInt("id_token"), rs.getString("data_geracao"), rs.getString("data_validade"), rs.getString("descricao"), rs.getInt("ativo"), rs.getString("codigo"), rs.getInt("id_reserva"));
+        System.out.println("QUERY");
+        System.out.println(qry);
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
+                tokenObj = createToken(rs.getInt("id_token"), rs.getString("data_geracao"), rs.getString("data_validade"), rs.getString("descricao"), rs.getInt("ativo"), rs.getString("codigo"), rs.getInt("id_reserva"));
+            } catch (SQLException e) {
             }
-        } catch (SQLException e) {
         }
         return tokenObj;
     }
@@ -75,8 +79,8 @@ public class TokenDAO extends GenericDAO<Token> {
         String aux2[]=obj.getExpirationDate().split("\\.");
         String expirationDate = aux2[2]+"-"+aux2[1]+"-20"+aux2[0];
         String qry = "update Token set data_geracao = TO_DATE('"+generationDate+"', 'dd-mm-yyyy'),"
-                + " data_validade = TO_DATE('"+expirationDate+"', 'dd-mm-yyyy'), id_tipo_token = "+obj.getType()+","
-                + " ativo = "+obj.getState()+", id_reserva = "+obj.getIdReservation()+", codigo = '"+obj.getCode()+"'\n"
+                + " data_validade = TO_DATE('"+expirationDate+"', 'dd-mm-yyyy'),"
+                + " ativo = "+obj.getState()+", id_reserva = "+obj.getReservationId()+", codigo = '"+obj.getCode()+"'\n"
                   + "  where id_token = "+obj.getId();
         //String qry = "update Token t set id_token = "+obj.getId()+", data_geracao = "+obj.getGenerationDate()+", data_validade = "+obj.getExpirationDate()+", id_tipo_token = "+obj.getType()+", ativo = "+obj.getState()+", id_reserva = "+obj.getIdReservation()+", codigo = "+obj.getCode()+"\n"
         //        + "  where t.CODIGO = '"+obj.getCode()+"'";
@@ -99,6 +103,23 @@ public class TokenDAO extends GenericDAO<Token> {
     @Override
     public Token get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Token createToken(int id, String generationDate, String expirationDate, String description, int state, String code, int idReservation) {
+        Token token;
+        
+        switch (description.toLowerCase()) {
+            
+            case "cliente":
+                token = new TokenClient(id, generationDate, expirationDate, state, code, idReservation);
+                break;
+            case "estafeta":
+                token = new TokenCourier(id, generationDate, expirationDate, state, code, idReservation);
+                break;
+            default:
+                return null;
+        }
+        return token;
     }
 
 }

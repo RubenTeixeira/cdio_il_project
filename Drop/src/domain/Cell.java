@@ -9,26 +9,26 @@ package domain;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-public class Prateleira {
+public class Cell {
     
     private int id;
-    private String desc;
+    private String description;
 
-    public Prateleira(int id, String desc) {
+    public Cell(int id, String description) {
         this.id = id;
-        this.desc = desc;
+        this.description = description;
     }
 
-    public Prateleira() {
+    public Cell() {
         this.id = 0;
-        this.desc = "";
+        this.description = "";
     }
 
     /* Getter methods*/
     public int getId() {return id;}
-    public void setDesc(String desc) {this.desc = desc;}
+    public void setDescription(String description) {this.description = description;}
     /* Setter methods*/
-    public String getDesc() {return desc;}
+    public String getDescription() {return description;}
     public void setId(int id) {this.id = id;}
 
     @Override
@@ -46,13 +46,13 @@ public class Prateleira {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Prateleira other = (Prateleira) obj;
+        final Cell other = (Cell) obj;
         return this.id == other.id;
     }
 
     @Override
     public String toString() {
-        return this.desc;
+        return this.description;
     }
     
 }

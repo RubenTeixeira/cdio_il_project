@@ -65,13 +65,13 @@ public class OracleDb implements SQLConnection, Settings {
 
         switch (t) {
             case RECOLHA:
-                return new RecolhaDAO(this.con);
+                return new PickUpDAO(this.con);
             case ENTREGA:
-                return new EntregaDAO(this.con);
+                return new DeliveryDAO(this.con);
             case TOKEN:
                 return new TokenDAO(this.con);
             case PRATELEIRA:
-                return new PrateleiraDAO(this.con);
+                return new CellDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");
         }
@@ -110,6 +110,23 @@ public class OracleDb implements SQLConnection, Settings {
         } catch (SQLException ex) {
             Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, "Oops algo de errado aconteceu!", ex);
             return null;
+        }
+    }
+    
+    @Override
+    public boolean executeUpdate(String query){
+         if (this.con == null) {
+            throw new IllegalAccessError("Conexão inixistente à base de dados!");
+        }
+        Statement c_st = null;
+        try {
+            c_st = this.con.createStatement();
+            ResultSet rs = null;
+             int executeUpdate = c_st.executeUpdate(query);
+            return executeUpdate!=0;
+        } catch (SQLException ex) {
+            Logger.getLogger(OracleDb.class.getName()).log(Level.SEVERE, "Oops algo de errado aconteceu!", ex);
+            return false;
         }
     }
 

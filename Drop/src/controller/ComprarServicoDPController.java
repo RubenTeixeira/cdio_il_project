@@ -4,6 +4,7 @@ import domain.Cliente;
 import domain.Gestao;
 import domain.RegistoCliente;
 import java.util.List;
+import persistence.SQLConnection;
 
 public class ComprarServicoDPController {
 
@@ -15,7 +16,7 @@ public class ComprarServicoDPController {
     private int idPrerenciasDim;
     private int idToken;
 
-    public ComprarServicoDPController() {
+    public ComprarServicoDPController(SQLConnection con) {
         this.gestao = new Gestao();
         registoCliente = new RegistoCliente(this.gestao.getBd());
        

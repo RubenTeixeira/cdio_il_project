@@ -9,10 +9,15 @@ package domain;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-public interface TransaccaoPrateleira {
+public interface CellTransaction {
     void setDateOpen();
     void setDateClose();
-    void setIdToken(int idToken);
+    void setTokenID(int tokenID);
     void setId(int id);
-    boolean valido();
+
+    /**
+     * Validates Transaction 
+     * @return true if valid, false otherwise
+     */
+    boolean validate();
 }

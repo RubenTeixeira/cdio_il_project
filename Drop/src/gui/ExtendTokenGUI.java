@@ -7,6 +7,7 @@ package gui;
 
 import controller.ExtendTokenController;
 import domain.Token;
+import domain.TokenClient;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
@@ -140,7 +141,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
 
     private void extensaoTokenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extensaoTokenBTNActionPerformed
         if (codigoTokenTXT.getText() != null && periodoExtensaoTXT.getText() != null) {
-            Token token = controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
+            TokenClient token = (TokenClient)controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
             if (token == null) {
                 JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Token inexistente", "Erro", JOptionPane.WARNING_MESSAGE);
             } else {
