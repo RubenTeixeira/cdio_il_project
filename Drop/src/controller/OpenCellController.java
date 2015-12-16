@@ -15,42 +15,42 @@ import persistence.*;
  *
  * @author 1140864
  */
-public class AbrirPrateleiraController {
+public class OpenCellController {
 
-    private CellTransaction transaccao;
-    private Cell prateleira;
+    private CellTransaction transaction;
+    private Cell cell;
     private Token token;
     private SQLConnection manager;
     private TokenDAO tokenDAO;
 
-    public AbrirPrateleiraController(String file) {
+    public OpenCellController(String file) {
         manager = persistence.OracleDb.getInstance(file);
         try {
             tokenDAO = (TokenDAO) manager.getDAO(Table.TOKEN);
         } catch (SQLException ex) {
-            Logger.getLogger(AbrirPrateleiraController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenCellController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public String iniciaAberturaPrateleira(String tok) {
+    public String beginOpenCell(String tok) {
         this.token = tokenDAO.getByCodigo(tok);
-        this.transaccao = token.newTransaction(manager);
-        this.prateleira = token.getCell(manager);
-        return this.prateleira.toString();
+        this.transaction = token.newTransaction(manager);
+        this.cell = token.getCell(manager);
+        return this.cell.toString();
     }
 
-    public void abrePrateleira() {
-        this.transaccao.setDateOpen();
+    public void openCell() {
+        this.transaction.setDateOpen();
     }
 
-    public void fechaPrateleira() {
-        this.transaccao.setDateClose();
-        terminarTransaccao();
+    public void closeCell() {
+        this.transaction.setDateClose();
+        closeTransaction();
     }
 
-    private void terminarTransaccao() {
-        if (this.transaccao.validate())
-            this.token.close(manager, this.transaccao);
+    private void closeTransaction() {
+        if (this.transaction.validate())
+            this.token.close(manager, this.transaction);
         else
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Invalid data, please verify.");
     }

@@ -59,7 +59,7 @@ public class main {
                     break;
 
                 case 3:
-                    new AbrirPrateleiraUI();
+                    new OpenCellUI();
                     
                     break;
                 case 4:
