@@ -20,8 +20,8 @@ import persistence.Table;
  */
 public class TokenClient extends TokenImpl {
 
-    public TokenClient(int id, String code, int reservationID) {
-        super(id, code, reservationID);
+    public TokenClient(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
+        super(id, generationDate, expirationDate, state, code, idReservation);
     }
 
     @Override
@@ -59,5 +59,7 @@ public class TokenClient extends TokenImpl {
         }
         
     }
+
+ 
     
 }

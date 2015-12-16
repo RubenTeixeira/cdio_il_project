@@ -14,10 +14,16 @@ import persistence.SQLConnection;
 public interface Token {
 
     int getId();
-    void setId(int id);
+    String getGenerationDate();
+    String getExpirationDate();
+    int getState();   
     String getCode();
-    void setCode(String code);
     int getReservationId();
+    void setId(int id);
+    void setGenerationDate(String generationDate);
+    void setExpirationDate(String expirationDate);
+    void setState(int state);
+    void setCode(String code);
     void setReservationId(int reservationID);
     CellTransaction newTransaction(SQLConnection manager);
     Cell getCell(SQLConnection manager);

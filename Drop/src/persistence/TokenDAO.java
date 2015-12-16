@@ -25,9 +25,14 @@ public class TokenDAO extends GenericDAO<Token> {
         super(con, TABLENAME);
     }
 
+    /**
+     * Method creates an object Token with the atributes of the token with the same code sent by parametre
+     * @param codigo token's code which is send by parametre
+     * @return objeto token
+     */
     public Token getByCodigo(String codigo) {
         Token tokenObj = null;
-        String qry = "select t.id_token, a.descricao, t.id_reserva from token t, tipo_token a"
+        String qry = "select t.id_token, t.data_geracao, t.data_validade, a.descricao, t.ativo, t.codigo, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
                 + " and t.codigo = '" + codigo + "'";
         System.out.println("QUERY");
@@ -36,7 +41,7 @@ public class TokenDAO extends GenericDAO<Token> {
         if (rs != null) {
             try {
                 rs.next();
-                tokenObj = createToken(rs.getInt("id_token"), codigo, rs.getString("descricao"), rs.getInt("id_reserva"));
+                tokenObj = createToken(rs.getInt("id_token"), rs.getString("data_geracao"), rs.getString("data_validade"), rs.getString("descricao"), rs.getInt("ativo"), rs.getString("codigo"), rs.getInt("id_reserva"));
             } catch (SQLException e) {
             }
         }
@@ -62,9 +67,32 @@ public class TokenDAO extends GenericDAO<Token> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Method updates a token sent by parametre in the Data Base
+     * @param obj object Token
+     * @return boolean variable true if the update was successfull otherwise returns false
+     */
     @Override
     public boolean update(Token obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String aux[]=obj.getGenerationDate().split("\\.");
+        String generationDate = aux[2]+"-"+aux[1]+"-20"+aux[0];
+        String aux2[]=obj.getExpirationDate().split("\\.");
+        String expirationDate = aux2[2]+"-"+aux2[1]+"-20"+aux2[0];
+        String qry = "update Token set data_geracao = TO_DATE('"+generationDate+"', 'dd-mm-yyyy'),"
+                + " data_validade = TO_DATE('"+expirationDate+"', 'dd-mm-yyyy'),"
+                + " ativo = "+obj.getState()+", id_reserva = "+obj.getReservationId()+", codigo = '"+obj.getCode()+"'\n"
+                  + "  where id_token = "+obj.getId();
+        //String qry = "update Token t set id_token = "+obj.getId()+", data_geracao = "+obj.getGenerationDate()+", data_validade = "+obj.getExpirationDate()+", id_tipo_token = "+obj.getType()+", ativo = "+obj.getState()+", id_reserva = "+obj.getIdReservation()+", codigo = "+obj.getCode()+"\n"
+        //        + "  where t.CODIGO = '"+obj.getCode()+"'";
+        try {
+            PreparedStatement stmnt = this.con.prepareStatement(qry);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+        }
+        return false;
     }
 
     @Override
@@ -77,16 +105,16 @@ public class TokenDAO extends GenericDAO<Token> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private Token createToken(int idToken, String codigo, String description, int idReservation) {
+    private Token createToken(int id, String generationDate, String expirationDate, String description, int state, String code, int idReservation) {
         Token token;
         
         switch (description.toLowerCase()) {
             
             case "cliente":
-                token = new TokenClient(idToken, codigo, idReservation);
+                token = new TokenClient(id, generationDate, expirationDate, state, code, idReservation);
                 break;
             case "estafeta":
-                token = new TokenCourier(idToken, codigo, idReservation);
+                token = new TokenCourier(id, generationDate, expirationDate, state, code, idReservation);
                 break;
             default:
                 return null;

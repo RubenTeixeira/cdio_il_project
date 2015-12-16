@@ -21,8 +21,8 @@ public class SeeInfoDPController {
         seeInfoDAL.closeConection();
     }
 
-    public void selectDropPoint(DropPoint dropChoosed) {
-        this.dropPoint = dropChoosed;
+    public void selectDropPoint(DropPoint dropChosen) {
+        this.dropPoint = dropChosen;
     }
 
     public String getDropPointName()
