@@ -61,7 +61,7 @@ public class ComprarServicoDPController {
     }
 
     public String tokenCliente() {
-        return gestao.tokemReferentReservaId(idToken);
+        return gestao.tokenReferentReservaId(idToken);
     }
 
     public void closeConection() {

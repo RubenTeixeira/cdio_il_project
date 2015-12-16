@@ -14,7 +14,7 @@ import javax.swing.*;
 public class ComprarServicoGUI extends JFrame {
 
     private JFrame parentFrame;
-    private DropPoint dropChoosed;
+    private DropPoint dropChosen;
     private ComprarServicoDPController controller;
 
     private DefaultComboBoxModel modelCMBTamanho;
@@ -23,7 +23,7 @@ public class ComprarServicoGUI extends JFrame {
     public ComprarServicoGUI(JFrame parentFrame, DropPoint dp) {
         super("Group Epsilon - Buy Drop Point Service");
         this.parentFrame = parentFrame;
-        this.dropChoosed = dp;
+        this.dropChosen = dp;
         controller = new ComprarServicoDPController();
         fecharJanela();
         initComponents();
@@ -100,14 +100,14 @@ public class ComprarServicoGUI extends JFrame {
 
         jLabel2.setText("Tamanho da Prateleira:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(30, 80, 130, 16);
+        jLabel2.setBounds(30, 80, 130, 20);
 
         getContentPane().add(cbTipoPrateleira);
         cbTipoPrateleira.setBounds(30, 100, 290, 26);
 
         jLabel3.setText("Temperatura desejada:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(30, 130, 130, 16);
+        jLabel3.setBounds(30, 130, 130, 20);
 
         getContentPane().add(cbTipoTemperatura);
         cbTipoTemperatura.setBounds(30, 150, 290, 26);
@@ -119,7 +119,7 @@ public class ComprarServicoGUI extends JFrame {
             }
         });
         getContentPane().add(seguinteBTN);
-        seguinteBTN.setBounds(40, 220, 120, 28);
+        seguinteBTN.setBounds(40, 220, 120, 29);
 
         sairBTN.setText("Sair");
         sairBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -136,7 +136,7 @@ public class ComprarServicoGUI extends JFrame {
     private void seguinteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seguinteBTNActionPerformed
         if (cbTipoPrateleira.getSelectedItem() != null && cbTipoTemperatura.getSelectedItem() != null) {
             this.dispose();
-            new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChoosed, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
+            new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChosen, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
         } else {
             JOptionPane.showMessageDialog(ComprarServicoGUI.this, "Tem campos por selecionar.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }

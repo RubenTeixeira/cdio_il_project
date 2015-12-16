@@ -12,56 +12,83 @@ package domain;
 public class Token {
     
     private int id;
-    private String codigo;
-    private String tipo;
-    private int idReserva;
+    private String generationDate;
+    private String expirationDate;
+    private String type;
+    private int state; 
+    private String code;  
+    private int idReservation;
 
-    public Token(int id, String codigo, String tipo, int idReserva) {
+    public Token(int id, String generationDate, String expirationDate, String type, int state, String code, int idReservation) {
         this.id = id;
-        this.codigo = codigo;
-        this.tipo = tipo;
-        this.idReserva = idReserva;
-    }
-
-    public Token() {
+        this.generationDate=generationDate;
+        this.expirationDate=expirationDate;
+        this.type = type;
+        this.state=state;
+        this.code = code;        
+        this.idReservation = idReservation;
     }
 
     public int getId() {
         return id;
     }
 
+    public String getGenerationDate() {
+        return generationDate;
+    }
+
+    public String getExpirationDate() {
+        return expirationDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public int getIdReservation() {
+        return idReservation;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public void setGenerationDate(String generationDate) {
+        this.generationDate = generationDate;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    public String getTipo() {
-        return tipo;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setState(int state) {
+        this.state = state;
     }
 
-    public int getIdReserva() {
-        return idReserva;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
+    public void setIdReservation(int idReservation) {
+        this.idReservation = idReservation;
     }
 
     public TransaccaoPrateleira novaTransaccao() {
-        if (this.tipo.equalsIgnoreCase("estafeta")) {
-            return new Entrega(this.idReserva,this.id);
-        } else if (this.tipo.equalsIgnoreCase("cliente")) {
+        if (this.type.equalsIgnoreCase("estafeta")) {
+            return new Entrega(this.idReservation,this.id);
+        } else if (this.type.equalsIgnoreCase("cliente")) {
             return new Recolha(this.id);
         }
         return null;

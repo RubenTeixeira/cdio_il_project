@@ -51,14 +51,14 @@ public class AbrirPrateleiraController {
     }
 
     private String iniciaAberturaPrateleiraEntrega(Entrega entrega, Token token) {
-        this.prateleira = this.prateleiraDAO.procurarPrateleiraEntrega(token.getCodigo());
+        this.prateleira = this.prateleiraDAO.procurarPrateleiraEntrega(token.getCode());
         entrega.setIdPrat(this.prateleira.getId());
         return this.prateleira.toString();
     }
 
     private String iniciaAberturaPrateleiraRecolha(Recolha recolha, Token token) {
-        this.prateleira = this.prateleiraDAO.procurarPrateleiraRecolha(token.getCodigo());
-        int idEntrega = this.entregaDAO.getIdByToken(token.getCodigo());
+        this.prateleira = this.prateleiraDAO.procurarPrateleiraRecolha(token.getCode());
+        int idEntrega = this.entregaDAO.getIdByToken(token.getCode());
         if (idEntrega == -1) {
             return null;
         }
