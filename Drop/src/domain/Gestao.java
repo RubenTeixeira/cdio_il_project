@@ -178,7 +178,7 @@ public class Gestao {
      * @param idReserva
      * @return String
      */
-    public String tokemReferentReservaId(int idReserva) {
+    public String tokenReferentReservaId(int idReserva) {
         String m = "select nvl(max(id_token),0)+1 FROM TOKEN";
         ResultSet executeQuery = bd.executeQuery(m);
         int lastId = 0;

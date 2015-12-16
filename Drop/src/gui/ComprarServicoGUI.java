@@ -15,7 +15,7 @@ import persistence.OracleDb;
 public class ComprarServicoGUI extends JFrame {
 
     private JFrame parentFrame;
-    private DropPoint dropChoosed;
+    private DropPoint dropChosen;
     private ComprarServicoDPController controller;
 
     private DefaultComboBoxModel modelCMBTamanho;
@@ -137,7 +137,7 @@ public class ComprarServicoGUI extends JFrame {
     private void seguinteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seguinteBTNActionPerformed
         if (cbTipoPrateleira.getSelectedItem() != null && cbTipoTemperatura.getSelectedItem() != null) {
             this.dispose();
-            new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChoosed, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
+            new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChosen, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
         } else {
             JOptionPane.showMessageDialog(ComprarServicoGUI.this, "Tem campos por selecionar.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }

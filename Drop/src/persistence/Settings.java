@@ -10,9 +10,9 @@ package persistence;
  * @author vascopinho
  */
 public interface Settings {
-    String user = "CDIOIL15_G3";
+    String user = "EPSILON";
     String password = "qwerty";
-    String url = "gandalf.dei.isep.ipp.pt";
-    String sid = "pdborcl";
+    String url = "youin.ignorelist.com";
+    String sid = "xe";
     
 }

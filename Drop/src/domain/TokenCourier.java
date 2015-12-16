@@ -19,8 +19,8 @@ import persistence.Table;
  */
 public class TokenCourier extends TokenImpl {
 
-    public TokenCourier(int id, String code, int reservationID) {
-        super(id, code, reservationID);
+    public TokenCourier(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
+        super(id, generationDate, expirationDate, state, code, idReservation);
     }
     
     @Override
