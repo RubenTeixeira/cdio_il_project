@@ -27,10 +27,9 @@ public class main {
     public static void menu()
     {
         String menu = "---------MENU---------\n"
-                + "1. Gestão DropPoint\n"
-                + "2. Comprar serviço DropPoint\n"
-                + "3. Abrir Prateleira\n"
-                + "4. Sair";
+                + "1. Abrir Prateleira\n"
+                + "2. Colaborador"
+                + "3. Sair";
         System.out.println(menu);
     }
 
@@ -45,24 +44,13 @@ public class main {
             switch (op)
             {
                 case 1:
-                    try
-                    {
-                        new ConsultarOcupacaoEntregaUI();
-                    } catch (RuntimeException e)
-                    {
-                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e.getMessage());
-                    }
-                    break;
-
-                case 2:
-                    new ComprarServicoDPUI();
-                    break;
-
-                case 3:
                     new OpenCellUI();
-                    
+
                     break;
-                case 4:
+                case 2:
+                    colabroradorConsola();
+                    break;
+                case 3:
                     exit(0);
                     break;
                 default:
@@ -75,4 +63,58 @@ public class main {
     {
         new DropGUI();
     }
+
+    private static void colabroradorConsola()
+    {
+        System.out.println("--------------------Colabrorador------------");
+        String menu = "1. Colocar em manutençao\n"
+                + "2. Efectuar manutenção"
+                + "3. Sair";
+        int op = 0;
+        do
+        {
+            System.out.println(menu);
+            switch (op)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
+    private static void gestorConsola()
+    {
+        System.out.println("--------------------Gestor------------");
+        String menu = "1. Gestão DropPoint\n";
+        int op = 0;
+        do
+        {
+            System.out.println(menu);
+            switch (op)
+            {
+                case 1:
+                    try
+                    {
+                        new ConsultarOcupacaoEntregaUI();
+                    } catch (RuntimeException e)
+                    {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e.getMessage());
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
 }
