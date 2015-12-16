@@ -8,12 +8,14 @@ package gui;
 import controller.ExtendTokenController;
 import domain.Token;
 import domain.TokenClient;
+import domain.TokenCourier;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -89,15 +91,13 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(extensaoTokenBTN)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(periodoExtensaoLBL)
-                                .addComponent(codigoTokenLBL)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(periodoExtensaoLBL)
+                            .addComponent(codigoTokenLBL)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addComponent(extensaoTokenBTN)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -105,9 +105,12 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                                     .addComponent(codigoTokenTXT)
                                     .addComponent(periodoExtensaoTXT, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(sairBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                                .addGap(32, 32, 32)
+                                .addComponent(sairBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(jLabel1)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,25 +144,16 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
 
     private void extensaoTokenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extensaoTokenBTNActionPerformed
         if (codigoTokenTXT.getText() != null && periodoExtensaoTXT.getText() != null) {
-            TokenClient token = (TokenClient)controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
-            if (token == null) {
-                JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Token inexistente", "Erro", JOptionPane.WARNING_MESSAGE);
-            } else {
-                /*String vec[]=token.getExpirationDate().split(".");
-                Calendar c = Calendar.getInstance();
-                c.set(Integer.parseInt(vec[0]), Integer.parseInt(vec[1]), Integer.parseInt(vec[2]));
-                c.add(Calendar.DAY_OF_MONTH, Integer.parseInt(periodoExtensaoTXT.getText()));*/
-                SimpleDateFormat sdf = new SimpleDateFormat("yy.mm.dd");
-                Calendar c = Calendar.getInstance();
-                try {
-                    Date date = sdf.parse(token.getExpirationDate());
-                    c.setTime(date);
-                } catch (ParseException ex) {
-                    Logger.getLogger(ExtendTokenGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            Token token = controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
+            if (token != null && token instanceof TokenClient) {
+                Calendar c = new GregorianCalendar();
+                String expirationDate = token.getExpirationDate();
+                String[] dataBD = expirationDate.split("\\.");
+                c.set(Calendar.YEAR, Integer.valueOf(dataBD[0]));
+                c.set(Calendar.MONTH, Integer.valueOf(dataBD[1]));
+                c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dataBD[2]));
                 c.add(Calendar.DATE, Integer.parseInt(periodoExtensaoTXT.getText()));
-                //SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
-                String expirationString = sdf.format(c.getTime());
+                String expirationString = c.get(Calendar.YEAR) + "." + c.get(Calendar.MONTH) + "." + c.get(Calendar.DAY_OF_MONTH);
                 token.setExpirationDate(expirationString);
                 if (controller.getTokenDAO().update(token)) {
                     this.dispose();
@@ -168,6 +162,8 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Erro na inserção na base de dados", "Erro", JOptionPane.WARNING_MESSAGE);
 
                 }
+            } else {
+                JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Token inválido", "Erro", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Preencha todos os campos", "Erro", JOptionPane.WARNING_MESSAGE);
