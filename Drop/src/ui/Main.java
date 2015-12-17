@@ -21,6 +21,7 @@ public class Main {
 
         //versaoGraficaParaCliente();
         versaoConsola();
+        //colabroradorConsola();
 
     }
 
@@ -68,7 +69,8 @@ public class Main {
     {
         System.out.println("--------------------Colabrorador------------");
         String menu = "1. Iniciar Manutenção\n"
-                + "2. Recolher Entregas Expiradas"
+                + "2. Recolher Entregas Expiradas\n"
+                + "3. Efectuar Manutenção\n"
                 + "0. Voltar";
         int op;
         do
@@ -79,6 +81,10 @@ public class Main {
             {
                 case 1:
                     new MaintenanceUI();
+                case 2:
+                   
+                case 3:
+                    new MakeMaintenanceUI(utils.ReadAndWriteFile.readFromFile("settings/settings.txt"));
                 case 0:
                     versaoConsola();
                     break;

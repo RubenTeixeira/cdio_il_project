@@ -31,16 +31,15 @@ class MakeMaintenanceUI {
 
     private void run() throws SQLException {
         System.out.println("Select Cabinet ID:");
-        
-         List<Cabinet> listCabinetsInMaintenance = new ArrayList<>();
-        
-        
+
+        List<Cabinet> listCabinetsInMaintenance = new ArrayList<>();
+
         List<DropPoint> listDropPoints = controller.listDropPoints();
         listDropPoints.stream().forEach((drop) -> {
             listCabinetsInMaintenance.addAll(controller.listCabinetsInMaintenance(drop.getId()));
         });
 
-        int i=1;
+        int i = 1;
         for (Cabinet cabinet : listCabinetsInMaintenance) {
             System.out.println("Cabinet " + i + " with id: " + cabinet.getId() + " and name: " + cabinet.getName());
             i++;
