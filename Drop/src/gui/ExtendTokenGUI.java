@@ -152,20 +152,35 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                 c.add(Calendar.DATE, Integer.parseInt(periodoExtensaoTXT.getText()));
                 String expirationString = c.get(Calendar.YEAR) + "." + c.get(Calendar.MONTH) + "." + c.get(Calendar.DAY_OF_MONTH);
                 token.setExpirationDate(expirationString);
-                if (controller.getTokenDAO().update(token)) {
+
+                String[] options = new String[2];
+                options[0] = "Sim";
+                options[1] = "Não";
+                int op = JOptionPane.showOptionDialog(ExtendTokenGUI.this, "Data Atual: " + dataBD[0] + "." + dataBD[1] + "." + dataBD[2] + "\nNova data: " + expirationString, "Confirmar Operação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (op == 0) {
+                    if (controller.getTokenDAO().update(token)) {
+                        this.dispose();
+                        JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Validade do token estendida com sucesso!\nNova validade: " + token.getExpirationDate(), "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Erro na inserção na base de dados", "Erro", JOptionPane.WARNING_MESSAGE);
+
+                    }
+                }else{
+                    this.dispose();
+                }
+                /*if (controller.getTokenDAO().update(token)) {
                     this.dispose();
                     JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Validade do token estendida com sucesso!\nNova validade: " + token.getExpirationDate(), "Informação", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Erro na inserção na base de dados", "Erro", JOptionPane.WARNING_MESSAGE);
-
-                }
+                 */
             } else {
-                JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Token inválido", "Erro", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Erro na inserção na base de dados", "Erro", JOptionPane.WARNING_MESSAGE);
+
             }
         } else {
             JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Preencha todos os campos", "Erro", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_extensaoTokenBTNActionPerformed
+
     private void fecharJanela() {
         addWindowListener(new WindowAdapter() {
             @Override
