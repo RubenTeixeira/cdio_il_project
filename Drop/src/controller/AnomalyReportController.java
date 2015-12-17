@@ -32,7 +32,8 @@ public class AnomalyReportController {
         this.description = descr;
         try {
             this.dropPoint = ((DropPointDAO)manager.getDAO(Table.DROPPOINT)).get(id);
-            
+            if (this.dropPoint == null)
+                return false;
         } catch (SQLException ex) {
             Logger.getLogger(AnomalyReportController.class.getName()).log(Level.SEVERE, null, ex);
             return false;
