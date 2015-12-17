@@ -78,19 +78,25 @@ public class CellDAO extends GenericDAO<Cell> {
         
 //        PreparedStatement stmnt = this.con.prepareStatement(query);
         
-        String qry = "cellstomaintenance("+cabinet.getId()+")";
-        CallableStatement stmnt = con.prepareCall(qry);
+        String qry = "SELECT p.ID_PRATELEIRA, d.ID_DROPPOINT, p.NUMERO_PRATELEIRA, a.ID_ARMARIO" +
+                    "  FROM PRATELEIRA p, ARMARIO a, DROPPOINT d" +
+                    "    WHERE a.ID_ARMARIO = "+cabinet.getId()+
+                    "      AND p.ID_ARMARIO = a.ID_ARMARIO" +
+                    "      AND a.ID_DROPPOINT = d.ID_DROPPOINT" +
+                    "      AND p.OCUPADO = 0" +
+                    "      AND a.MANUTENCAO = 1";
 
-        ResultSet result = stmnt.executeQuery();
-
-        while (result.next()) {
-            Cell newCell = new Cell();
-            newCell.setId(result.getInt(0));
-            String description = "Cell number: " + String.valueOf(result.getInt(1));
-            newCell.setDescription(description);
-            data.push(newCell);
+        ResultSet result = executeQuery(qry);
+        
+        if (result != null) {
+            while (result.next()) {
+                Cell newCell = new Cell();
+                newCell.setId(result.getInt(0));
+                String description = result.getString(2);
+                newCell.setDescription(description);
+                data.push(newCell);
+            }
         }
-
         return data.isEmpty() ? null : data;
     }
     
