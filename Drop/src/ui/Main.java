@@ -29,7 +29,6 @@ public class Main {
         String menu = "---------MENU---------\n"
                 + "1. Abrir Prateleira\n"
                 + "2. Colaborador\n"
-                + "3. "
                 + "0. Sair";
         System.out.println(menu);
     }
@@ -69,6 +68,7 @@ public class Main {
     {
         System.out.println("--------------------Colabrorador------------");
         String menu = "1. Iniciar Manutenção\n"
+                + "2. Recolher Entregas Expiradas"
                 + "0. Voltar";
         int op;
         do
