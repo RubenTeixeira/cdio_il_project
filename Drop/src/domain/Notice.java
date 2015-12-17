@@ -54,7 +54,7 @@ public class Notice {
             return false;
         GoogleMail mail = new GoogleMail();
         mail.setRecipientEmail(email);
-        mail.setTitle("Token de Abertura");
+        mail.setTitle("Anomaly Report from DropPoint");
         mail.setMessage(this.message);
         mail.send();
         System.out.println("Email enviado para: " + email);
