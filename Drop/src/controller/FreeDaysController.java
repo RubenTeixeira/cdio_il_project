@@ -22,11 +22,9 @@ public class FreeDaysController {
 
     private static SQLConnection con;
     private int idDropPoint,freeDays;
-    private Gestao gestao;
     private DropPointDAO dropPointDao;
 
     public FreeDaysController() throws SQLException {
-        this.gestao = new Gestao();
         con = persistence.OracleDb.getInstance();
         this.dropPointDao = (DropPointDAO) con.getDAO(Table.DROPPOINT);
     }

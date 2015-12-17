@@ -68,7 +68,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
 
         codigoTokenLBL.setText("Código do Token:");
 
-        periodoExtensaoLBL.setText("Período de Extensão:");
+        periodoExtensaoLBL.setText("Período de Extensão (dias):");
 
         extensaoTokenBTN.setText("Estender");
         extensaoTokenBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -108,9 +108,9 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                                 .addGap(32, 32, 32)
                                 .addComponent(sairBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
+                        .addGap(148, 148, 148)
                         .addComponent(jLabel1)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,14 +121,11 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codigoTokenLBL)
                     .addComponent(codigoTokenTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(periodoExtensaoLBL))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(periodoExtensaoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(periodoExtensaoLBL)
+                    .addComponent(periodoExtensaoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(extensaoTokenBTN)
                     .addComponent(sairBTN))
@@ -144,7 +141,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
 
     private void extensaoTokenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extensaoTokenBTNActionPerformed
         if (codigoTokenTXT.getText() != null && periodoExtensaoTXT.getText() != null) {
-            Token token = controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
+            Token token = controller.getTokenByCode(codigoTokenTXT.getText());
             if (token != null && token instanceof TokenClient) {
                 Calendar c = new GregorianCalendar();
                 String expirationDate = token.getExpirationDate();
@@ -157,7 +154,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                 token.setExpirationDate(expirationString);
                 if (controller.getTokenDAO().update(token)) {
                     this.dispose();
-                    JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Validade do token estendida com sucesso!\nValidade do token: " + token.getExpirationDate(), "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Validade do token estendida com sucesso!\nNova validade: " + token.getExpirationDate(), "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(ExtendTokenGUI.this, "Erro na inserção na base de dados", "Erro", JOptionPane.WARNING_MESSAGE);
 

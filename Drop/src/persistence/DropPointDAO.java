@@ -37,6 +37,7 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
                     drop.setId(rs.getInt("ID_DROPPOINT"));
                     drop.setNome(rs.getString("NOME_DROPPOINT"));
                     drop.setIdMorada(rs.getInt("ID_MORADA"));
+                    drop.setFree_Days(rs.getInt("FREE_DAYS"));
                     lstDroPoint.add(drop);
                 }
             } catch (Exception ex) {
@@ -69,7 +70,7 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
         if (rs != null) {
             try {
                 rs.next();
-                dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"));
+                dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"), rs.getInt("FREE_DAYS"));
             } catch (SQLException ex) {
                 Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
