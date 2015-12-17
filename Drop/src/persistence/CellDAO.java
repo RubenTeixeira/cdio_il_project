@@ -95,7 +95,6 @@ public class CellDAO extends GenericDAO<Cell> {
             newCell.setDescription(description);
             data.push(newCell);
         }
-
         return data.isEmpty() ? null : data;
     }
     
