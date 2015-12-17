@@ -38,7 +38,7 @@ public class MaintenanceDPController {
         manager = persistence.OracleDb.getInstance(file);
         try
         {
-            cabinetDAO = (CabinetDAO) manager.getDAO(Table.ARMARIO);
+            cabinetDAO = (CabinetDAO) manager.getDAO(Table.CABINET);
         } catch (Exception e)
         {
             Logger.getLogger(MaintenanceDPController.class.getName()).log(Level.SEVERE, null, e);

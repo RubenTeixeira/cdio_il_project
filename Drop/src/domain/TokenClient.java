@@ -28,7 +28,7 @@ public class TokenClient extends TokenImpl {
     public CellTransaction newTransaction(SQLConnection manager) {
         int deliveryID;
         try {
-            deliveryID = ((DeliveryDAO)manager.getDAO(Table.ENTREGA)).getDeliveryIdByToken(getCode());
+            deliveryID = ((DeliveryDAO)manager.getDAO(Table.DELIVERY)).getDeliveryIdByToken(getCode());
         } catch (SQLException ex) {
             return null;
         }
@@ -39,7 +39,7 @@ public class TokenClient extends TokenImpl {
     public Cell getCell(SQLConnection manager) {
         Cell cell = null;
         try {
-            cell = ((CellDAO)manager.getDAO(Table.PRATELEIRA)).findCellForPickUp(getCode());
+            cell = ((CellDAO)manager.getDAO(Table.CELL)).findCellForPickUp(getCode());
         } catch (SQLException ex) {
             Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
         }
@@ -50,7 +50,7 @@ public class TokenClient extends TokenImpl {
     public void close(SQLConnection manager, CellTransaction transaction) {
         PickUpDAO recolhaDAO;
         try {
-            recolhaDAO = (PickUpDAO)manager.getDAO(Table.RECOLHA);
+            recolhaDAO = (PickUpDAO)manager.getDAO(Table.PICKUP);
             transaction.setId(recolhaDAO.getNextId());
             recolhaDAO.insertNew((PickUp)transaction);
             

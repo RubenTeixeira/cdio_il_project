@@ -10,20 +10,20 @@ package persistence;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public enum Table {
-    
+
     DROPPOINT,
-    CLIENTE,
-    CLASSE_DIMENSAO,
-    ARMARIO,
-    RESERVA,
-    PRATELEIRA,
-    RECOLHA,
-    ENTREGA,
-    GESTOR,
-    CLASSE_TEMPERATURA,
+    COSTUMER,
+    CLASS_DIMENSION,
+    CABINET,
+    RESERVATION,
+    CELL,
+    PICKUP,
+    DELIVERY,
+    MANAGER,
+    CLASS_TEMPERATURE,
     TOKEN,
-    TIPO_TOKEN,
-    MORADA
-    
+    TOKEN_TYPE, 
+    ADDRESS,
+    MAINTENANCE_PICKUP
+
 }
-    
