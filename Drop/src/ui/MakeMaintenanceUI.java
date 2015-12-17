@@ -8,12 +8,12 @@ package ui;
 import controller.MakeMaintenanceController;
 import domain.Cabinet;
 import domain.Cell;
-import domain.Gestao;
+import domain.DropPoint;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import persistence.SQLConnection;
 import utils.ReadFromKeyboard;
 
 /**
@@ -24,26 +24,37 @@ class MakeMaintenanceUI {
 
     private MakeMaintenanceController controller;
 
-    public MakeMaintenanceUI() throws SQLException {
-        controller = new MakeMaintenanceController();
+    public MakeMaintenanceUI(List<String> file) throws SQLException {
+        controller = new MakeMaintenanceController(file);
         run();
     }
 
     private void run() throws SQLException {
-        System.out.println("Select Cabinet:");
+        System.out.println("Select Cabinet ID:");
+        
+         List<Cabinet> listCabinetsInMaintenance = new ArrayList<>();
+        
+        
+        List<DropPoint> listDropPoints = controller.listDropPoints();
+        listDropPoints.stream().forEach((drop) -> {
+            listCabinetsInMaintenance.addAll(controller.listCabinetsInMaintenance(drop.getId()));
+        });
 
-        List<Cabinet> listCabinetsInMaintenance = controller.listCabinetsInMaintenance();
-        System.out.println(listCabinetsInMaintenance);
+        int i=1;
+        for (Cabinet cabinet : listCabinetsInMaintenance) {
+            System.out.println("Cabinet " + i + " with id: " + cabinet.getId() + " and name: " + cabinet.getName());
+            i++;
+        }
 
         int op = ReadFromKeyboard.read();
-        controller.selectCabinet(listCabinetsInMaintenance.get(op + 1));
+        controller.selectCabinet(listCabinetsInMaintenance.get(op - 1));
 
         Deque<Cell> cellsToOpen = controller.cellsToOpen();
         Iterator<Cell> iterator = cellsToOpen.iterator();
 
         while (iterator.hasNext()) {
             Cell next = iterator.next();
-            System.out.println("Open " + next.getDescription() + "+ Confirm s/n?");
+            System.out.println("Open " + next.getDescription() + " Confirm s/n?");
             String confirm = ReadFromKeyboard.readString();
             if (confirm.equalsIgnoreCase("S")) {
                 if (controller.openCell(next)) {
@@ -58,7 +69,7 @@ class MakeMaintenanceUI {
                     System.out.println("Cell is closed s/n?");
                     confirm = ReadFromKeyboard.readString();
                     if (confirm.equalsIgnoreCase("s")) {
-                        if (controller.closeCells()) {
+                        if (controller.closeCell()) {
                             System.out.println("Successfully processed!");
                         }
                     }

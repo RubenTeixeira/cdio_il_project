@@ -21,6 +21,9 @@ import java.util.LinkedList;
 public class CellDAO extends GenericDAO<Cell> {
     
     private final static String TABLENAME = "PRATELEIRA";
+    public static final int OPEN=0;
+    public static final int CLOSE=1;
+    
 
     public CellDAO(Connection con) {
         super(con, TABLENAME);
@@ -67,18 +70,26 @@ public class CellDAO extends GenericDAO<Cell> {
      */
     public Deque<Cell> cellsToOpen(Cabinet idCabinet) throws SQLException {
         Deque<Cell> data = new LinkedList<>();
-        String idCabine = String.valueOf(idCabinet.getId());
-
-        String query = "begin "
-                + "CELLSTOMAINTENANCE(" + idCabine + ") "
-                + "end;/";
+        
+        String query = "select p.ID_PRATELEIRA, d.ID_DROPPOINT, p.NUMERO_PRATELEIRA, a.ID_ARMARIO from PRATELEIRA p " +
+                "INNER JOIN ARMARIO a ON " +
+                    "p.ID_ARMARIO= a.ID_ARMARIO " +
+                "INNER JOIN DROPPOINT d ON " +
+                    "a.ID_DROPPOINT=d.ID_DROPPOINT " +
+                "WHERE a.MANUTENCAO = ? AND a.ID_ARMARIO= ? AND p.OCUPADO= ?";
+        
         PreparedStatement stmnt = this.con.prepareStatement(query);
+        
+        stmnt.setInt(1, 1);
+        stmnt.setInt(2, idCabinet.getId());
+        stmnt.setInt(3, 0);
+        
         ResultSet result = stmnt.executeQuery();
 
         while (result.next()) {
             Cell newCell = new Cell();
-            newCell.setId(result.getInt(0));
-            String description = "Cell number: " + String.valueOf(result.getInt(1));
+            newCell.setId(result.getInt(1));
+            String description = "Cell number: " + result.getString(3);
             newCell.setDescription(description);
             data.push(newCell);
         }
@@ -87,15 +98,20 @@ public class CellDAO extends GenericDAO<Cell> {
     }
     
     
-    public boolean openCell(Cell cell){
+    public boolean updateCell(Cell cell, int state) throws SQLException {
+        String query = "UPDATE PRATELEIRA "
+                + "SET ATIVO=? "
+                + "WHERE ID_PRATELEIRA=? ";
+
+        PreparedStatement stmnt = this.con.prepareStatement(query);
+        
+        stmnt.setInt(1, state);
+        stmnt.setInt(2, cell.getId());
+        stmnt.executeUpdate();
         return true;
     }
     
     public boolean insertReport(Cell cell){
-        return true;
-    }
-    
-    public boolean closeCell(Cell cell){
         return true;
     }
     

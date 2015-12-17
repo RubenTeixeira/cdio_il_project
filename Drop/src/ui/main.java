@@ -3,9 +3,11 @@ package ui;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.ReadFromKeyboard;
 
 /**
  *
@@ -13,19 +15,18 @@ import java.util.logging.Logger;
  */
 public class main {
 
+    static List<String> file;
     static Scanner in = new Scanner(System.in);
 
-    public static void main(String[] args) throws SQLException
-    {
-        utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
+    public static void main(String[] args) throws SQLException {
+        file = utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
-        versaoGraficaParaCliente();
+        //versaoGraficaParaCliente();
         //versaoConsola();
-
+        colabroradorConsola();
     }
 
-    public static void menu()
-    {
+    public static void menu() {
         String menu = "---------MENU---------\n"
                 + "1. Abrir Prateleira\n"
                 + "2. Colaborador"
@@ -33,16 +34,13 @@ public class main {
         System.out.println(menu);
     }
 
-    private static void versaoConsola()
-    {
+    private static void versaoConsola() {
         int op = 0;
 
-        do
-        {
+        do {
             menu();
             op = in.nextInt();
-            switch (op)
-            {
+            switch (op) {
                 case 1:
                     new OpenCellUI();
 
@@ -59,27 +57,31 @@ public class main {
         } while (op != 4);
     }
 
-    private static void versaoGraficaParaCliente()
-    {
+    private static void versaoGraficaParaCliente() {
         new DropGUI();
     }
 
-    private static void colabroradorConsola()
-    {
+    private static void colabroradorConsola() {
         System.out.println("--------------------Colabrorador------------");
         String menu = "1. Colocar em manutençao\n"
                 + "2. Efectuar manutenção"
                 + "3. Sair";
         int op = 0;
-        do
-        {
+        do {
             System.out.println(menu);
-            switch (op)
-            {
+            op = ReadFromKeyboard.read();
+            switch (op) {
                 case 1:
                     break;
-                case 2:
-                    break;
+                case 2: {
+                    try {
+                        new MakeMaintenanceUI(file);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                break;
                 default:
                     System.out.println("Opção inválida.");
                     break;
@@ -88,23 +90,18 @@ public class main {
         } while (op != 0);
     }
 
-    private static void gestorConsola()
-    {
+    private static void gestorConsola() {
         System.out.println("--------------------Gestor------------");
         String menu = "1. Gestão DropPoint\n";
         int op = 0;
-        do
-        {
+        do {
             System.out.println(menu);
-            switch (op)
-            {
+            switch (op) {
                 case 1:
-                    try
-                    {
+                    try {
                         new ConsultarOcupacaoEntregaUI();
-                    } catch (RuntimeException e)
-                    {
-                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, e.getMessage());
+                    } catch (RuntimeException e) {
+                        Logger.getLogger(main.class.getName()).log(Level.WARNING, "Something went wrong.", e.getMessage());
                     }
                     break;
                 case 2:
