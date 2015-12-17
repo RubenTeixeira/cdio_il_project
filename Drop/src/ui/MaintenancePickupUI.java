@@ -6,7 +6,7 @@
 package ui;
 
 import controller.MaintenancePickupController;
-import domain.Prateleira;
+import domain.Cell;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ class MaintenancePickupUI {
         System.out.println("Insira um token válido: ");
         String tokenCode = utils.ReadFromKeyboard.readString();
 
-        List<Prateleira> cells = this.controller.getListOfCellsWithDeliveriesOutOfDate(tokenCode);
+        List<Cell> cells = this.controller.getListOfCellsWithDeliveriesOutOfDate(tokenCode);
 
         if(cells == null) {
             System.out.println("Não foram encontradas prateleira com encomendas por levantar para o token inserido");
@@ -35,8 +35,8 @@ class MaintenancePickupUI {
 
         System.out.println("\nForam encontradas " + cells.size() + " prateleiras com reservas expiradas.");
 
-        for (Prateleira cell : cells) {
-            System.out.println(cell.getDesc());
+        for (Cell cell : cells) {
+            System.out.println(cell.getDescription());
             boolean open = utils.ReadFromKeyboard.confirma("Pretende abrir a prateleira indicada?(S/N)");
             if(open) {
                 controller.selectCell(cell);
