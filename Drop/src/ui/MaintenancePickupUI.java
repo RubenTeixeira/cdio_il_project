@@ -19,6 +19,7 @@ class MaintenancePickupUI {
 
     public MaintenancePickupUI() {
         controller = new MaintenancePickupController("settings/settings.txt");
+        run();
     }
 
     public void run() {
