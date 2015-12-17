@@ -46,7 +46,7 @@ class MaintenancePickupUI {
                 boolean close = utils.ReadFromKeyboard.confirma("Pretende fechar a prateleira? (S/N)");
 
                 if(close) {
-                    if(this.controller.closeShelf()) {
+                    if(this.controller.closeCell()) {
                         System.out.println("Ação efetuada com sucesso\n");
                     } else {
                         System.out.println("Erro ao fechar a prateleira\n");
