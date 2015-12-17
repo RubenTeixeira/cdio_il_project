@@ -81,10 +81,13 @@ public class Main {
             {
                 case 1:
                     new MaintenanceUI();
+                    break;
                 case 2:
                    new MaintenancePickupUI();
+                    break;
                 case 3:
                     new MakeMaintenanceUI(utils.ReadAndWriteFile.readFromFile("settings/settings.txt"));
+                    break;
                 case 0:
                     versaoConsola();
                     break;
