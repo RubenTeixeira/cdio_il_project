@@ -7,7 +7,6 @@ package persistence;
 
 import domain.Cabinet;
 import domain.Cell;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,7 +83,7 @@ public class CellDAO extends GenericDAO<Cell> {
         PreparedStatement stmnt = this.con.prepareStatement(query);
         
         stmnt.setInt(1, 1);
-        stmnt.setInt(2, idCabinet.getId());
+        stmnt.setInt(2, cabinet.getId());
         stmnt.setInt(3, 0);
         
         ResultSet result = stmnt.executeQuery();
