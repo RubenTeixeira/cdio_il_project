@@ -61,6 +61,69 @@ public class CabinetDAO extends GenericDAO<Cabinet> {
     }
 
     /**
+     * Return a list of Cabinets with the Cabinet ID, Name and Maintenance state
+     * Not in Maintenance
+     *
+     * @param dropID The relative DropPoint
+     * @return list of Cabinets
+     */
+    public List<Cabinet> getListOfCabinetsNotInMaintenance(int dropID)
+    {
+        ResultSet rs = executeQuery("select * from Armario where id_droppoint = " + dropID + "and manutencao = 0");
+        List<Cabinet> lstCabinets = new ArrayList<>();
+
+        if (rs != null)
+        {
+            try
+            {
+                while (rs.next())
+                {
+                    Cabinet cabinet = new Cabinet();
+                    cabinet.setId(rs.getInt("ID_ARMARIO"));
+                    cabinet.setName(rs.getString("NOME"));
+                    cabinet.setMaintenance(rs.getInt("MANUTENCAO"));
+                    lstCabinets.add(cabinet);
+                }
+            } catch (Exception ex)
+            {
+                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
+            }
+        }
+        return lstCabinets;
+    }
+    /**
+     * Return a list of Cabinets with the Cabinet ID, Name and Maintenance state
+     * in Maintenance
+     *
+     * @param dropID The relative DropPoint
+     * @return list of Cabinets
+     */
+    public List<Cabinet> getListOfCabinetsInMaintenance(int dropID)
+    {
+        ResultSet rs = executeQuery("select * from Armario where id_droppoint = " + dropID + "and manutencao = 1");
+        List<Cabinet> lstCabinets = new ArrayList<>();
+
+        if (rs != null)
+        {
+            try
+            {
+                while (rs.next())
+                {
+                    Cabinet cabinet = new Cabinet();
+                    cabinet.setId(rs.getInt("ID_ARMARIO"));
+                    cabinet.setName(rs.getString("NOME"));
+                    cabinet.setMaintenance(rs.getInt("MANUTENCAO"));
+                    lstCabinets.add(cabinet);
+                }
+            } catch (Exception ex)
+            {
+                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
+            }
+        }
+        return lstCabinets;
+    }
+    
+    /**
      * Put Cabinet in Maintenance
      *
      * @param cabinet the cabinet to put in maintenance

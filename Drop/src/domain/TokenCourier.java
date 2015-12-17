@@ -38,7 +38,7 @@ public class TokenCourier extends TokenImpl {
     public Cell getCell(SQLConnection manager) {
         Cell cell = null;
         try {
-            cell = ((CellDAO)manager.getDAO(Table.PRATELEIRA)).findCellForDelivery(getCode());
+            cell = ((CellDAO)manager.getDAO(Table.CELL)).findCellForDelivery(getCode());
         } catch (SQLException ex) {
         }
         return cell;
@@ -49,7 +49,7 @@ public class TokenCourier extends TokenImpl {
         DeliveryDAO deliveryDAO;
         Delivery delivery = (Delivery) transaction;
         try {
-            deliveryDAO = (DeliveryDAO)manager.getDAO(Table.ENTREGA);
+            deliveryDAO = (DeliveryDAO)manager.getDAO(Table.DELIVERY);
             delivery.setId(deliveryDAO.getNextId());
             deliveryDAO.insertNew(delivery);
             String email = deliveryDAO.getClientEmail(delivery);

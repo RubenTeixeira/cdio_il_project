@@ -24,19 +24,20 @@ class MakeMaintenanceUI {
 
     private MakeMaintenanceController controller;
 
-    public MakeMaintenanceUI() throws SQLException {
+    public MakeMaintenanceUI(Cabinet cabinet) throws SQLException {
         controller = new MakeMaintenanceController();
-        run();
+        run(cabinet);
     }
 
-    private void run() throws SQLException {
-        System.out.println("Select Cabinet:");
-
-        List<Cabinet> listCabinetsInMaintenance = controller.listCabinetsInMaintenance();
-        System.out.println(listCabinetsInMaintenance);
-
-        int op = ReadFromKeyboard.read();
-        controller.selectCabinet(listCabinetsInMaintenance.get(op + 1));
+    private void run(Cabinet cabinet) throws SQLException {
+//        System.out.println("Select Cabinet:");
+//
+//        List<Cabinet> listCabinetsInMaintenance = controller.listCabinetsInMaintenance();
+//        System.out.println(listCabinetsInMaintenance);
+//
+//        int op = ReadFromKeyboard.read();
+//        controller.selectCabinet(listCabinetsInMaintenance.get(op + 1));
+        controller.selectCabinet(cabinet);
 
         Deque<Cell> cellsToOpen = controller.cellsToOpen();
         Iterator<Cell> iterator = cellsToOpen.iterator();
