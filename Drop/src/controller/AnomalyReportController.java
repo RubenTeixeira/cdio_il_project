@@ -62,7 +62,7 @@ public class AnomalyReportController {
         strBuild.append("\nReporter:\nDropPoint Inc.\n\nBest Regards.");
 
         notice.setMessage(strBuild.toString());
-        notice.setEmail("rubentrteixeira@gmail.com");
+        notice.setEmail("vasco.pinho@gmail.com");
         
         return notice.dispatchMail();
     }
