@@ -30,7 +30,7 @@ public class TokenDAO extends GenericDAO<Token> {
      * @param code token's code which is send by parametre
      * @return Token type object
      */
-    public Token getByCodigo(String code) {
+    public Token getByCode(String code) {
         Token tokenObj = null;
         String qry = "select t.id_token, t.data_geracao, t.data_validade, a.descricao, t.ativo, t.codigo, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"

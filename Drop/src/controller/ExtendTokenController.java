@@ -7,6 +7,7 @@ package controller;
 
 import domain.DropPoint;
 import domain.Gestao;
+import domain.Token;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -38,6 +39,10 @@ public class ExtendTokenController {
         } catch (SQLException ex) {
             Logger.getLogger(ExtendTokenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public Token getTokenByCode(String code){
+        return getTokenDAO().getByCode(code);
     }
 
     public TokenDAO getTokenDAO() {

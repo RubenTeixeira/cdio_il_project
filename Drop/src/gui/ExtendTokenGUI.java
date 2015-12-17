@@ -141,7 +141,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
 
     private void extensaoTokenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extensaoTokenBTNActionPerformed
         if (codigoTokenTXT.getText() != null && periodoExtensaoTXT.getText() != null) {
-            Token token = controller.getTokenDAO().getByCodigo(codigoTokenTXT.getText());
+            Token token = controller.getTokenByCode(codigoTokenTXT.getText());
             if (token != null && token instanceof TokenClient) {
                 Calendar c = new GregorianCalendar();
                 String expirationDate = token.getExpirationDate();
