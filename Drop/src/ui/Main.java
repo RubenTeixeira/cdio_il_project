@@ -82,7 +82,7 @@ public class Main {
                 case 1:
                     new MaintenanceUI();
                 case 2:
-                   
+                   new MaintenancePickupUI();
                 case 3:
                     new MakeMaintenanceUI(utils.ReadAndWriteFile.readFromFile("settings/settings.txt"));
                 case 0:
