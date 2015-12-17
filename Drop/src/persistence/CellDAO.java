@@ -62,7 +62,7 @@ public class CellDAO extends GenericDAO<Cell> {
     /**
      * Return a list of open cell's
      *
-     * @param abinet
+     * @param cabinet
      * @return Deque Cell Objects
      * @throws SQLException
      */

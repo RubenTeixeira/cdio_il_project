@@ -42,7 +42,7 @@ public class OpenCellController {
      * @return Cell string representation (currently its name)
      */
     public String beginOpenCell(String tok) {
-        this.token = tokenDAO.getByCodigo(tok);
+        this.token = tokenDAO.getByCode(tok);
         this.transaction = token.newTransaction(manager);
         this.cell = token.getCell(manager);
         return this.cell.toString();

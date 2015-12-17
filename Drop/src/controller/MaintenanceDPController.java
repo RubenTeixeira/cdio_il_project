@@ -46,14 +46,15 @@ public class MaintenanceDPController {
     }
 
     /**
-     * Get the List of Cabinets of a relative DropPoint
+     * Get the List of Cabinets of a relative DropPoint that are not in
+     * maintenance
      *
      * @param dropID DropPoint
      * @return List of Cabinets
      */
-    public List<Cabinet> getListOfCabinets(int dropID)
+    public List<Cabinet> getListOfCabinetsNotInMaintenance(int dropID)
     {
-        return cabinetDAO.getListOfCabinets(dropID);
+        return cabinetDAO.getListOfCabinetsNotInMaintenance(dropID);
     }
 
     public void selectCabinet(Cabinet cabinet)
@@ -83,4 +84,3 @@ public class MaintenanceDPController {
         return cabinetDAO.stopMaintenance(cabinet);
     }
 }
-
