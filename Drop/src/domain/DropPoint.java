@@ -10,6 +10,12 @@ public class DropPoint {
     private String m_nome;
     private int m_idMorada;
 
+    public DropPoint(int m_id, String m_nome, int m_idMorada) {
+        this.m_id = m_id;
+        this.m_nome = m_nome;
+        this.m_idMorada = m_idMorada;
+    }
+    
     public DropPoint() {
     }
     //GET`S

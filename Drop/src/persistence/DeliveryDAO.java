@@ -39,6 +39,10 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         
     }
 
+    /**
+     * Retrieves incremental ID for this object correponding Table
+     * @return int ID
+     */
     public int getNextId() {
         String query = "select nvl(max(id_entrega),0)+1 as id from entrega";
         ResultSet rs = executeQuery(query);

@@ -23,6 +23,10 @@ public class OpenCellController {
     private SQLConnection manager;
     private TokenDAO tokenDAO;
 
+    /**
+     * Controller Constructor
+     * @param file settings file containing the credentials to create the DAL SQL connection
+     */
     public OpenCellController(String file) {
         manager = persistence.OracleDb.getInstance(file);
         try {
@@ -32,6 +36,11 @@ public class OpenCellController {
         }
     }
 
+    /**
+     * Starts the cell opening process
+     * @param tok String containing the Token code
+     * @return Cell string representation (currently its name)
+     */
     public String beginOpenCell(String tok) {
         this.token = tokenDAO.getByCodigo(tok);
         this.transaction = token.newTransaction(manager);
@@ -39,15 +48,27 @@ public class OpenCellController {
         return this.cell.toString();
     }
 
+    /**
+     * Method responsible for actually opening the cell.
+     * Currently it will only sets the date of opening
+     */
     public void openCell() {
         this.transaction.setDateOpen();
     }
 
+    /**
+     * Method responsible for closing the cell.
+     * Currently it will set the date of closing
+     * aswell as invoke closeTransaction()
+     */
     public void closeCell() {
         this.transaction.setDateClose();
         closeTransaction();
     }
 
+    /**
+     * Closes the transaction wich will be CellTransaction implementation dependant
+     */
     private void closeTransaction() {
         if (this.transaction.validate())
             this.token.close(manager, this.transaction);

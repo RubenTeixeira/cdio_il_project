@@ -20,21 +20,52 @@ import java.util.logging.Logger;
  */
 public abstract class GenericDAO<T> {
 
-
-    public abstract boolean insertNew(T obj);
-    public abstract boolean update(T obj);
-    public abstract void delete(T obj);
-    public abstract T get(int id);
-    
-
     protected final String tableName;
     protected Connection con;
 
+    /**
+     * Generic DAO constructor, requiring the connection used and the correponding Table name
+     * @param con Connection to be used by the DAO
+     * @param tableName Corresponding Table name
+     */
     protected GenericDAO(Connection con, String tableName) {
         this.tableName = tableName;
         this.con = con;
     }
     
+    /**
+     * Inserts Object of wich the DAO is responsible into the respective Table
+     * @param obj Object the DAO is responsible for
+     * @return true if successfull, false otherwise
+     */
+    public abstract boolean insertNew(T obj);
+    
+    /**
+     * Updates Object of wich the DAO is responsible in the respective Table
+     * @param obj Object the DAO is responsible for
+     * @return true if successfull, false otherwise
+     */
+    public abstract boolean update(T obj);
+    
+    /**
+     * Deletes Object of wich the DAO is responsible in the respective Table
+     * @param obj Object the DAO is responsible for
+     */
+    public abstract void delete(T obj);
+    
+    /**
+     * Returns Object the DAO is responsible for
+     * @param id ID of the correponding record in the Object's Table
+     * @return Object
+     */
+    public abstract T get(int id);
+    
+    
+    /**
+     * Executes a query given its SQL statement, validates the ResultSet and returns it
+     * @param query String containing the SQL statement to execute
+     * @return ResultSet object
+     */
     public ResultSet executeQuery(String query) {
         PreparedStatement stmnt;
         ResultSet rs = null;

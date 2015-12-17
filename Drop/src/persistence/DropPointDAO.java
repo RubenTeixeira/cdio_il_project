@@ -3,6 +3,7 @@ package persistence;
 import domain.DropPoint;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,9 +63,21 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
 
     @Override
     public DropPoint get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DropPoint dropPoint = null;
+        String query = "SELECT * FROM "+TABLENAME+" WHERE ID_DROPPOINT = "+id;
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
+                dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"));
+            } catch (SQLException ex) {
+                Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return dropPoint;
     }
 
+    
     public boolean setFreeDays(int idDropPoint, int freeDays) {
         String query = "UPDATE DROPPOINT SET FREE_DAYS = "
                 + freeDays

@@ -30,7 +30,7 @@ public class Cell {
     /* Setter methods*/
     public String getDescription() {return description;}
     public void setId(int id) {this.id = id;}
-
+    
     @Override
     public int hashCode() {
         int hash = 7;

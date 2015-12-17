@@ -23,6 +23,10 @@ public class PickUpDAO extends GenericDAO<PickUp> {
         super(con, TABLENAME);
     }
     
+    /**
+     * Retrieves incremental ID for this object correponding Table
+     * @return int ID
+     */
     public int getNextId() {
         String query = "select nvl(max(id_recolha),0)+1 as id from recolha";
         PreparedStatement stmnt;

@@ -27,14 +27,14 @@ public class TokenDAO extends GenericDAO<Token> {
 
     /**
      * Method creates an object Token with the atributes of the token with the same code sent by parametre
-     * @param codigo token's code which is send by parametre
-     * @return objeto token
+     * @param code token's code which is send by parametre
+     * @return Token type object
      */
-    public Token getByCodigo(String codigo) {
+    public Token getByCodigo(String code) {
         Token tokenObj = null;
         String qry = "select t.id_token, t.data_geracao, t.data_validade, a.descricao, t.ativo, t.codigo, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
-                + " and t.codigo = '" + codigo + "'";
+                + " and t.codigo = '" + code + "'";
         System.out.println("QUERY");
         System.out.println(qry);
         ResultSet rs = executeQuery(qry);
@@ -48,6 +48,10 @@ public class TokenDAO extends GenericDAO<Token> {
         return tokenObj;
     }
 
+    /**
+     * Retrieves incremental ID for this object correponding Table
+     * @return int ID
+     */
     public int getNextId() {
         String query = "select nvl(max(id_token),0)+1 as id from token";
         PreparedStatement stmnt;
@@ -105,6 +109,17 @@ public class TokenDAO extends GenericDAO<Token> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Private method used to instantiate one of Token class implementations. Depends on its Description
+     * @param id Token id
+     * @param generationDate
+     * @param expirationDate
+     * @param description represanted in the DB under TipoToken as description (Cliente, Estafeta (...))
+     * @param state
+     * @param code
+     * @param idReservation
+     * @return Token implementation class object (TokenClient, TokenCourier (...))
+     */
     private Token createToken(int id, String generationDate, String expirationDate, String description, int state, String code, int idReservation) {
         Token token;
         

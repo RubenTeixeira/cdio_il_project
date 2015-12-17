@@ -5,11 +5,14 @@
  */
 package persistence;
 
+import domain.Cabinet;
 import domain.Cell;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  *
@@ -54,6 +57,48 @@ public class CellDAO extends GenericDAO<Cell> {
         return findCell(query);
         
     }
+    
+    /**
+     * Return a list of open cell's
+     *
+     * @param idCabinet
+     * @return Deque Cell Objects
+     * @throws SQLException
+     */
+    public Deque<Cell> cellsToOpen(Cabinet idCabinet) throws SQLException {
+        Deque<Cell> data = new LinkedList<>();
+        String idCabine = String.valueOf(idCabinet.getId());
+
+        String query = "begin "
+                + "CELLSTOMAINTENANCE(" + idCabine + ") "
+                + "end;/";
+        PreparedStatement stmnt = this.con.prepareStatement(query);
+        ResultSet result = stmnt.executeQuery();
+
+        while (result.next()) {
+            Cell newCell = new Cell();
+            newCell.setId(result.getInt(0));
+            String description = "Cell number: " + String.valueOf(result.getInt(1));
+            newCell.setDescription(description);
+            data.push(newCell);
+        }
+
+        return data.isEmpty() ? null : data;
+    }
+    
+    
+    public boolean openCell(Cell cell){
+        return true;
+    }
+    
+    public boolean insertReport(Cell cell){
+        return true;
+    }
+    
+    public boolean closeCell(Cell cell){
+        return true;
+    }
+    
     
     private Cell findCell(String query) {
         Cell prateleira = null;

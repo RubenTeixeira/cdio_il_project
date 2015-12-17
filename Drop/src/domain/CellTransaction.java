@@ -10,6 +10,10 @@ package domain;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public interface CellTransaction {
+    
+    /*
+    *   Setter methods
+    */
     void setDateOpen();
     void setDateClose();
     void setTokenID(int tokenID);

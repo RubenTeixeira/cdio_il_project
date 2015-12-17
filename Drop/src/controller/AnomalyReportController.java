@@ -7,6 +7,10 @@ package controller;
 
 import domain.DropPoint;
 import domain.Notice;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import persistence.DropPointDAO;
 import persistence.SQLConnection;
 import persistence.Table;
 
@@ -24,26 +28,41 @@ public class AnomalyReportController {
         manager = persistence.OracleDb.getInstance();
     }
     
+    /**
+     * Starts Anomaly Report process.
+     * @param descr Body of the notice
+     * @param id DropPoint id
+     * @return true if data is valid, false otherwise
+     */
     public boolean beginAnomalyReport(String descr, int id) {
-        if (descr.length() > 500)
-            return false;
         this.description = descr;
-        //this.dropPoint = ((DropPointDAO)manager.getDAO(Table.DROPPOINT)).get(id);
+        try {
+            this.dropPoint = ((DropPointDAO)manager.getDAO(Table.DROPPOINT)).get(id);
+            if (this.dropPoint == null)
+                return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(AnomalyReportController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
         return true;
     }
     
+    /**
+     * Dispatch Anomaly Report notice
+     * @return truee if dispatched successfull, false otherwise
+     */
     public boolean sendAnomalyReport() {
         Notice notice = new Notice();
         StringBuilder strBuild = new StringBuilder();
         
-        strBuild.append("This is an anomaly notification for the auothorities.\n");
-        strBuild.append("\nLocation: TBA\n");
+        strBuild.append("This is an anomaly notification for the Authorities.\n");
+        strBuild.append("\nLocation: "+this.dropPoint.getNome()+"\n");
         strBuild.append("\nDescription:\n");
-        strBuild.append(this.description);
+        strBuild.append(this.description+"\n");
         strBuild.append("\nReporter:\nDropPoint Inc.\n\nBest Regards.");
 
         notice.setMessage(strBuild.toString());
-        notice.setEmail("1140780@isep.ipp.pt");
+        notice.setEmail("rubentrteixeira@gmail.com");
         
         return notice.dispatchMail();
     }
