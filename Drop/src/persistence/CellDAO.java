@@ -7,6 +7,7 @@ package persistence;
 
 import domain.Cabinet;
 import domain.Cell;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,18 +62,23 @@ public class CellDAO extends GenericDAO<Cell> {
     /**
      * Return a list of open cell's
      *
-     * @param idCabinet
+     * @param abinet
      * @return Deque Cell Objects
      * @throws SQLException
      */
-    public Deque<Cell> cellsToOpen(Cabinet idCabinet) throws SQLException {
+    public Deque<Cell> cellsToOpen(Cabinet cabinet) throws SQLException {
         Deque<Cell> data = new LinkedList<>();
-        String idCabine = String.valueOf(idCabinet.getId());
+        //String idCabine = String.valueOf(idCabinet.getId());
 
-        String query = "begin "
-                + "CELLSTOMAINTENANCE(" + idCabine + ") "
-                + "end;/";
-        PreparedStatement stmnt = this.con.prepareStatement(query);
+//        String query = "begin "
+//                + "CELLSTOMAINTENANCE(" + idCabine + ") "
+//                + "end;/";
+        
+//        PreparedStatement stmnt = this.con.prepareStatement(query);
+        
+        String qry = "cellstomaintenance("+cabinet.getId()+")";
+        CallableStatement stmnt = con.prepareCall(qry);
+
         ResultSet result = stmnt.executeQuery();
 
         while (result.next()) {
