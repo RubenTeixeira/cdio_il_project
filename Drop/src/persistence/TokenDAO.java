@@ -6,6 +6,7 @@
 package persistence;
 
 import domain.Token;
+import domain.TokenAssistent;
 import domain.TokenClient;
 import domain.TokenCourier;
 import java.sql.Connection;
@@ -35,8 +36,6 @@ public class TokenDAO extends GenericDAO<Token> {
         String qry = "select t.id_token, t.data_geracao, t.data_validade, a.descricao, t.ativo, t.codigo, t.id_reserva from token t, tipo_token a"
                 + " where t.id_tipo_token = a.id_tipo_token"
                 + " and t.codigo = '" + code + "'";
-        System.out.println("QUERY");
-        System.out.println(qry);
         ResultSet rs = executeQuery(qry);
         if (rs != null) {
             try {
@@ -130,6 +129,9 @@ public class TokenDAO extends GenericDAO<Token> {
                 break;
             case "estafeta":
                 token = new TokenCourier(id, generationDate, expirationDate, state, code, idReservation);
+                break;
+            case "colaborador":
+                token = new TokenAssistent(id, generationDate, expirationDate, state, code, 0);
                 break;
             default:
                 return null;
