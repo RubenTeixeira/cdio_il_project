@@ -25,36 +25,47 @@ public class Notice {
     public Notice() {
     }
 
+    /*
+    *   Setter methods
+    */
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public void setToken(String message) {
-        this.message = message;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
+    
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
     }
     
+    /*
+    *   Getter methods
+    */
+    public String getTitle() {
+        return title;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    
+    
+    /**
+     * Mail dispatch method
+     * @return true if successfull, false otherwise
+     */
     public boolean dispatchMail() {
         if (!valid())
             return false;
         GoogleMail mail = new GoogleMail();
         mail.setRecipientEmail(email);
-        mail.setTitle("Token de Abertura");
+        mail.setTitle("Anomaly Report from DropPoint");
         mail.setMessage(this.message);
         mail.send();
         System.out.println("Email enviado para: " + email);
@@ -70,6 +81,10 @@ public class Notice {
         System.out.println("Email enviado para: " + email);
     }
     
+    /**
+     * Validates notice
+     * @return true if valid, false otherwise
+     */
     private boolean valid() {
         return this.email.matches(EMAIL_PATTERN) && this.message.length() > 0;
     }

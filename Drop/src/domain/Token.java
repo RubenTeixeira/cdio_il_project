@@ -13,20 +13,45 @@ import persistence.SQLConnection;
  */
 public interface Token {
 
+    /*
+    *   Getter methods
+    */
     int getId();
     String getGenerationDate();
     String getExpirationDate();
     int getState();   
     String getCode();
     int getReservationId();
+    
+    /*
+    *   Setter methods
+    */
     void setId(int id);
     void setGenerationDate(String generationDate);
     void setExpirationDate(String expirationDate);
     void setState(int state);
     void setCode(String code);
     void setReservationId(int reservationID);
+    
+    /**
+     * Instantiates an object of the implementer class
+     * @param manager SQLConnection object responsible for DAO instantiation
+     * @return object implementing CellTransaction (Delivery, PickUp (...))
+     */
     CellTransaction newTransaction(SQLConnection manager);
+    
+    /**
+     * Retrieves cell which corresponds to this Token
+     * @param manager DAO instantiator
+     * @return Cell
+     */
     Cell getCell(SQLConnection manager);
+    
+    /**
+     * Closes the transaction
+     * @param manager DAO instantiator
+     * @param transaction object implementing CellTransaction (Delivery, PickUp (...))
+     */
     void close(SQLConnection manager, CellTransaction transaction);
  
 }

@@ -3,44 +3,46 @@ package ui;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utils.ReadFromKeyboard;
 
 /**
  *
  * @author vascopinho
  */
-public class main {
+public class Main {
 
-    static List<String> file;
     static Scanner in = new Scanner(System.in);
 
-    public static void main(String[] args) throws SQLException {
-        file = utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
+    public static void main(String[] args) throws SQLException
+    {
+        utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
         //versaoGraficaParaCliente();
-        //versaoConsola();
-        colabroradorConsola();
+        versaoConsola();
+
     }
 
-    public static void menu() {
+    public static void menu()
+    {
         String menu = "---------MENU---------\n"
                 + "1. Abrir Prateleira\n"
-                + "2. Colaborador"
-                + "3. Sair";
+                + "2. Colaborador\n"
+                + "0. Sair";
         System.out.println(menu);
     }
 
-    private static void versaoConsola() {
-        int op = 0;
+    private static void versaoConsola() throws SQLException
+    {
+        int op;
 
-        do {
+        do
+        {
             menu();
             op = in.nextInt();
-            switch (op) {
+            switch (op)
+            {
                 case 1:
                     new OpenCellUI();
 
@@ -48,40 +50,38 @@ public class main {
                 case 2:
                     colabroradorConsola();
                     break;
-                case 3:
+                case 0:
                     exit(0);
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
-        } while (op != 4);
+        } while (op != 0);
     }
 
-    private static void versaoGraficaParaCliente() {
+    private static void versaoGraficaParaCliente()
+    {
         new DropGUI();
     }
 
-    private static void colabroradorConsola() {
+    private static void colabroradorConsola() throws SQLException
+    {
         System.out.println("--------------------Colabrorador------------");
-        String menu = "1. Colocar em manutençao\n"
-                + "2. Efectuar manutenção"
-                + "3. Sair";
-        int op = 0;
-        do {
+        String menu = "1. Iniciar Manutenção\n"
+                + "2. Recolher Entregas Expiradas"
+                + "0. Voltar";
+        int op;
+        do
+        {
             System.out.println(menu);
-            op = ReadFromKeyboard.read();
-            switch (op) {
+            op = in.nextInt();
+            switch (op)
+            {
                 case 1:
+                    new MaintenanceUI();
+                case 0:
+                    versaoConsola();
                     break;
-                case 2: {
-                    try {
-                        new MakeMaintenanceUI(file);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                break;
                 default:
                     System.out.println("Opção inválida.");
                     break;
@@ -90,21 +90,28 @@ public class main {
         } while (op != 0);
     }
 
-    private static void gestorConsola() {
+    private static void gestorConsola()
+    {
         System.out.println("--------------------Gestor------------");
-        String menu = "1. Gestão DropPoint\n";
+        String menu = "1. Gestão DropPoint\n"
+                + "0. Sair";
         int op = 0;
-        do {
+        do
+        {
             System.out.println(menu);
-            switch (op) {
+            switch (op)
+            {
                 case 1:
-                    try {
+                    try
+                    {
                         new ConsultarOcupacaoEntregaUI();
-                    } catch (RuntimeException e) {
-                        Logger.getLogger(main.class.getName()).log(Level.WARNING, "Something went wrong.", e.getMessage());
+                    } catch (RuntimeException e)
+                    {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());
                     }
                     break;
                 case 2:
+                    exit(0);
                     break;
                 default:
                     System.out.println("Opção inválida.");

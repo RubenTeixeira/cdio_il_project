@@ -9,7 +9,15 @@ public class DropPoint {
     private int m_id;
     private String m_nome;
     private int m_idMorada;
+    private int free_days;
 
+    public DropPoint(int m_id, String m_nome, int m_idMorada, int free_days) {
+        this.m_id = m_id;
+        this.m_nome = m_nome;
+        this.m_idMorada = m_idMorada;
+        this.free_days = free_days;
+    }
+    
     public DropPoint() {
     }
     //GET`S
@@ -25,6 +33,10 @@ public class DropPoint {
     public int getIdMorada() {
         return this.m_idMorada;
     }
+    
+    public int getFree_Days(){
+        return this.free_days;
+    }
 
     //SET`S
     public void setId(int m_id) {
@@ -37,6 +49,10 @@ public class DropPoint {
 
     public void setIdMorada(int m_idMorada) {
         this.m_idMorada = m_idMorada;
+    }
+    
+    public void setFree_Days(int free_days){
+        this.free_days = free_days;
     }
 
     @Override
