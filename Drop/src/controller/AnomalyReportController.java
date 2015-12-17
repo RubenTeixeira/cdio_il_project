@@ -28,6 +28,12 @@ public class AnomalyReportController {
         manager = persistence.OracleDb.getInstance();
     }
     
+    /**
+     * Starts Anomaly Report process.
+     * @param descr Body of the notice
+     * @param id DropPoint id
+     * @return true if data is valid, false otherwise
+     */
     public boolean beginAnomalyReport(String descr, int id) {
         this.description = descr;
         try {
@@ -41,6 +47,10 @@ public class AnomalyReportController {
         return true;
     }
     
+    /**
+     * Dispatch Anomaly Report notice
+     * @return truee if dispatched successfull, false otherwise
+     */
     public boolean sendAnomalyReport() {
         Notice notice = new Notice();
         StringBuilder strBuild = new StringBuilder();
