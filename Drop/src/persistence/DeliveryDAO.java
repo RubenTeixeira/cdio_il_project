@@ -28,7 +28,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "         and r.id_reserva = e.id_reserva"
                 + "         and t.codigo = '" + token + "'";
         ResultSet rs = executeQuery(qry);
-        if (rs != null) {
+        if(rs != null) {
             try {
                 rs.next();
                 return rs.getInt("id_entrega");
@@ -36,17 +36,18 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
             }
         }
         return -1;
-        
+
     }
 
     /**
      * Retrieves incremental ID for this object correponding Table
+     *
      * @return int ID
      */
     public int getNextId() {
         String query = "select nvl(max(id_entrega),0)+1 as id from entrega";
         ResultSet rs = executeQuery(query);
-        if (rs != null) {
+        if(rs != null) {
             try {
                 rs.next();
                 return rs.getInt("id");
@@ -89,7 +90,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "     where r.id_reserva = " + idReservation
                 + "AND r.id_cliente = c.id_cliente";
         ResultSet rs = executeQuery(qry);
-        if (rs != null) {
+        if(rs != null) {
             try {
                 rs.next();
                 return rs.getString("email");
@@ -107,7 +108,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "AND t.id_tipo_token = 2"
                 + "AND t.ativo = 1";
         ResultSet rs = executeQuery(qry);
-        if (rs != null) {
+        if(rs != null) {
             try {
                 rs.next();
                 return rs.getString("codigo");
@@ -117,4 +118,22 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         return null;
     }
 
+    public int getDeliveryIdByCellId(int id) {
+        String query = "SELECT ID_ENTREGA"
+                + " FROM entrega e, prateleira p"
+                + " WHERE p.ocupado = 1"
+                + " AND p.ID_PRATELEIRA = " + id
+                + " AND p.ID_PRATELEIRA = e.ID_PRATELEIRA";
+
+        ResultSet rs = executeQuery(query);
+        if(rs != null) {
+            try {
+                rs.next();
+                return rs.getInt("ID_ENTREGA");
+            } catch (SQLException ex) {
+            }
+        }
+        return -1;
+
+    }
 }
