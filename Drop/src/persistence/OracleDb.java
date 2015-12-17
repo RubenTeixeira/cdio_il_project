@@ -71,17 +71,17 @@ public class OracleDb implements SQLConnection, Settings {
 
         switch (t)
         {
-            case RECOLHA:
+            case PICKUP:
                 return new PickUpDAO(this.con);
-            case ENTREGA:
+            case DELIVERY:
                 return new DeliveryDAO(this.con);
             case TOKEN:
                 return new TokenDAO(this.con);
-            case PRATELEIRA:
+            case CELL:
                 return new CellDAO(this.con);
             case DROPPOINT:
                 return new DropPointDAO(this.con);
-            case ARMARIO:
+            case CABINET:
                 return new CabinetDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");

@@ -12,8 +12,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -123,6 +125,34 @@ public class CellDAO extends GenericDAO<Cell> {
         return prateleira;
     }
 
+        public List<Cell> getListOfCellsWithDeliveriesOutOfDateOrderByTemperature(int dropID, String tokenCode) {
+
+        List<Cell> listCells = new ArrayList<>();
+
+        String qry = "SELECT p.ID_PRATELEIRA, p.NUMERO_PRATELEIRA, c.TEMP_MIN"
+                + " FROM armario a, prateleira p , token t, entrega e, classe_temperatura c"
+                + " WHERE "+ dropID +" = a.ID_DROPPOINT"
+                + " AND a.ID_ARMARIO = p.ID_ARMARIO"
+                + " AND p.OCUPADO = 1"
+                + " AND p.ID_PRATELEIRA = e.ID_PRATELEIRA"
+                + " AND e.ID_TOKEN_COLABORADOR = t.ID_TOKEN"
+                + " AND t.CODIGO = '"+ tokenCode +"'"
+                + " AND c.ID_TEMPERATURA = p.ID_TEMPERATURA"
+                + " ORDER BY c.TEMP_MIN";
+        PreparedStatement stmnt;
+        try {
+            stmnt = this.con.prepareStatement(qry);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                Cell cell = new Cell();
+                cell.setId(rs.getInt("ID_PRATELEIRA"));
+                cell.setDescription(rs.getString("NUMERO_PRATELEIRA"));
+                listCells.add(cell);
+            }
+        } catch (SQLException ex) {
+        }
+        return listCells;
+    }
 
     @Override
     public boolean insertNew(Cell obj) {

@@ -29,7 +29,7 @@ public class MakeMaintenanceController {
     
     public MakeMaintenanceController() throws SQLException {
         this.gestao = new Gestao();
-        this.cellDAO = (CellDAO) this.gestao.getBd().getDAO(Table.PRATELEIRA);
+        this.cellDAO = (CellDAO) this.gestao.getBd().getDAO(Table.CELL);
     }
     
     public List<Cabinet> listCabinetsInMaintenance() {
