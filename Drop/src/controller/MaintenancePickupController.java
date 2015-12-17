@@ -60,7 +60,7 @@ public class MaintenancePickupController {
     }
 
     public void openCell() {
-        int deliveryID = this.deliveryDAO.getDeliveryIdByToken(token.getCode());
+        int deliveryID = this.deliveryDAO.getDeliveryIdByCellId(cell.getId());
         this.maintenancePickup = this.maintenancePickupDAO.newMaintenancePickup();
         this.maintenancePickup.setDeliveryId(deliveryID);
         this.maintenancePickup.setTokenId(this.token.getId());
@@ -69,7 +69,7 @@ public class MaintenancePickupController {
         this.maintenancePickup.setDateOpen(ft.format(data));
     }
 
-    public boolean closeShelf() {
+    public boolean closeCell() {
         Date data = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         this.maintenancePickup.setDateClose(ft.format(data));
