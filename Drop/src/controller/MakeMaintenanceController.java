@@ -36,8 +36,8 @@ public class MakeMaintenanceController {
     
     public MakeMaintenanceController(List<String> file) throws SQLException {
         SQLConnection instance = OracleDb.getInstance(file.get(0),file.get(1), file.get(2), file.get(3));
-        this.cabinetDAO = (CabinetDAO) instance.getDAO(Table.ARMARIO);
-        this.cellDAO = (CellDAO) instance.getDAO(Table.PRATELEIRA);
+        this.cabinetDAO = (CabinetDAO) instance.getDAO(Table.CABINET);
+        this.cellDAO = (CellDAO) instance.getDAO(Table.CELL);
         this.dropDAO = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
     }
     
