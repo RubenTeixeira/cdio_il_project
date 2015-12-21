@@ -9,6 +9,15 @@ package persistence;
  *
  * @author vascopinho
  */
+import dal.TokenDAO;
+import dal.Table;
+import dal.PickUpDAO;
+import dal.MaintenancePickupDAO;
+import dal.DropPointDAO;
+import dal.DeliveryDAO;
+import dal.CellDAO;
+import dal.CabinetDAO;
+import dal.GenericDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

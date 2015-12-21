@@ -10,9 +10,9 @@ import domain.Notice;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.DropPointDAO;
+import dal.DropPointDAO;
 import persistence.SQLConnection;
-import persistence.Table;
+import dal.Table;
 
 /**
  *

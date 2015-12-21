@@ -24,7 +24,7 @@ class MakeMaintenanceUI {
 
     private MakeMaintenanceController controller;
 
-    public MakeMaintenanceUI(List<String> file) throws SQLException {
+    public MakeMaintenanceUI(String file) throws SQLException {
         controller = new MakeMaintenanceController(file);
         run();
     }

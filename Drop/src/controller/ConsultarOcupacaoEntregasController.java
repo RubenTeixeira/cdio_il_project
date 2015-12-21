@@ -7,7 +7,6 @@ package controller;
 
 import domain.Gestao;
 import java.sql.ResultSet;
-import java.util.List;
 import persistence.SQLConnection;
 
 /**

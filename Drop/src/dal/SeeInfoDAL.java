@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package persistence;
+package dal;
 
 import domain.DropPoint;
 import java.sql.ResultSet;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import persistence.OracleDb;
+import persistence.SQLConnection;
 
 /**
  *

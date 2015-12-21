@@ -6,16 +6,14 @@
 package controller;
 
 import domain.DropPoint;
-import domain.Gestao;
 import domain.Token;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.OracleDb;
 import persistence.SQLConnection;
-import persistence.Table;
-import persistence.TokenDAO;
+import dal.Table;
+import dal.TokenDAO;
 
 /**
  *

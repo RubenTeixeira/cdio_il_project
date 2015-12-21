@@ -5,6 +5,8 @@
  */
 package persistence;
 
+import dal.Table;
+import dal.GenericDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

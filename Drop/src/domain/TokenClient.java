@@ -8,11 +8,11 @@ package domain;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.DeliveryDAO;
-import persistence.CellDAO;
-import persistence.PickUpDAO;
+import dal.DeliveryDAO;
+import dal.CellDAO;
+import dal.PickUpDAO;
 import persistence.SQLConnection;
-import persistence.Table;
+import dal.Table;
 
 /**
  *

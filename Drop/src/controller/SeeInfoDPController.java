@@ -1,6 +1,6 @@
 package controller;
 
-import persistence.SeeInfoDAL;
+import dal.SeeInfoDAL;
 import domain.DropPoint;
 import java.util.List;
 
