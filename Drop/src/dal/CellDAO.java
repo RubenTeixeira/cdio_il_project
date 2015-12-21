@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package persistence;
+package dal;
 
+import dal.GenericDAO;
 import domain.Cabinet;
 import domain.Cell;
 import java.sql.Connection;

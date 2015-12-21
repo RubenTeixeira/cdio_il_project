@@ -14,10 +14,11 @@ import java.util.logging.Logger;
 public class Main {
 
     static Scanner in = new Scanner(System.in);
+    static final String CREDENTIALS_FILE = "settings/settings.txt";
 
     public static void main(String[] args) throws SQLException
     {
-        utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
+        //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
         //versaoGraficaParaCliente();
         versaoConsola();
@@ -80,13 +81,13 @@ public class Main {
             switch (op)
             {
                 case 1:
-                    new MaintenanceUI();
+                    new MaintenanceUI(CREDENTIALS_FILE);
                     break;
                 case 2:
                    new MaintenancePickupUI();
                     break;
                 case 3:
-                    new MakeMaintenanceUI(utils.ReadAndWriteFile.readFromFile("settings/settings.txt"));
+                    new MakeMaintenanceUI(CREDENTIALS_FILE);
                     break;
                 case 0:
                     versaoConsola();

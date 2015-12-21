@@ -14,8 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistence.OracleDb;
 import persistence.SQLConnection;
-import persistence.Table;
-import persistence.TokenDAO;
+import dal.Table;
+import dal.TokenDAO;
 
 /**
  *

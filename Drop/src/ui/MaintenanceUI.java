@@ -11,14 +11,17 @@ import java.util.Scanner;
  * @author 1130874
  */
 public class MaintenanceUI {
+    
 
     private MaintenanceDPController controller;
     private int localDropID = 1;
     static Scanner in = new Scanner(System.in);
+    static String FILE;
 
-    public MaintenanceUI() throws SQLException
+    public MaintenanceUI(String file) throws SQLException
     {
-        this.controller = new MaintenanceDPController("settings/settings.txt");
+        FILE = file;
+        this.controller = new MaintenanceDPController(file);
         run();
     }
 
@@ -43,7 +46,7 @@ public class MaintenanceUI {
                 controller.selectCabinet(cabinet);
                 if (controller.putInMaintenance())
                 {
-                    new MakeMaintenanceUI(cabinet);
+                    new MakeMaintenanceUI(FILE);
                 } else
                 {
                     System.out.println("Erro ao Realizar operação\nTente Novamente mais tarde!");

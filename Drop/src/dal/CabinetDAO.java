@@ -1,5 +1,6 @@
-package persistence;
+package dal;
 
+import dal.GenericDAO;
 import domain.Cabinet;
 import java.sql.Connection;
 import java.sql.ResultSet;

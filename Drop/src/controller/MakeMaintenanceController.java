@@ -12,14 +12,12 @@ import domain.Gestao;
 import java.sql.SQLException;
 import java.util.Deque;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import persistence.CabinetDAO;
-import persistence.CellDAO;
-import persistence.DropPointDAO;
+import dal.CabinetDAO;
+import dal.CellDAO;
+import dal.DropPointDAO;
 import persistence.OracleDb;
 import persistence.SQLConnection;
-import persistence.Table;
+import dal.Table;
 
 /**
  *
@@ -34,8 +32,8 @@ public class MakeMaintenanceController {
     private DropPointDAO dropDAO;
     private Cell cell;
     
-    public MakeMaintenanceController(List<String> file) throws SQLException {
-        SQLConnection instance = OracleDb.getInstance(file.get(0),file.get(1), file.get(2), file.get(3));
+    public MakeMaintenanceController(String file) throws SQLException {
+        SQLConnection instance = OracleDb.getInstance(file);
         this.cabinetDAO = (CabinetDAO) instance.getDAO(Table.CABINET);
         this.cellDAO = (CellDAO) instance.getDAO(Table.CELL);
         this.dropDAO = (DropPointDAO) instance.getDAO(Table.DROPPOINT);

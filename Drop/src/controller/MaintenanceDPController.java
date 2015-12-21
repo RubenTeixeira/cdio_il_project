@@ -4,9 +4,9 @@ import domain.Cabinet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.CabinetDAO;
+import dal.CabinetDAO;
 import persistence.SQLConnection;
-import persistence.Table;
+import dal.Table;
 
 /**
  *

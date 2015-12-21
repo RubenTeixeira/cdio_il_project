@@ -10,9 +10,9 @@ import domain.Gestao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import persistence.DropPointDAO;
+import dal.DropPointDAO;
 import persistence.SQLConnection;
-import persistence.Table;
+import dal.Table;
 
 /**
  *
