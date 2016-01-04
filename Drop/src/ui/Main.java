@@ -20,7 +20,7 @@ public class Main {
     {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
-        //versaoGraficaParaCliente();
+        versaoGraficaParaCliente();
         versaoConsola();
         //colabroradorConsola();
 
@@ -63,7 +63,7 @@ public class Main {
 
     private static void versaoGraficaParaCliente()
     {
-        new DropGUI();
+        new DropGUI(CREDENTIALS_FILE);
     }
 
     private static void colabroradorConsola() throws SQLException

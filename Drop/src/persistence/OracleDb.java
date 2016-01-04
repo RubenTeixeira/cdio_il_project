@@ -76,6 +76,8 @@ public class OracleDb implements SQLConnection, Settings {
         }
 
         switch (t) {
+            case ADDRESS:
+                return new AddressDAO(this.con);
             case PICKUP:
                 return new PickUpDAO(this.con);
             case DELIVERY:

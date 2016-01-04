@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -25,7 +26,7 @@ public class SeeInfoDPGUI {
 
     public static void initAndShowGUI(
             JFrame fatherFrame,
-            SeeInfoDPController seeInfoDPController)
+            SeeInfoDPController seeInfoDPController) throws SQLException
     {
 
         SeeInfoDPGUI.fatherFrame = fatherFrame;

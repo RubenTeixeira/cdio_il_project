@@ -1,18 +1,19 @@
 package ui;
 
 import controller.ComprarServicoDPController;
+import java.sql.SQLException;
 import persistence.OracleDb;
 
 public class ComprarServicoDPUI {
 
     private controller.ComprarServicoDPController controller;
 
-    public ComprarServicoDPUI() {
+    public ComprarServicoDPUI() throws SQLException{
         controller = new ComprarServicoDPController(OracleDb.getInstance());
         run();
     }
 
-    private void run() {
+    private void run() throws SQLException{
 
         String menu = "---------------------Selccione das seguintes opções------------------\n"
                 + "1. Cliente registado\n"

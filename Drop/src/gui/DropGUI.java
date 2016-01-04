@@ -25,9 +25,9 @@ public class DropGUI extends javax.swing.JFrame {
     /**
      * Creates new form DropGUI
      */
-    public DropGUI() {
+    public DropGUI(String file) {
 
-        seeInfoDPController = new SeeInfoDPController();
+        seeInfoDPController = new SeeInfoDPController(file);
         extendTokenController = new ExtendTokenController();
         initComponents();
 
@@ -131,7 +131,11 @@ public class DropGUI extends javax.swing.JFrame {
         dropChosen = (DropPoint) listDropPoints.getSelectedValue();
         if (dropChosen != null) {
             seeInfoDPController.selectDropPoint(dropChosen);
-            SeeInfoDPGUI.initAndShowGUI(this, seeInfoDPController);
+            try {
+                SeeInfoDPGUI.initAndShowGUI(this, seeInfoDPController);
+            } catch (SQLException ex) {
+                Logger.getLogger(DropGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Tem de selecionar um DropPoint para poder ver a sua informação", "Erro ao selecionar", JOptionPane.INFORMATION_MESSAGE, null);
         }

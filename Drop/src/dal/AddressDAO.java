@@ -5,7 +5,6 @@
  */
 package dal;
 
-import dal.GenericDAO;
 import domain.Address;
 import domain.Gestao;
 import java.sql.Connection;
@@ -66,7 +65,7 @@ public class AddressDAO extends GenericDAO<Address> {
      * @return boolean
      */
     public boolean registerAddress(Address morada) {
-        if (!morada.validate()) {
+        if(!morada.validate()) {
             return false;
         }
 
@@ -86,6 +85,45 @@ public class AddressDAO extends GenericDAO<Address> {
         }
 
         return false;
+    }
+
+    /**
+     * Returns a String object with the street, the postal code and the
+     * locality info of a specified address
+     *
+     * @param adressID the address id
+     * @return an address
+     * @throws SQLException
+     */
+    public String getAdressByID(int adressID) throws SQLException {
+        ResultSet rs = executeQuery("SELECT rua, codpostal, localidade FROM morada WHERE id_morada = " + adressID + "");
+        String adress = "";
+        while (rs.next()) {
+            adress = String.format("%s\n"
+                    + "%s, %s\n",
+                    rs.getString("RUA"),
+                    rs.getString("CODPOSTAL"),
+                    rs.getString("LOCALIDADE"));
+        }
+        return adress;
+    }
+
+    /**
+     * Returns a String object with the coordinates of a specified address
+     *
+     * @param adressID the address id
+     * @return the coordinates of an address
+     * @throws SQLException
+     */
+    public String getCoordinatesByAddressID(int adressID) throws SQLException {
+        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from morada where ID_MORADA = " + adressID + "");
+        String adress = "";
+        while (rs.next()) {
+            adress = String.format("%s;%s",
+                    rs.getString("LATITUDE"),
+                    rs.getString("LONGITUDE"));
+        }
+        return adress;
     }
 
     /**
