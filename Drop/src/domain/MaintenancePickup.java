@@ -16,6 +16,7 @@ public class MaintenancePickup {
     private String dateClose;
     private int deliveryId;
     private int tokenId;
+    private String filePath;
 
     public MaintenancePickup() {
     }
@@ -41,6 +42,10 @@ public class MaintenancePickup {
         return this.tokenId;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+    
     /*Setters*/
     public void setMaintenacePickupId(int maintenacePickupId) {
         this.maintenacePickupId = maintenacePickupId;
@@ -62,6 +67,10 @@ public class MaintenancePickup {
         this.tokenId = tokenId;
     }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+    
     public boolean validate() {
         return maintenacePickupId > 0 
                 && deliveryId > 0 

@@ -68,6 +68,10 @@ public class MaintenancePickupController {
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         this.maintenancePickup.setDateOpen(ft.format(data));
     }
+    
+    public void savePhoto(String filePath) {
+        this.maintenancePickup.setFilePath(filePath);
+    }
 
     public boolean closeCell() {
         Date data = new Date();
