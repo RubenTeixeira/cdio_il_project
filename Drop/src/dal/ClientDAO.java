@@ -32,7 +32,7 @@ public class ClientDAO extends GenericDAO<Client> {
     private String nextId = "select nvl(max(id_cliente),0)+1 from cliente";
     private String delete = "DELETE FROM CLIENTE WHERE IDCLIENTE=?";
     private String login = "SELECT * FROM CLIENTE WHERE USERNAME=? AND UPASSWORD=?";
-    private String insert = "Insert Into CLIENTE (id_Cliente,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,IDMORADA)"
+    private String insert = "Insert Into CLIENTE (id_Cliente,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,ID_MORADA)"
             + " VALUES (?,?,?,?,?,?,?,?)";
     private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
             + " WHERE IDCLIENTE =?";

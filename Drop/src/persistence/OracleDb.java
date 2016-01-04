@@ -9,6 +9,7 @@ package persistence;
  *
  * @author vascopinho
  */
+import dal.AddressDAO;
 import dal.TokenDAO;
 import dal.Table;
 import dal.PickUpDAO;
@@ -17,6 +18,7 @@ import dal.DropPointDAO;
 import dal.DeliveryDAO;
 import dal.CellDAO;
 import dal.CabinetDAO;
+import dal.ClientDAO;
 import dal.GenericDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -88,6 +90,10 @@ public class OracleDb implements SQLConnection, Settings {
                 return new CabinetDAO(this.con);
             case MAINTENANCE_PICKUP:
                 return new MaintenancePickupDAO(this.con);
+            case CLIENTE:
+                return new ClientDAO(this.con);
+            case MORADA:
+                return new AddressDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");
         }

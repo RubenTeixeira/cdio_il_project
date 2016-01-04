@@ -13,7 +13,7 @@ public class ClientRegisterUI {
         run();
     }
 
-    private void run() {
+    private void run() throws SQLException {
 
         System.out.println("----Insira dados de contacto----\n");
         

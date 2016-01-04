@@ -23,8 +23,8 @@ public class AddressDAO extends GenericDAO<Address> {
 
     private final static String TABLENAME = "MORADA";
 
-    private String nextId = "select nvl(max(IDMORADA),0)+1 from Morada";
-    private String insert = "INSERT INTO Morada (IDMORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
+    private String nextId = "select nvl(max(ID_MORADA),0)+1 from Morada";
+    private String insert = "INSERT INTO Morada (ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
 
     /**
      * Construtor responsavel por cria uma conexao.
