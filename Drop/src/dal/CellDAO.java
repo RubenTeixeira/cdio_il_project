@@ -32,6 +32,11 @@ public class CellDAO extends GenericDAO<Cell> {
         super(con, TABLENAME);
     }
 
+    /**
+     * Finds an available Cell for a new Delivery
+     * @param token Token associated with a given Reservation
+     * @return available Cell
+     */
     public Cell findCellForDelivery(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
@@ -50,6 +55,11 @@ public class CellDAO extends GenericDAO<Cell> {
         return findCell(query);
     }
     
+    /**
+     * Finds the Cell containing the corresponding package for the PickUp
+     * @param token Token associated with a given Reservation already delivered
+     * @return occupied Cell
+     */
     public Cell findCellForPickUp(String token) {
         
         String query = "select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA" +
@@ -65,7 +75,7 @@ public class CellDAO extends GenericDAO<Cell> {
     }
     
     /**
-     * Return a list of open cell's
+     * Returns a list of open cell's
      *
      * @param cabinet
      * @return Deque Cell Objects
