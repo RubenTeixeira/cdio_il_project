@@ -80,8 +80,8 @@ public class RegistoMorada {
      * @param morada
      * @return boolean
      */
-    public boolean registarMorada(Morada morada) {
-        if(!morada.valida())
+    public boolean registarMorada(Address morada) {
+        if(!morada.validate())
             return false;
         
         PreparedStatement prepareStatement = connection.prepareStatement(insert);
@@ -89,9 +89,9 @@ public class RegistoMorada {
 
         try {
             prepareStatement.setInt(1, id);
-            prepareStatement.setString(2, morada.getRua());
-            prepareStatement.setString(3, morada.getCodigoPostal());
-            prepareStatement.setString(4, morada.getLocalidade());
+            prepareStatement.setString(2, morada.getStreet());
+            prepareStatement.setString(3, morada.getPostalCode());
+            prepareStatement.setString(4, morada.getLocality());
             morada.setId(id);
             return prepareStatement.execute();
 
@@ -108,10 +108,10 @@ public class RegistoMorada {
      * @param rua
      * @param codigoPostal
      * @param localidade
-     * @return Morada
+     * @return Address
      */
-    public Morada novaMorada(String rua, String codigoPostal, String localidade) {
-        return new Morada(rua, codigoPostal, localidade);
+    public Address novaMorada(String rua, String codigoPostal, String localidade) {
+        return new Address(rua, codigoPostal, localidade);
     }
 
     /**

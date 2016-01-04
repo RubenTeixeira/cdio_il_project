@@ -96,7 +96,7 @@ public class RegistoCliente {
      */
     public boolean registarCliente(Cliente novoCliente) {
         
-        if(!novoCliente.valida()){
+        if(!novoCliente.validate()){
             return false;
         }
         
@@ -104,10 +104,10 @@ public class RegistoCliente {
         try {
 
             prepareStatement.setInt(1, nextClientId());
-            prepareStatement.setString(2, novoCliente.getNome());
+            prepareStatement.setString(2, novoCliente.getName());
             prepareStatement.setInt(3, novoCliente.getNIF());
             prepareStatement.setString(4, novoCliente.getEmail());
-            prepareStatement.setInt(5, novoCliente.getTelemovel());
+            prepareStatement.setInt(5, novoCliente.getMobilePhone());
             prepareStatement.setString(6, novoCliente.getUsername());
             prepareStatement.setString(7, novoCliente.getPassword());
             prepareStatement.setInt(8, novoCliente.getId());
@@ -167,7 +167,7 @@ public class RegistoCliente {
      * @param telemovel
      * @return Cliente
      */
-    public Cliente novoCliente(int id, String nome, int NIF, String username, String password, Morada morada, String email, int telemovel) {
+    public Cliente novoCliente(int id, String nome, int NIF, String username, String password, Address morada, String email, int telemovel) {
         return new Cliente(id, nome, NIF, username, password, morada, email, telemovel);
     }
 

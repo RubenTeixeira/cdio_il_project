@@ -42,7 +42,7 @@ public class ComprarServicoDPUI {
 
                         break;
                     case 2:
-                        new RegistarClienteUI();
+                        new ClientRegisterUI();
                         break;
 
                     default:

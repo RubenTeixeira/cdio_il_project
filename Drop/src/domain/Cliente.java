@@ -3,13 +3,13 @@ package domain;
 public class Cliente implements Comparable<Cliente>, Cloneable {
 
     private int id;
-    private String nome;
+    private String name;
     private int NIF;
     private String username;
     private String password;
-    private Morada morada;
+    private Address address;
     private String email;
-    private int telemovel;
+    private int mobilePhone;
 
     /**
      * Void construtor.
@@ -29,15 +29,15 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      * @param email
      * @param cellPhoneNumber
      */
-    public Cliente(int id, String name, int NIF, String username, String password, Morada address, String email, int cellPhoneNumber) {
+    public Cliente(int id, String name, int NIF, String username, String password, Address address, String email, int cellPhoneNumber) {
         this.setId(id);
-        this.setNome(name);
+        this.setName(name);
         this.setNIF(NIF);
         this.setUsername(username);
         this.setPassword(password);
-        this.setMorada(address);
+        this.setAddress(address);
         this.setEmail(email);
-        this.setTelemovel(cellPhoneNumber);
+        this.setMobilePhone(cellPhoneNumber);
     }
 
     /**
@@ -46,13 +46,13 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      * @param outro
      */
     private Cliente(Cliente outro) {
-        this(outro.getId(), outro.getNome(),
+        this(outro.getId(), outro.getName(),
                 outro.getNIF(),
                 outro.getUsername(),
                 outro.getPassword(),
-                outro.getMorada(),
+                outro.getAddress(),
                 outro.getEmail(),
-                outro.getTelemovel());
+                outro.getMobilePhone());
     }
 
     /**
@@ -60,8 +60,8 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @return int
      */
-    public int getTelemovel() {
-        return telemovel;
+    public int getMobilePhone() {
+        return mobilePhone;
     }
 
     /**
@@ -83,12 +83,12 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
     }
 
     /**
-     * Give it back morada attribute value.
+     * Give it back address attribute value.
      *
-     * @return Morada object
+     * @return Address object
      */
-    public Morada getMorada() {
-        return morada;
+    public Address getAddress() {
+        return address;
     }
 
     /**
@@ -105,8 +105,8 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @return String
      */
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -141,8 +141,8 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @param cellphoneNumber
      */
-    public void setTelemovel(int cellphoneNumber) {
-        this.telemovel = cellphoneNumber;
+    public void setMobilePhone(int cellphoneNumber) {
+        this.mobilePhone = cellphoneNumber;
     }
 
     /**
@@ -168,8 +168,8 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @param address
      */
-    public void setMorada(Morada address) {
-        this.morada = address;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     /**
@@ -186,8 +186,8 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @param name
      */
-    public void setNome(String name) {
-        this.nome = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -204,7 +204,7 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      *
      * @return boolean
      */
-    public boolean valida() {
+    public boolean validate() {
         if (getEmail() == null
                 || getEmail().isEmpty()
                 || !utils.ValidateEmail.isValidEmail(getEmail())) {
@@ -215,11 +215,11 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
             return false;
         }
 
-        if (getNome() == null || getNome().isEmpty()) {
+        if (getName() == null || getName().isEmpty()) {
             return false;
         }
 
-        if (getTelemovel() < 0 || getTelemovel() > 999999999) {
+        if (getMobilePhone() < 0 || getMobilePhone() > 999999999) {
             return false;
         }
 
@@ -231,7 +231,7 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
             return false;
         }
 
-        if (!getMorada().valida()) {
+        if (!getAddress().validate()) {
             return false;
         }
 
@@ -246,13 +246,13 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
     @Override
     public String toString() {
         return "Cliente{" + "id=" + id + ""
-                + ", nome=" + nome + ""
+                + ", nome=" + name + ""
                 + ", NIF=" + NIF + ""
                 + ", username=" + username + ""
                 + ", password=" + password + ""
-                + ", morada=" + morada + ""
+                + ", morada=" + address + ""
                 + ", email=" + email + ""
-                + ", telemovel=" + telemovel + '}';
+                + ", telemovel=" + mobilePhone + '}';
     }
 
     @Override
@@ -291,7 +291,7 @@ public class Cliente implements Comparable<Cliente>, Cloneable {
      */
     @Override
     public int compareTo(Cliente other) {
-        return this.getNome().compareTo(other.getNome());
+        return this.getName().compareTo(other.getName());
     }
 
     /**
