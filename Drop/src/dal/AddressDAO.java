@@ -65,15 +65,15 @@ public class AddressDAO extends GenericDAO<Address> {
      * @param morada
      * @return boolean
      */
-    public boolean registerAddress(Address morada) throws SQLException {
+    public boolean registerAddress(Address morada) {
         if (!morada.validate()) {
             return false;
         }
 
-        PreparedStatement prepareStatement = con.prepareStatement(insert);
-        int id = nextId();
-
         try {
+            PreparedStatement prepareStatement = con.prepareStatement(insert);
+            int id = nextId();
+
             prepareStatement.setInt(1, id);
             prepareStatement.setString(2, morada.getStreet());
             prepareStatement.setString(3, morada.getPostalCode());

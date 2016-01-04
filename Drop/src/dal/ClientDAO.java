@@ -25,8 +25,6 @@ public class ClientDAO extends GenericDAO<Client> {
 
     private final static String TABLENAME = "CLIENTE";
 
-    private SQLConnection connection;
-
     /**
      * Define-se queries que serao utilizadas pelos metodos.
      *
@@ -39,7 +37,6 @@ public class ClientDAO extends GenericDAO<Client> {
     private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
             + " WHERE IDCLIENTE =?";
 
-    
     /**
      * Construtor responsavel por cria uma conexao.
      *
@@ -53,17 +50,8 @@ public class ClientDAO extends GenericDAO<Client> {
      *
      * @return SQLConnection
      */
-    public SQLConnection getConnection() {
-        return connection;
-    }
-
-    /**
-     * Permite definir conexao
-     *
-     * @param conn
-     */
-    public void setConnection(SQLConnection conn) {
-        this.connection = conn;
+    public Connection getConnection() {
+        return con;
     }
 
     /**
@@ -72,7 +60,7 @@ public class ClientDAO extends GenericDAO<Client> {
      * @return int
      */
     private int nextClientId() {
-        ResultSet executeQuery = connection.executeQuery(nextId);
+        ResultSet executeQuery = executeQuery(nextId);
         int nextId = 0;
         try {
             while (executeQuery.next()) {
@@ -98,8 +86,9 @@ public class ClientDAO extends GenericDAO<Client> {
             return false;
         }
 
-        PreparedStatement prepareStatement = connection.prepareStatement(insert);
         try {
+
+            PreparedStatement prepareStatement = con.prepareStatement(insert);
 
             prepareStatement.setInt(1, nextClientId());
             prepareStatement.setString(2, novoCliente.getName());
@@ -129,7 +118,7 @@ public class ClientDAO extends GenericDAO<Client> {
      */
     public Client login(String username, String password) {
         try {
-            PreparedStatement prepareStatement = connection.prepareStatement(login);
+            PreparedStatement prepareStatement = con.prepareStatement(login);
             prepareStatement.setString(1, username);
             prepareStatement.setString(2, password);
 
@@ -167,13 +156,6 @@ public class ClientDAO extends GenericDAO<Client> {
      */
     public Client newClient(int id, String nome, int NIF, String username, String password, Address morada, String email, int telemovel) {
         return new Client(id, nome, NIF, username, password, morada, email, telemovel);
-    }
-
-    /**
-     * Termina a ligação utilizada pela base de dados.
-     */
-    public void closeConection() {
-        connection.closeConnection();
     }
 
     @Override
