@@ -20,6 +20,15 @@ import dal.Table;
  */
 public class TokenClient extends TokenImpl {
 
+    /**
+     * Calls Super Constructor
+     * @param id
+     * @param generationDate
+     * @param expirationDate
+     * @param state
+     * @param code
+     * @param idReservation 
+     */
     public TokenClient(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
         super(id, generationDate, expirationDate, state, code, idReservation);
     }
