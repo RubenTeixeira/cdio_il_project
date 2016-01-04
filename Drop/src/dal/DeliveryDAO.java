@@ -23,6 +23,11 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         super(con, TABLENAME);
     }
 
+    /**
+     * Returns Delivery ID corresponding to given token
+     * @param token Token code string
+     * @return  Delivery ID
+     */
     public int getDeliveryIdByToken(String token) {
         String qry = "select e.id_entrega from token t, reserva r, entrega e"
                 + "     where t.id_reserva = r.id_reserva"
@@ -84,6 +89,11 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Returns Client email corresponding to given Delivery
+     * @param delivery Delivery
+     * @return Client email string
+     */
     public String getClientEmail(Delivery delivery) {
         int idReservation = delivery.getReservationID();
 
@@ -101,6 +111,11 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         return null;
     }
 
+    /**
+     * Returns token code string used to PickUp Cell content
+     * @param delivery Delivery in process
+     * @return token code string
+     */
     public String getPickUpToken(Delivery delivery) {
         int idReservation = delivery.getReservationID();
 
@@ -119,6 +134,11 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         return null;
     }
 
+    /**
+     * Returns the Delivery ID of an occupied Cell
+     * @param id Cell id
+     * @return id
+     */
     public int getDeliveryIdByCellId(int id) {
         String query = "SELECT ID_ENTREGA"
                 + " FROM entrega e, prateleira p"

@@ -11,6 +11,13 @@ public class DropPoint {
     private int m_idMorada;
     private int free_days;
 
+    /**
+     * Constructor with parameters
+     * @param m_id DropPoint ID
+     * @param m_nome DropPoint name
+     * @param m_idMorada DropPoint's address
+     * @param free_days DropPoint's grace period which will be added to the Reservation period
+     */
     public DropPoint(int m_id, String m_nome, int m_idMorada, int free_days) {
         this.m_id = m_id;
         this.m_nome = m_nome;
@@ -20,8 +27,8 @@ public class DropPoint {
     
     public DropPoint() {
     }
+    
     //GET`S
-
     public int getId() {
         return this.m_id;
     }
@@ -55,6 +62,10 @@ public class DropPoint {
         this.free_days = free_days;
     }
 
+    /**
+     * 
+     * @return DropPoint name
+     */
     @Override
     public String toString() {
 

@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 /**
  *
  * @author 1130874
@@ -96,5 +98,35 @@ public class Cabinet {
         return String.format("Nome: %s", this.name);
     }
 
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 59 * hash + this.id;
+        hash = 59 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        
+        final Cabinet other = (Cabinet) obj;
+        return this.id == other.id && this.name.equals(other.name);
+    }
+
+    
 }
 

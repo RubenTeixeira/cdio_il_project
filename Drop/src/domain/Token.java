@@ -34,21 +34,22 @@ public interface Token {
     void setReservationId(int reservationID);
     
     /**
-     * Instantiates an object of the implementer class
+     * Starts the transaction instantiating and returning
+     * an object of the implementer class
      * @param manager SQLConnection object responsible for DAO instantiation
      * @return object implementing CellTransaction (Delivery, PickUp (...))
      */
     CellTransaction newTransaction(SQLConnection manager);
     
     /**
-     * Retrieves cell which corresponds to this Token
+     * Retrieves cell which corresponds to this Token/Transaction
      * @param manager DAO instantiator
      * @return Cell
      */
     Cell getCell(SQLConnection manager);
     
     /**
-     * Closes the transaction
+     * Closes the transaction sending it to the Database
      * @param manager DAO instantiator
      * @param transaction object implementing CellTransaction (Delivery, PickUp (...))
      */

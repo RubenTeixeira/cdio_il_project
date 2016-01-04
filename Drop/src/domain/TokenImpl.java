@@ -18,6 +18,15 @@ public abstract class TokenImpl implements Token {
     private String code;
     private int idReservation;
 
+    /**
+     * SuperClass Constructor
+     * @param id Token id
+     * @param generationDate Date from which the token was generated 
+     * @param expirationDate Date from which the token will be considered expired
+     * @param state Token state. Can be active (1) or inactive (0)
+     * @param code Actual token. May vary in the future
+     * @param idReservation Rservation ID corresponding to this token
+     */
     public TokenImpl(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
         this.id = id;
         this.generationDate = generationDate;
@@ -35,14 +44,17 @@ public abstract class TokenImpl implements Token {
         return id;
     }
 
+    @Override
     public String getGenerationDate() {
         return generationDate;
     }
 
+    @Override
     public String getExpirationDate() {
         return expirationDate;
     }
 
+    @Override
     public int getState() {
         return state;
     }
@@ -62,14 +74,17 @@ public abstract class TokenImpl implements Token {
         this.id = id;
     }
 
+    @Override
     public void setGenerationDate(String generationDate) {
         this.generationDate = generationDate;
     }
 
+    @Override
     public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
+    @Override
     public void setState(int state) {
         this.state = state;
     }
