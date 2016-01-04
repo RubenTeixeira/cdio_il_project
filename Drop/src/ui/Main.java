@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Main {
 
     static Scanner in = new Scanner(System.in);
-    static final String CREDENTIALS_FILE = "settings/settings.txt";
+    public static final String CREDENTIALS_FILE = "settings/settings.txt";
 
     public static void main(String[] args) throws SQLException
     {

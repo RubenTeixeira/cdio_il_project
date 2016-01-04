@@ -1,14 +1,15 @@
 package ui;
 
 import controller.ClientRegisterController;
+import java.sql.SQLException;
 import persistence.OracleDb;
 
 public class ClientRegisterUI {
 
     private controller.ClientRegisterController controller;
 
-    public ClientRegisterUI() {
-        controller = new ClientRegisterController(OracleDb.getInstance());
+    public ClientRegisterUI() throws SQLException {
+        controller = new ClientRegisterController(Main.CREDENTIALS_FILE);
         run();
     }
 

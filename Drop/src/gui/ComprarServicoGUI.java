@@ -1,12 +1,16 @@
 package gui;
 
-import controller.ComprarServicoDPController;
+import controller.BuyDropPointServiceController;
 import domain.DropPoint;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import persistence.OracleDb;
+import ui.Main;
 
 /**
  *
@@ -16,16 +20,16 @@ public class ComprarServicoGUI extends JFrame {
 
     private JFrame parentFrame;
     private DropPoint dropChosen;
-    private ComprarServicoDPController controller;
+    private BuyDropPointServiceController controller;
 
     private DefaultComboBoxModel modelCMBTamanho;
     private DefaultComboBoxModel modelCMBTemperatura;
 
-    public ComprarServicoGUI(JFrame parentFrame, DropPoint dp) {
+    public ComprarServicoGUI(JFrame parentFrame, DropPoint dp) throws SQLException {
         super("Group Epsilon - Buy Drop Point Service");
         this.parentFrame = parentFrame;
         this.dropChosen = dp;
-        controller = new ComprarServicoDPController(OracleDb.getInstance());
+        controller = new BuyDropPointServiceController(Main.CREDENTIALS_FILE);
         fecharJanela();
         initComponents();
 
@@ -40,7 +44,7 @@ public class ComprarServicoGUI extends JFrame {
     }
 
     private void addElementsCBTemperatura() {
-        List<String> infoTemp = controller.listarPreferenciasTemp();
+        List<String> infoTemp = controller.preferredTemperatureList();
         for (String it : infoTemp) {
             modelCMBTemperatura.addElement(it);
         }
@@ -48,7 +52,7 @@ public class ComprarServicoGUI extends JFrame {
     }
 
     private void addElementsCBTamanho() {
-        List<String> infoTamanho = controller.listarPreferenciasDim();
+        List<String> infoTamanho = controller.preferredDimensionsList();
         for (String infoT : infoTamanho) {
             modelCMBTamanho.addElement(infoT);
         }
@@ -136,8 +140,12 @@ public class ComprarServicoGUI extends JFrame {
 
     private void seguinteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seguinteBTNActionPerformed
         if (cbTipoPrateleira.getSelectedItem() != null && cbTipoTemperatura.getSelectedItem() != null) {
-            this.dispose();
-            new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChosen, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
+            try {
+                this.dispose();
+                new InterfaceUtilizadorGUI(ComprarServicoGUI.this, dropChosen, cbTipoPrateleira.getSelectedIndex()+1, cbTipoTemperatura.getSelectedIndex()+1);
+            } catch (SQLException ex) {
+                Logger.getLogger(ComprarServicoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(ComprarServicoGUI.this, "Tem campos por selecionar.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
