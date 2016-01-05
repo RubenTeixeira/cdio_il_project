@@ -1,5 +1,6 @@
 package controller;
 
+import domain.Address;
 import domain.Cliente;
 import domain.Morada;
 import domain.RegistoCliente;
@@ -10,7 +11,7 @@ public class RegistarClienteController {
 
     private RegistoCliente registoCliente;
     private RegistoMorada registoMorada;
-    private Morada morada;
+    private Address morada;
 
     public RegistarClienteController(SQLConnection con) {
         this.registoCliente = new RegistoCliente(con);

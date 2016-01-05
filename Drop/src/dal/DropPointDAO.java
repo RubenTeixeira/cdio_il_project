@@ -1,6 +1,5 @@
 package dal;
 
-import dal.GenericDAO;
 import domain.DropPoint;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -42,7 +41,7 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
                     lstDroPoint.add(drop);
                 }
             } catch (Exception ex) {
-                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create DropPoints", ex);
+                Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, "Error trying to create DropPoints", ex);
             }
         }
         return lstDroPoint;

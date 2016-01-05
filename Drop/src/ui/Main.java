@@ -14,13 +14,13 @@ import java.util.logging.Logger;
 public class Main {
 
     static Scanner in = new Scanner(System.in);
-    static final String CREDENTIALS_FILE = "settings/settings.txt";
+    public static final String CREDENTIALS_FILE = "settings/settings.txt";
 
     public static void main(String[] args) throws SQLException
     {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
-        //versaoGraficaParaCliente();
+        versaoGraficaParaCliente();
         versaoConsola();
         //colabroradorConsola();
 
@@ -63,7 +63,7 @@ public class Main {
 
     private static void versaoGraficaParaCliente()
     {
-        new DropGUI();
+        new DropGUI(CREDENTIALS_FILE);
     }
 
     private static void colaboradorConsola() throws SQLException

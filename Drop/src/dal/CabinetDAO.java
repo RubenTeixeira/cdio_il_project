@@ -1,6 +1,5 @@
 package dal;
 
-import dal.GenericDAO;
 import domain.Cabinet;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -55,7 +54,7 @@ public class CabinetDAO extends GenericDAO<Cabinet> {
                 }
             } catch (Exception ex)
             {
-                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
+                Logger.getLogger(CabinetDAO.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
             }
         }
         return lstCabinets;
@@ -87,7 +86,7 @@ public class CabinetDAO extends GenericDAO<Cabinet> {
                 }
             } catch (Exception ex)
             {
-                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
+                Logger.getLogger(CabinetDAO.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
             }
         }
         return lstCabinets;
@@ -118,7 +117,7 @@ public class CabinetDAO extends GenericDAO<Cabinet> {
                 }
             } catch (Exception ex)
             {
-                Logger.getLogger(SeeInfoDAL.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
+                Logger.getLogger(CabinetDAO.class.getName()).log(Level.SEVERE, "Error trying to create Cabinet`s", ex);
             }
         }
         return lstCabinets;

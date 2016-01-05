@@ -22,6 +22,8 @@ public enum Table {
     TOKEN,
     TOKEN_TYPE, 
     ADDRESS,
-    MAINTENANCE_PICKUP
+    MAINTENANCE_PICKUP,
+    CLIENTE,
+    MORADA
 
 }

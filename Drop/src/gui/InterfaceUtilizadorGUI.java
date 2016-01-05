@@ -5,13 +5,15 @@
  */
 package gui;
 
-import controller.ComprarServicoDPController;
+import controller.BuyDropPointServiceController;
 import domain.DropPoint;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import persistence.OracleDb;
+import ui.Main;
 
 /**
  *
@@ -19,7 +21,7 @@ import persistence.OracleDb;
  */
 public class InterfaceUtilizadorGUI extends javax.swing.JFrame {
 
-    private ComprarServicoDPController controller;
+    private BuyDropPointServiceController controller;
     private JFrame parentFrame;
     private DropPoint dropChoosed;
     private int idTamanho;
@@ -28,13 +30,13 @@ public class InterfaceUtilizadorGUI extends javax.swing.JFrame {
     /**
      * Creates new form InterfaceUtilizadorGUI
      */
-    public InterfaceUtilizadorGUI(JFrame parent, DropPoint dp, int tamanho, int temperatura) {
+    public InterfaceUtilizadorGUI(JFrame parent, DropPoint dp, int tamanho, int temperatura) throws SQLException {
         super("User Information");
         parentFrame = parent;
         dropChoosed = dp;
         idTamanho = tamanho;
         idTemperatura = temperatura;
-        controller = new ComprarServicoDPController(OracleDb.getInstance());
+        controller = new BuyDropPointServiceController(Main.CREDENTIALS_FILE);
         initComponents();
         fecharJanela();
         setLocationRelativeTo(null);
@@ -131,15 +133,15 @@ public class InterfaceUtilizadorGUI extends javax.swing.JFrame {
 
     private void comprarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarBTNActionPerformed
         if (nomeTXT != null && passwordTXT != null) {
-            boolean login = controller.loginCliente(nomeTXT.getText(), passwordTXT.getText());
+            boolean login = controller.clientLogin(nomeTXT.getText(), passwordTXT.getText());
             if (login) {
-                controller.SelecionarDropPoint(dropChoosed.getId());
-                controller.SelecionarPreferenciasDim(idTamanho);
-                controller.SelecionarPreferenciasTemp(idTemperatura);
-                boolean idToken = controller.confirmarRegisto(); 
+                controller.selectDropPoint(dropChoosed.getId());
+                controller.selectPreferredDimensions(idTamanho);
+                controller.selectPreferredTemperature(idTemperatura);
+                boolean idToken = controller.confirmRegister(); 
                 if(idToken){
                     this.dispose();
-                    String tokenEstafeta=controller.tokenCliente();
+                    String tokenEstafeta=controller.tokenClient();
                     JOptionPane.showMessageDialog(this, "Dados da Reserva\nDropPoint: "+dropChoosed.getNome()+"\nToken: "+tokenEstafeta, "Reserva efetuada com sucesso!", JOptionPane.INFORMATION_MESSAGE, null);
                 }
                 
