@@ -3,7 +3,10 @@ package gui;
 import controller.ExtendTokenController;
 import controller.SeeInfoDPController;
 import domain.DropPoint;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -22,9 +25,9 @@ public class DropGUI extends javax.swing.JFrame {
     /**
      * Creates new form DropGUI
      */
-    public DropGUI() {
+    public DropGUI(String file) {
 
-        seeInfoDPController = new SeeInfoDPController();
+        seeInfoDPController = new SeeInfoDPController(file);
         extendTokenController = new ExtendTokenController();
         initComponents();
 
@@ -112,8 +115,12 @@ public class DropGUI extends javax.swing.JFrame {
     private void btnComprarServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarServicoActionPerformed
         dropChosen = (DropPoint) listDropPoints.getSelectedValue();
         if (dropChosen != null) {
-            seeInfoDPController.selectDropPoint(dropChosen);
-            new ComprarServicoGUI(this, dropChosen);
+            try {
+                seeInfoDPController.selectDropPoint(dropChosen);
+                new ComprarServicoGUI(this, dropChosen);
+            } catch (SQLException ex) {
+                Logger.getLogger(DropGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Tem de selecionar um DropPoint para poder comprar serviço", "Erro ao selecionar", JOptionPane.INFORMATION_MESSAGE, null);
         }
@@ -124,7 +131,11 @@ public class DropGUI extends javax.swing.JFrame {
         dropChosen = (DropPoint) listDropPoints.getSelectedValue();
         if (dropChosen != null) {
             seeInfoDPController.selectDropPoint(dropChosen);
-            SeeInfoDPGUI.initAndShowGUI(this, seeInfoDPController);
+            try {
+                SeeInfoDPGUI.initAndShowGUI(this, seeInfoDPController);
+            } catch (SQLException ex) {
+                Logger.getLogger(DropGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Tem de selecionar um DropPoint para poder ver a sua informação", "Erro ao selecionar", JOptionPane.INFORMATION_MESSAGE, null);
         }
