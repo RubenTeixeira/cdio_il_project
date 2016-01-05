@@ -7,6 +7,7 @@ package dal;
 
 import dal.GenericDAO;
 import domain.Delivery;
+import domain.Token;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,8 +26,9 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     /**
      * Returns Delivery ID corresponding to given token
+     *
      * @param token Token code string
-     * @return  Delivery ID
+     * @return Delivery ID
      */
     public int getDeliveryIdByToken(String token) {
         String qry = "select e.id_entrega from token t, reserva r, entrega e"
@@ -34,7 +36,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "         and r.id_reserva = e.id_reserva"
                 + "         and t.codigo = '" + token + "'";
         ResultSet rs = executeQuery(qry);
-        if(rs != null) {
+        if (rs != null) {
             try {
                 rs.next();
                 return rs.getInt("id_entrega");
@@ -45,6 +47,28 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     }
 
+    public Delivery getDeliveryByReservationId(int reservationId) {
+        Delivery delivery = null;
+        String qry = "select * from entrega"
+                + "where " + reservationId + "= id_reserva";
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
+                delivery = new Delivery();
+                delivery.setId(rs.getInt("id_reserva"));
+                delivery.setDateOpen();
+                delivery.setDateClose();
+                delivery.setReservationID(reservationId);
+                delivery.setCellID(rs.getInt("id_prateleira"));
+                delivery.setCourierTokenID(rs.getInt("id_token_estafeta"));
+                delivery.setAssistantTokenID(rs.getInt("id_token_colaborador"));
+            } catch (SQLException e) {
+            }
+        }
+        return delivery;
+    }
+
     /**
      * Retrieves incremental ID for this object correponding Table
      *
@@ -53,7 +77,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public int getNextId() {
         String query = "select nvl(max(id_entrega),0)+1 as id from entrega";
         ResultSet rs = executeQuery(query);
-        if(rs != null) {
+        if (rs != null) {
             try {
                 rs.next();
                 return rs.getInt("id");
@@ -67,7 +91,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public boolean insertNew(Delivery obj) {
         String query = "INSERT INTO ENTREGA ("
                 + "ID_ENTREGA,ID_PRATELEIRA,ID_RESERVA,ID_TOKEN_ESTAFETA,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA) "
-                + " VALUES (" + obj.getDeliveryID() + "," + obj.getCellID() + "," + obj.getReservationID() + "," + obj.getTokenID() + ","
+                + " VALUES (" + obj.getDeliveryID() + "," + obj.getCellID() + "," + obj.getReservationID() + "," + obj.getCourierTokenID()+ ","
                 + "TO_DATE('" + obj.getOpenedDate() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getClosedDate() + "', 'dd-mm-yyyy HH24:MI'))";
         ResultSet rs = executeQuery(query);
@@ -75,8 +99,16 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     }
 
     @Override
-    public boolean update(Delivery obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Delivery delivery) {
+        String query = "update entrega set data_abre_prateleira=TO_DATE('"+delivery.getOpenedDate()+"','dd-mm-yyyy'),"
+                + "data_fecha_prateleira=TO_DATE('"+delivery.getClosedDate()+"','dd-mm-yyyy'),"
+                + "id_reserva="+delivery.getReservationID()+","
+                + "id_prateleira="+delivery.getCellID()+","
+                + "id_token_estafeta="+delivery.getCourierTokenID()+","
+                + "id_token_colaborador="+delivery.getAssistantTokenID()+","
+                + " where id_entrega = "+delivery.getDeliveryID();
+        ResultSet rs = executeQuery(query);
+        return rs != null;
     }
 
     @Override
@@ -91,6 +123,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     /**
      * Returns Client email corresponding to given Delivery
+     *
      * @param delivery Delivery
      * @return Client email string
      */
@@ -101,7 +134,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "     where r.id_reserva = " + idReservation
                 + "AND r.id_cliente = c.id_cliente";
         ResultSet rs = executeQuery(qry);
-        if(rs != null) {
+        if (rs != null) {
             try {
                 rs.next();
                 return rs.getString("email");
@@ -113,6 +146,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     /**
      * Returns token code string used to PickUp Cell content
+     *
      * @param delivery Delivery in process
      * @return token code string
      */
@@ -124,7 +158,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + "AND t.id_tipo_token = 2"
                 + "AND t.ativo = 1";
         ResultSet rs = executeQuery(qry);
-        if(rs != null) {
+        if (rs != null) {
             try {
                 rs.next();
                 return rs.getString("codigo");
@@ -136,6 +170,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     /**
      * Returns the Delivery ID of an occupied Cell
+     *
      * @param id Cell id
      * @return id
      */
@@ -147,7 +182,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
                 + " AND p.ID_PRATELEIRA = e.ID_PRATELEIRA";
 
         ResultSet rs = executeQuery(query);
-        if(rs != null) {
+        if (rs != null) {
             try {
                 rs.next();
                 return rs.getInt("ID_ENTREGA");

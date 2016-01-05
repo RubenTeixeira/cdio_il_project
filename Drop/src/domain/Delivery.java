@@ -13,70 +13,104 @@ import java.util.Date;
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public class Delivery implements CellTransaction {
-    
+
     private int deliveryID;
     private int cellID;
     private String openedDate;
     private String closedDate;
     private int reservationID;
-    private int tokenID;
+    private int courierTokenID;
+    private int assistantTokenID;
 
     public Delivery(int cellID, int reservationID, int tokenID) {
         this.cellID = cellID;
         this.reservationID = reservationID;
-        this.tokenID = tokenID;
+        this.courierTokenID = tokenID;
     }
 
     public Delivery(int reservationID, int tokenID) {
         this.reservationID = reservationID;
-        this.tokenID = tokenID;
+        this.courierTokenID = tokenID;
     }
 
     public Delivery() {
     }
 
     /*Getter methods*/
-    public int getCellID() {return cellID;}
-    public String getOpenedDate() {return openedDate;}
-    public String getClosedDate() {return closedDate;}
-    public int getReservationID() {return reservationID;}
-    public int getDeliveryID() {return deliveryID;}
-    public int getTokenID() {return tokenID;}
+    public int getCellID() {
+        return cellID;
+    }
+
+    public String getOpenedDate() {
+        return openedDate;
+    }
+
+    public String getClosedDate() {
+        return closedDate;
+    }
+
+    public int getReservationID() {
+        return reservationID;
+    }
+
+    public int getDeliveryID() {
+        return deliveryID;
+    }
+
+    public int getCourierTokenID() {
+        return courierTokenID;
+    }
+
+    public int getAssistantTokenID() {
+        return assistantTokenID;
+    }
 
     /*Setter methods*/
     @Override
-    public void setId(int deliveryID) {this.deliveryID = deliveryID;}
-    public void setCellID(int cellID) {this.cellID = cellID;}
-    
+    public void setId(int deliveryID) {
+        this.deliveryID = deliveryID;
+    }
+
+    public void setCellID(int cellID) {
+        this.cellID = cellID;
+    }
+
     @Override
     public void setDateOpen() {
         this.openedDate = getDateStr();
     }
-    
+
     @Override
     public void setDateClose() {
         this.closedDate = getDateStr();
     }
-    
+
     private String getDateStr() {
         Date data = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat ("dd-MM-yyyy HH:mm");
+        SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         return ft.format(data);
     }
-    
-    public void setReservationID(int reservationID) {this.reservationID = reservationID;}
 
-    @Override
-    public void setTokenID(int tokenID) {this.tokenID = tokenID;}
+    public void setReservationID(int reservationID) {
+        this.reservationID = reservationID;
+    }
+
+    public void setCourierTokenID(int courierTokenID) {
+        this.courierTokenID = courierTokenID;
+    }
+
+    public void setAssistantTokenID(int assistantTokenID) {
+        this.assistantTokenID = assistantTokenID;
+    }
 
     @Override
     public boolean validate() {
-        return cellID > 0 && reservationID > 0 && tokenID > 0 && openedDate != null && closedDate != null;
+        return cellID > 0 && reservationID > 0 && courierTokenID > 0 && openedDate != null && closedDate != null;
     }
 
     @Override
     public String toString() {
-        return "Delivery{" + "deliveryID=" + deliveryID + ", cellID=" + cellID + ", openedDate=" + openedDate + ", closedDate=" + closedDate + ", reservationID=" + reservationID + ", tokenID=" + tokenID + '}';
+        return "Delivery{" + "deliveryID=" + deliveryID + ", cellID=" + cellID + ", openedDate=" + openedDate + ", closedDate=" + closedDate + ", reservationID=" + reservationID + ", tokenID=" + courierTokenID + '}';
     }
-    
+
 }

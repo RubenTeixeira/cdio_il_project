@@ -17,9 +17,9 @@ import dal.Table;
  *
  * @author MarcoSousa
  */
-public class TokenAssistent extends TokenImpl{
+public class TokenAssistant extends TokenImpl{
     
-    public TokenAssistent(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
+    public TokenAssistant(int id, String generationDate, String expirationDate, int state, String code, int idReservation) {
         super(id, generationDate, expirationDate, state, code, idReservation);
     }
     

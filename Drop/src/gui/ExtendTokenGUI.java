@@ -150,7 +150,7 @@ public class ExtendTokenGUI extends javax.swing.JFrame {
                 c.set(Calendar.MONTH, Integer.valueOf(dataBD[1]));
                 c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dataBD[2]));
                 c.add(Calendar.DATE, Integer.parseInt(periodoExtensaoTXT.getText()));
-                String expirationString = c.get(Calendar.YEAR) + "." + c.get(Calendar.MONTH) + "." + c.get(Calendar.DAY_OF_MONTH);
+                String expirationString = c.get(Calendar.YEAR) + "." + c.get(Calendar.MONTH+1) + "." + c.get(Calendar.DAY_OF_MONTH);
                 token.setExpirationDate(expirationString);
 
                 String[] options = new String[2];

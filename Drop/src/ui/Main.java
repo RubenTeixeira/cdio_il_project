@@ -50,7 +50,7 @@ public class Main {
 
                     break;
                 case 2:
-                    colabroradorConsola();
+                    colaboradorConsola();
                     break;
                 case 0:
                     exit(0);
@@ -66,9 +66,9 @@ public class Main {
         new DropGUI();
     }
 
-    private static void colabroradorConsola() throws SQLException
+    private static void colaboradorConsola() throws SQLException
     {
-        System.out.println("--------------------Colabrorador------------");
+        System.out.println("--------------------Colaborador------------");
         String menu = "1. Iniciar Manutenção\n"
                 + "2. Recolher Entregas Expiradas\n"
                 + "3. Efectuar Manutenção\n"

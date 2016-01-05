@@ -16,8 +16,8 @@ import java.sql.SQLException;
  *
  * @author MarcoSousa
  */
-public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup>{
-       
+public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup> {
+
     private final static String TABLENAME = "RECOLHA_MANUTENCAO";
 
     public MaintenancePickupDAO(Connection con) {
@@ -29,7 +29,7 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup>{
 
         String query = "INSERT INTO MAINTENANCE_PICKUP ("
                 + "MAINTENANCE_PICKUP_ID,OPEN_SHELF_DATE,CLOSE_SHELF_DATE,ID_ENTREGA, ID_TOKEN_COLABORADOR) "
-                + " VALUES (" + obj.getMaintenacePickupId() + ","
+                + " VALUES (" + obj.getMaintenancePickupId() + ","
                 + "TO_DATE('" + obj.getDateOpen() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getDateClose() + "', 'dd-mm-yyyy HH24:MI'),"
                 + obj.getDeliveryId() + ", "
@@ -38,7 +38,7 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup>{
         try {
             stmnt = this.con.prepareStatement(query);
             ResultSet rs = stmnt.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 return true;
             }
         } catch (SQLException ex) {
@@ -65,7 +65,7 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup>{
         String query = "select nvl(max(maintenance_pickup_id),0)+1 as id from maintenance_pickup";
         PreparedStatement stmnt;
         try {
-            stmnt=this.con.prepareStatement(query);
+            stmnt = this.con.prepareStatement(query);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("id");
@@ -74,10 +74,12 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup>{
         }
         return -1;
     }
-    
-    public MaintenancePickup newMaintenancePickup()
-    {
+
+    public MaintenancePickup newMaintenancePickup(int maintenancePickupId, String dateOpen, String dateClose, int deliveryId, int tokenId, String filePath) {
+        return new MaintenancePickup(maintenancePickupId, dateOpen, dateClose, deliveryId, tokenId, filePath);
+    }
+
+    public MaintenancePickup newMaintenancePickup(){
         return new MaintenancePickup();
     }
-    
 }
