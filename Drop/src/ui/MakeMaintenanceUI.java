@@ -53,22 +53,25 @@ class MakeMaintenanceUI {
 
         while (iterator.hasNext()) {
             Cell next = iterator.next();
-            System.out.println("Open " + next.getDescription() + " Confirm s/n?");
+            System.out.println("Open " + next.getDescription() + " Confirm y/n?");
             String confirm = ReadFromKeyboard.readString();
-            if (confirm.equalsIgnoreCase("S")) {
-                if (controller.openCell(next)) {
+            if(confirm.equalsIgnoreCase("Y")) {
+                if(controller.openCell(next)) {
                     System.out.println("Cell is open!");
-
                     System.out.println("Insert report:");
                     String report = ReadFromKeyboard.readString();
-                    if (!controller.insertReport(report)) {
+                    if(!controller.insertReport(report)) {
                         System.out.println("Not possible register report!");
                     }
-
-                    System.out.println("Cell is closed s/n?");
+                    System.out.println("Is cell operational? (0-No, 1-Yes)");
+                    op = ReadFromKeyboard.read();
+                    if(!controller.setCellOperational(op)) {
+                        System.out.println("Not possible set cell operational!");
+                    }
+                    System.out.println("Cell is closed y/n?");
                     confirm = ReadFromKeyboard.readString();
-                    if (confirm.equalsIgnoreCase("s")) {
-                        if (controller.closeCell()) {
+                    if(confirm.equalsIgnoreCase("y")) {
+                        if(controller.closeCell(op)) {
                             System.out.println("Successfully processed!");
                         }
                     }

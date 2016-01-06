@@ -102,7 +102,7 @@ public class MaintenancePickupGUI extends JFrame {
 
         return jPanel;
     }
-
+    
     private JButton createBtnOpenCell() {
         btnOpen = new JButton("Abrir");
 

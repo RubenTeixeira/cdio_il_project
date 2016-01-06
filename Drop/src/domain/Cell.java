@@ -13,6 +13,7 @@ public class Cell {
     
     private int id;
     private String description;
+    private int isOperational;
 
     public Cell(int id, String description) {
         this.id = id;
@@ -26,10 +27,12 @@ public class Cell {
 
     /* Getter methods*/
     public int getId() {return id;}
-    public void setDescription(String description) {this.description = description;}
-    /* Setter methods*/
     public String getDescription() {return description;}
+    public int isOperational(){return isOperational;}
+    /* Setter methods*/
     public void setId(int id) {this.id = id;}
+    public void setDescription(String description) {this.description = description;}
+    public void setIsOperational(int isOperational) {this.isOperational = isOperational;}
     
     @Override
     public int hashCode() {

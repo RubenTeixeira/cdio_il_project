@@ -24,50 +24,57 @@ import dal.Table;
  * @author nuno
  */
 public class MakeMaintenanceController {
-    
+
     private Gestao gestao;
     private Cabinet cabinet;
     private CabinetDAO cabinetDAO;
     private CellDAO cellDAO;
     private DropPointDAO dropDAO;
     private Cell cell;
-    
+
     public MakeMaintenanceController(String file) throws SQLException {
         SQLConnection instance = OracleDb.getInstance(file);
         this.cabinetDAO = (CabinetDAO) instance.getDAO(Table.CABINET);
         this.cellDAO = (CellDAO) instance.getDAO(Table.CELL);
         this.dropDAO = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
     }
-    
-    public List<DropPoint> listDropPoints(){
+
+    public List<DropPoint> listDropPoints() {
         return this.dropDAO.getListDropPoints();
     }
-    
+
     public List<Cabinet> listCabinetsInMaintenance(int dropID) {
         List<Cabinet> listOfCabinets = this.cabinetDAO.getListOfCabinets(dropID);
         listOfCabinets.removeIf(p -> p.getMaintenance() == 0);
         return listOfCabinets;
     }
-    
+
     public void selectCabinet(Cabinet cabinet) {
         this.cabinet = cabinet;
     }
-    
+
     public Deque<Cell> cellsToOpen() throws SQLException {
         return this.cellDAO.cellsToOpen(this.cabinet);
     }
-    
+
     public boolean openCell(Cell cell) throws SQLException {
         this.cell = cell;
-        return this.cellDAO.updateCell(this.cell,CellDAO.OPEN);
+        return this.cellDAO.updateCell(this.cell, CellDAO.OPEN);
     }
-    
+
     public boolean insertReport(String report) {
         return this.cellDAO.insertReport(this.cell);
     }
-    
-    public boolean closeCell() throws SQLException {
+
+    public boolean closeCell(int op) throws SQLException {
+        if(op == 0) {
+            return this.cellDAO.updateCell(cell, CellDAO.OPEN);
+        }
         return this.cellDAO.updateCell(cell, CellDAO.CLOSE);
     }
-    
+
+    public boolean setCellOperational(int op) {
+        this.cell.setIsOperational(op);
+        return true;
+    }
 }

@@ -112,13 +112,15 @@ public class CellDAO extends GenericDAO<Cell> {
 
     public boolean updateCell(Cell cell, int state) throws SQLException {
         String query = "UPDATE PRATELEIRA "
-                + "SET ATIVO=? "
+                + "SET ATIVO=? ,"
+                + "is_operational =? "
                 + "WHERE ID_PRATELEIRA=? ";
 
         PreparedStatement stmnt = this.con.prepareStatement(query);
 
         stmnt.setInt(1, state);
-        stmnt.setInt(2, cell.getId());
+        stmnt.setInt(2, cell.isOperational());
+        stmnt.setInt(3, cell.getId());
         stmnt.executeUpdate();
         return true;
     }
