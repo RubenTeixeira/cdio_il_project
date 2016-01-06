@@ -11,19 +11,28 @@ package domain;
  */
 public class MaintenancePickup {
 
-    private int maintenacePickupId;
+    private int maintenancePickupId;
     private String dateOpen;
     private String dateClose;
     private int deliveryId;
     private int tokenId;
     private String filePath;
 
-    public MaintenancePickup() {
+    public MaintenancePickup(int maintenancePickupId, String dateOpen, String dateClose, int deliveryId, int tokenId, String filePath) {
+        this.maintenancePickupId=maintenancePickupId;
+        this.dateOpen=dateOpen;
+        this.dateClose=dateClose;
+        this.deliveryId=deliveryId;
+        this.tokenId=tokenId;
+        this.filePath=filePath;
+    }
+    
+    public MaintenancePickup(){
     }
 
     /*Getters*/
-    public int getMaintenacePickupId() {
-        return this.maintenacePickupId;
+    public int getMaintenancePickupId() {
+        return this.maintenancePickupId;
     }
 
     public String getDateOpen() {
@@ -48,7 +57,7 @@ public class MaintenancePickup {
     
     /*Setters*/
     public void setMaintenacePickupId(int maintenacePickupId) {
-        this.maintenacePickupId = maintenacePickupId;
+        this.maintenancePickupId = maintenacePickupId;
     }
 
     public void setDeliveryId(int deliveryId) {
@@ -72,7 +81,7 @@ public class MaintenancePickup {
     }
     
     public boolean validate() {
-        return maintenacePickupId > 0 
+        return maintenancePickupId > 0 
                 && deliveryId > 0 
                 && tokenId > 0 
                 && dateOpen != null 
@@ -82,9 +91,9 @@ public class MaintenancePickup {
     @Override
     public String toString() {
         return "Recolha de Manutenção: \n"
-                + "ID: " + maintenacePickupId
+                + "ID: " + maintenancePickupId
                 + "\nEntrega ID: " + deliveryId
-                + "\nData Abretura Prateleira: " + dateOpen
+                + "\nData Abertura Prateleira: " + dateOpen
                 + "\nData Fecho Prateleira: " + dateClose
                 + "\nToken ID: " + tokenId;
     }

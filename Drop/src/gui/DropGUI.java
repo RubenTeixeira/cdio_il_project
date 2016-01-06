@@ -130,12 +130,19 @@ public class DropGUI extends javax.swing.JFrame {
 
         dropChosen = (DropPoint) listDropPoints.getSelectedValue();
         if (dropChosen != null) {
-            seeInfoDPController.selectDropPoint(dropChosen);
             try {
-                SeeInfoDPGUI.initAndShowGUI(this, seeInfoDPController);
+                seeInfoDPController.selectDropPoint(dropChosen);
+                String[] args = new String[1];
+                String dropPointCoor = seeInfoDPController.getDropPointCoor();
+                String[] split = dropPointCoor.split(";");
+                SeeInfoDPGUI.lat=split[0];
+                SeeInfoDPGUI.lng=split[1];
+                SeeInfoDPGUI.main(args);
+                
             } catch (SQLException ex) {
                 Logger.getLogger(DropGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         } else {
             JOptionPane.showMessageDialog(this, "Tem de selecionar um DropPoint para poder ver a sua informação", "Erro ao selecionar", JOptionPane.INFORMATION_MESSAGE, null);
         }

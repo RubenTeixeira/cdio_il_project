@@ -12,7 +12,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import javax.swing.*;
 import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import ui.Main;
 
 /**
  *
@@ -29,7 +32,7 @@ public class MaintenancePickupGUI extends JFrame {
 
     public MaintenancePickupGUI() {
         super("Recolhar Encomendas!");
-        controller = new MaintenancePickupController("settings/settings.txt");
+        controller = new MaintenancePickupController(Main.CREDENTIALS_FILE);
     }
 
     private void addComponentsToPane(final Container pane) {
@@ -38,7 +41,7 @@ public class MaintenancePickupGUI extends JFrame {
         compsToFrame.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel dataHeader = new JPanel();
-        dataHeader.setLayout(new GridLayout(2, 2, 10, 10));
+        dataHeader.setLayout(new GridLayout(3, 2, 10, 10));
 
         dataHeader.add(new JLabel("Insira Token:"));
         txtToken = new JTextField("", 20);
@@ -47,7 +50,11 @@ public class MaintenancePickupGUI extends JFrame {
         dataHeader.add(new JLabel());
         dataHeader.add(createSubmitTokenBtn());
 
-        JPanel jPanel = new JPanel(new BorderLayout(10, 10));
+        dataHeader.add(new JSeparator());
+        dataHeader.add(new JSeparator());
+
+        JPanel jPanel = new JPanel(new BorderLayout(20, 20));
+        jPanel.add(new JSeparator(), BorderLayout.NORTH);
         jPanel.add(createBtnExit(), BorderLayout.EAST);
 
         compsToFrame.add(dataHeader, BorderLayout.NORTH);
@@ -65,9 +72,11 @@ public class MaintenancePickupGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                cellModel.clear();
                 List<Cell> cellList = controller.getListOfCellsWithDeliveriesOutOfDate(txtToken.getText().trim());
-                if (cellList != null) {
+                if (!cellList.isEmpty()) {
                     cellList.stream().forEach((c) -> cellModel.addElement(c));
+
                 } else {
                     JOptionPane.showMessageDialog(
                             MaintenancePickupGUI.this,
@@ -85,19 +94,27 @@ public class MaintenancePickupGUI extends JFrame {
         jlCells = new JList(cellModel);
         jlCells.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jlCells.setLayoutOrientation(JList.VERTICAL);
-        jlCells.setVisibleRowCount(-1);
+        jlCells.setVisibleRowCount(4);
+
+        jlCells.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                btnOpen.setEnabled(true);
+            }
+        });
 
         JScrollPane listScroller = new JScrollPane(jlCells);
-        listScroller.setPreferredSize(new Dimension(250, 80));
+        //listScroller.setPreferredSize(new Dimension(250, 80));
 
-        JPanel jPanel = new JPanel(new BorderLayout(10, 10));
-        JPanel jPanelBtn = new JPanel(new GridLayout(1, 3, 5, 5));
+        JPanel jPanel = new JPanel(new BorderLayout(20, 20));
+        JPanel jPanelBtn = new JPanel(new GridLayout(1, 3, 10, 10));
 
         jPanelBtn.add(createBtnOpenCell());
         jPanelBtn.add(createBtnCloseCell());
         jPanelBtn.add(createBtnUplaodCellImage());
 
-        jPanel.add(jlCells, BorderLayout.NORTH);
+        jPanel.add(listScroller, BorderLayout.NORTH);
         jPanel.add(jPanelBtn, BorderLayout.CENTER);
 
         return jPanel;
@@ -105,13 +122,22 @@ public class MaintenancePickupGUI extends JFrame {
     
     private JButton createBtnOpenCell() {
         btnOpen = new JButton("Abrir");
-
+        btnOpen.setEnabled(false);
         btnOpen.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.selectCell(jlCells.getSelectedValue());
                 controller.openCell();
+                JOptionPane.showMessageDialog(
+                        MaintenancePickupGUI.this,
+                        "Cell is open!",
+                        "Cell status",
+                        JOptionPane.INFORMATION_MESSAGE);
+                btnOpen.setEnabled(false);
+                btnClose.setEnabled(true);
+                btnUplaod.setEnabled(true);
+                jlCells.setEnabled(false);
             }
         });
 
@@ -120,14 +146,25 @@ public class MaintenancePickupGUI extends JFrame {
 
     private JButton createBtnCloseCell() {
         btnClose = new JButton("Fechar");
-
+        btnClose.setEnabled(false);
         btnClose.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.selectCell(jlCells.getSelectedValue());
                 controller.closeCell();
+                JOptionPane.showMessageDialog(
+                        MaintenancePickupGUI.this,
+                        "Cell is Close!",
+                        "Cell status",
+                        JOptionPane.INFORMATION_MESSAGE);
+                btnOpen.setEnabled(true);
+                btnClose.setEnabled(false);
+                btnUplaod.setEnabled(false);
+                jlCells.setEnabled(true);
+                cellModel.remove(jlCells.getSelectedIndex());
             }
+
         });
 
         return btnClose;
@@ -135,7 +172,7 @@ public class MaintenancePickupGUI extends JFrame {
 
     private JButton createBtnUplaodCellImage() {
         btnUplaod = new JButton("Upload");
-
+        btnUplaod.setEnabled(false);
         btnUplaod.addActionListener(new ActionListener() {
 
             @Override
@@ -158,7 +195,7 @@ public class MaintenancePickupGUI extends JFrame {
                         File dest = new File(System.getProperty("user.dir"), file.getName());
                         inStream = new FileInputStream(source);
                         outStream = new FileOutputStream(dest);
-                        System.out.println(dest.getAbsolutePath());
+
                         byte[] buffer = new byte[1024];
 
                         int length;
@@ -201,7 +238,14 @@ public class MaintenancePickupGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                if(!btnClose.isEnabled())
+                    System.exit(0);
+                else
+                   JOptionPane.showMessageDialog(
+                                MaintenancePickupGUI.this,
+                                "Antes de sair, feche célula.",
+                                "Cell status",
+                                JOptionPane.ERROR_MESSAGE); 
             }
         });
 
@@ -267,4 +311,5 @@ public class MaintenancePickupGUI extends JFrame {
         frame.pack();
         frame.setVisible(true);
     }
+
 }

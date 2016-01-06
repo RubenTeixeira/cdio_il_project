@@ -66,7 +66,6 @@ public class PickUp implements CellTransaction {
         return ft.format(data);
     }
     
-    @Override
     public void setTokenID(int tokenID) {
         this.tokenID = tokenID;
     }

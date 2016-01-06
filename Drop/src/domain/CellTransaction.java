@@ -16,7 +16,6 @@ public interface CellTransaction {
     */
     void setDateOpen();
     void setDateClose();
-    void setTokenID(int tokenID);
     void setId(int id);
 
     /**
