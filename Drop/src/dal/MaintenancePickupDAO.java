@@ -28,12 +28,13 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup> {
     public boolean insertNew(MaintenancePickup obj) {
 
         String query = "INSERT INTO MAINTENANCE_PICKUP ("
-                + "MAINTENANCE_PICKUP_ID,OPEN_SHELF_DATE,CLOSE_SHELF_DATE,ID_ENTREGA, ID_TOKEN_COLABORADOR) "
+                + "MAINTENANCE_PICKUP_ID,OPEN_SHELF_DATE,CLOSE_SHELF_DATE,ID_ENTREGA, ID_TOKEN_COLABORADOR,PHOTO_PATH) "
                 + " VALUES (" + obj.getMaintenancePickupId() + ","
                 + "TO_DATE('" + obj.getDateOpen() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getDateClose() + "', 'dd-mm-yyyy HH24:MI'),"
                 + obj.getDeliveryId() + ", "
-                + obj.getTokenId() + ")";
+                + obj.getTokenId() + ","
+                + obj.getFilePath()  + ")";
         PreparedStatement stmnt;
         try {
             stmnt = this.con.prepareStatement(query);
