@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.plaf.basic.BasicListUI;
 import ui.Main;
 
 /**
@@ -138,6 +137,7 @@ public class MaintenancePickupGUI extends JFrame {
                 btnOpen.setEnabled(false);
                 btnClose.setEnabled(true);
                 btnUplaod.setEnabled(true);
+                jlCells.setEnabled(false);
             }
         });
 
@@ -161,6 +161,8 @@ public class MaintenancePickupGUI extends JFrame {
                 btnOpen.setEnabled(true);
                 btnClose.setEnabled(false);
                 btnUplaod.setEnabled(false);
+                jlCells.setEnabled(true);
+                cellModel.remove(jlCells.getSelectedIndex());
             }
 
         });
@@ -193,7 +195,7 @@ public class MaintenancePickupGUI extends JFrame {
                         File dest = new File(System.getProperty("user.dir"), file.getName());
                         inStream = new FileInputStream(source);
                         outStream = new FileOutputStream(dest);
-                        
+
                         byte[] buffer = new byte[1024];
 
                         int length;
@@ -236,7 +238,14 @@ public class MaintenancePickupGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                if(!btnClose.isEnabled())
+                    System.exit(0);
+                else
+                   JOptionPane.showMessageDialog(
+                                MaintenancePickupGUI.this,
+                                "Antes de sair, feche célula.",
+                                "Cell status",
+                                JOptionPane.ERROR_MESSAGE); 
             }
         });
 
@@ -303,8 +312,4 @@ public class MaintenancePickupGUI extends JFrame {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        createAndShowGUI();
-        System.out.println("");
-    }
 }

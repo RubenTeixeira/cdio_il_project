@@ -6,11 +6,14 @@
 package dal;
 
 import dal.GenericDAO;
+import domain.Gestao;
 import domain.MaintenancePickup;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,8 +36,8 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup> {
                 + "TO_DATE('" + obj.getDateOpen() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getDateClose() + "', 'dd-mm-yyyy HH24:MI'),"
                 + obj.getDeliveryId() + ", "
-                + obj.getTokenId() + ","
-                + obj.getFilePath()  + ")";
+                + obj.getTokenId() + ",'"
+                + obj.getFilePath()  + "')";
         PreparedStatement stmnt;
         try {
             stmnt = this.con.prepareStatement(query);
@@ -43,6 +46,7 @@ public class MaintenancePickupDAO extends GenericDAO<MaintenancePickup> {
                 return true;
             }
         } catch (SQLException ex) {
+            Logger.getLogger(MaintenancePickupDAO.class.getName()).log(Level.SEVERE, "Not possible to add new Pick.", ex);
         }
         return false;
     }
