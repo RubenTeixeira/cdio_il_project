@@ -1,102 +1,127 @@
 package gui;
 
-import controller.SeeInfoDPController;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.sql.SQLException;
+import java.net.URL;
+import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.application.Platform;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebErrorEvent;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
-
+import javafx.stage.Stage;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class SeeInfoDPGUI {
 
-    private static JFrame fatherFrame;
-    private static SeeInfoDPController seeInfoDPController;
-    private static String url;
-    /* Create a JFrame with a JButton and a JFXPanel containing the WebView. */
+    Browser myBrowser;
+    public static String lat;
+    public static String lng;
 
-    public static void initAndShowGUI(
-            JFrame fatherFrame,
-            SeeInfoDPController seeInfoDPController) throws SQLException
-    {
+    public SeeInfoDPGUI() {
+    }
+    
+    public Browser newBrowser() {
+        return new Browser();
+    }
 
-        SeeInfoDPGUI.fatherFrame = fatherFrame;
-        SeeInfoDPGUI.seeInfoDPController = seeInfoDPController;
+    class Browser extends Region {
 
-        JFrame frame = new JFrame("Info DropPoint: " + SeeInfoDPGUI.seeInfoDPController.getDropPointName());
-        SeeInfoDPGUI.fatherFrame.setVisible(false);
-        frame.setLayout(new BorderLayout());
+        HBox toolbar;
 
-        String info = seeInfoDPController.getDropPointInfo();
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
 
-        JTextArea textArea = new JTextArea(info);
-        textArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
+        public Browser() {
+            webEngine.setJavaScriptEnabled(true);
 
-        String coordenadas = SeeInfoDPGUI.seeInfoDPController.getDropPointCoor();
-        String[] temp = coordenadas.split(";");
-        SeeInfoDPGUI.url = "https://www.google.pt/maps/@" + temp[0] + "," + temp[1] + "z";
+            webEngine
+                    .getLoadWorker()
+                    .stateProperty()
+                    .addListener(
+                            (obs, oldValue, newValue) -> {
+                                System.out.println(newValue);
+                                if (newValue == State.SUCCEEDED) {
+                                    System.out.println("finished loading");
+                                    webEngine.executeScript("setCoor(" + lat + "," + lng + ");");
+                                    // String html = (String) webEngine
+                                    //.executeScript("document.documentElement.outerHTML");
+                                    //System.out.println(html);
+                                }
+                            });
 
+            webEngine.setOnError(new EventHandler<WebErrorEvent>() {
+
+                @Override
+                public void handle(WebErrorEvent event) {
+                    System.out.println(event.getMessage());
+                }
+            });
+
+            webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
+
+                @Override
+                public void handle(WebEvent<String> event) {
+                    System.out.println(event.getData());
+                }
+            });
+
+            final URL urlGoogleMaps = getClass().getResource("google.html");
+            webEngine.load(urlGoogleMaps.toExternalForm());
+            getChildren().add(webView);
+
+        }
+
+    }
+
+    private static void initAndShowGUI() {
+        // This method is invoked on the EDT thread
+        JFrame frame = new JFrame("DP Info!");
         final JFXPanel fxPanel = new JFXPanel();
-
-        frame.add(scrollPane, BorderLayout.WEST);
-        frame.add(fxPanel, BorderLayout.CENTER);
+        frame.add(fxPanel);
+        frame.setSize(600, 400);
         frame.setVisible(true);
 
-        //fxPanel.setSize(new Dimension(400, 600));
-        //fxPanel.setLocation(new Point(0, 27));
-        frame.getContentPane().setPreferredSize(new Dimension(800, 600));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-
-        //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.addWindowListener(new WindowAdapter() {
+        Platform.runLater(new Runnable() {
             @Override
-            public void windowClosing(WindowEvent e)
-            {
-                SeeInfoDPGUI.fatherFrame.setVisible(true);
-                frame.setVisible(false);
-                Thread.currentThread().stop();
-            }
-        });
-        Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
-            @Override
-            public void run()
-            {
-                initFX(fxPanel, url);
+            public void run() {
+                initFX(fxPanel);
             }
         });
     }
 
-    /* Creates a WebView and fires up google.com */
-    private static void initFX(final JFXPanel fxPanel, String url)
-    {
-        Group group = new Group();
-        Scene scene = new Scene(group);
+    private static void initFX(JFXPanel fxPanel) {
+        // This method is invoked on the JavaFX thread
+        Scene scene = createScene();
         fxPanel.setScene(scene);
+    }
 
-        WebView webView = new WebView();
+    private static Scene createScene() {
+        Group root = new Group();
+        Scene scene = new Scene(root, Color.ALICEBLUE);
+        SeeInfoDPGUI seeInfoDPGUI = new SeeInfoDPGUI();
+        Browser browser = seeInfoDPGUI.newBrowser();
+        root.getChildren().add(browser);
 
-        group.getChildren().add(webView);
-        webView.setMinSize(500, 600);
-        webView.setMaxSize(500, 600);
+        return (scene);
+    }
 
-        // Obtain the webEngine to navigate
-        WebEngine webEngine = webView.getEngine();
-        webEngine.load(url);
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initAndShowGUI();
+            }
+        });
     }
 
 }
