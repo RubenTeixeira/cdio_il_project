@@ -1,5 +1,6 @@
 package ui;
 
+import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
@@ -20,9 +21,10 @@ public class Main {
     {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
-        versaoGraficaParaCliente();
-        versaoConsola();
+        //versaoGraficaParaCliente();
+        //versaoConsola();
         //colabroradorConsola();
+        //colaboradorAPP();
 
     }
 
@@ -129,6 +131,11 @@ public class Main {
             }
 
         } while (op != 0);
+    }
+
+    private static void colaboradorAPP()
+    {
+        new ColaboratorAPPGUI();
     }
 
 }
