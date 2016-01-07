@@ -35,6 +35,14 @@ public abstract class TokenImpl implements Token {
         this.code = code;
         this.idReservation = idReservation;
     }
+    
+    public TokenImpl(int id, String generationDate, String expirationDate, int state, String code) {
+        this.id = id;
+        this.generationDate = generationDate;
+        this.expirationDate = expirationDate;
+        this.state = state;
+        this.code = code;
+    }
 
     public TokenImpl() {
     }

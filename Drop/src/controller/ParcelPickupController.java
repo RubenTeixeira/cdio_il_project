@@ -16,6 +16,7 @@ import domain.Token;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistence.SQLConnection;
@@ -39,15 +40,19 @@ public class ParcelPickupController {
         try {
             manager = persistence.OracleDb.getInstance();
             tokenDAO = (TokenDAO) manager.getDAO(Table.TOKEN);
-            deliveryDAO = (DeliveryDAO) manager.getDAO(Table.PICKUP);
+            deliveryDAO = (DeliveryDAO) manager.getDAO(Table.DELIVERY);
         } catch (SQLException ex) {
             Logger.getLogger(ExtendTokenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public String generateRandomToken(){
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
 
     public List<Token> checkValidity() {
         return tokenDAO.checkValidity();
-    }   
+    }
 
     public TokenDAO getTokenDAO() {
         return tokenDAO;

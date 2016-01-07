@@ -28,13 +28,13 @@ import javax.swing.JOptionPane;
  */
 public class ParcelPickupGUI extends javax.swing.JFrame {
 
-    private JFrame parentFrame;
+    //private JFrame parentFrame;
     private ParcelPickupController controller;
 
     //private DefaultComboBoxModel modelTokenCB;
-    public ParcelPickupGUI(JFrame parentFrame) {
-        super("Group Epsilon - Recolha de Encomendas não Levantadas");
-        this.parentFrame = parentFrame;
+    public ParcelPickupGUI() {
+        super("Recolha de Encomendas não Levantadas");
+        //this.parentFrame = parentFrame;
         controller = new ParcelPickupController();
         initComponents();
         tokenTXT.setEditable(false);
@@ -62,6 +62,11 @@ public class ParcelPickupGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         sairBTN.setText("Sair");
+        sairBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairBTNActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Token:");
 
@@ -96,15 +101,21 @@ public class ParcelPickupGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void generateToken() {      
-        String code = UUID.randomUUID().toString().substring(0, 8);
-        DateFormat df = new SimpleDateFormat("yy.mm.dd");
+    private void sairBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairBTNActionPerformed
+        dispose();
+    }//GEN-LAST:event_sairBTNActionPerformed
+
+    private void generateToken() {
+        String code = controller.generateRandomToken();
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
         Date today = Calendar.getInstance().getTime();
         String data = df.format(today);
-        Token newToken = new TokenAssistant(controller.getTokenDAO().getNextId(), data, data, 1, code, 0);
-        controller.getTokenDAO().insertNew(newToken);
+        Token newToken = new TokenAssistant(controller.getTokenDAO().getNextId(), data, data, 1, code);
+        if (controller.getTokenDAO().insertNew(newToken)) {
+            tokenTXT.setText(code);
+        }
         for (Token t : controller.checkValidity()) {
-            Delivery delivery = controller.getDeliveryDAO().getDeliveryByReservationId(t.getReservationId());
+            Delivery delivery = controller.getDeliveryDAO().getDeliveryByReservationID(t.getReservationId());
             delivery.setAssistantTokenID(newToken.getId());
             controller.getDeliveryDAO().update(delivery);
         }

@@ -23,6 +23,10 @@ public class TokenAssistant extends TokenImpl{
         super(id, generationDate, expirationDate, state, code, idReservation);
     }
     
+    public TokenAssistant(int id, String generationDate, String expirationDate, int state, String code) {
+        super(id, generationDate, expirationDate, state, code);
+    }
+    
     @Override
     public CellTransaction newTransaction(SQLConnection manager) {
         Cell cell = getCell(manager);

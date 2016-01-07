@@ -78,12 +78,22 @@ public class TokenDAO extends GenericDAO<Token> {
 
     @Override
     public boolean insertNew(Token obj) {
+        ResultSet rs;
+        if(obj.getReservationId()==0){
+            String query = "insert into token ("
+                + "id_token, data_geracao, data_validade, ativo, id_reserva, codigo) "
+                + " VALUES (" + obj.getId() + "," + "to_date('" + obj.getGenerationDate() + "', 'dd-mm-yyyy HH24:MI'),"
+                + "to_date('" + obj.getExpirationDate() + "', 'dd-mm-yyyy HH24:MI')," + obj.getState() 
+                + ",null, '" + obj.getCode() + "')";
+        rs = executeQuery(query);
+        }else{
         String query = "insert into token ("
                 + "id_token, data_geracao, data_validade, ativo, id_reserva, codigo) "
                 + " VALUES (" + obj.getId() + "," + "to_date('" + obj.getGenerationDate() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "to_date('" + obj.getExpirationDate() + "', 'dd-mm-yyyy HH24:MI')," + obj.getState() + ","
-                + obj.getReservationId() + "," + obj.getCode() + ")";
-        ResultSet rs = executeQuery(query);
+                + obj.getReservationId() + ",'" + obj.getCode() + "')";
+        rs = executeQuery(query);
+        }
         return rs != null;
     }
 
@@ -164,9 +174,10 @@ public class TokenDAO extends GenericDAO<Token> {
 
     public List<Token> checkValidity() {
         List<Token> list = new ArrayList<Token>();
-        String qry = "select * from token"
-                + "where TO_DATE(data_validade) < sysdate"
-                + "and id_tipo_token = 2";
+        String qry = "select e.*, t.descricao from token e, tipo_token t"
+                + " where TO_DATE(e.data_validade) < sysdate"
+                + " and e.id_tipo_token = 2"
+                + " and t.id_tipo_token = e.id_tipo_token";
         ResultSet rs = executeQuery(qry);
         if (rs != null) {
             try {
