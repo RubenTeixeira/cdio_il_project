@@ -2,7 +2,7 @@ package controller;
 
 import domain.Client;
 import domain.Gestao;
-import dal.ClientDAO;
+import dal.CostumerDAO;
 import dal.Table;
 import java.sql.SQLException;
 import java.util.List;
@@ -11,7 +11,7 @@ import persistence.SQLConnection;
 public class BuyDropPointServiceController {
 
     private Gestao gestao;
-    private ClientDAO registoCliente;
+    private CostumerDAO registoCliente;
     private Client login;
     private int idDropPoint;
     private int idPrerenciasTemp;
@@ -22,7 +22,7 @@ public class BuyDropPointServiceController {
     public BuyDropPointServiceController(String file) throws SQLException {
         this.manager = persistence.OracleDb.getInstance(file);
         this.gestao = new Gestao();
-        registoCliente = (ClientDAO) this.manager.getDAO(Table.CLIENTE);
+        registoCliente = (CostumerDAO) this.manager.getDAO(Table.COSTUMER);
 
     }
 

@@ -5,7 +5,6 @@
  */
 package dal;
 
-import dal.GenericDAO;
 import domain.Address;
 import domain.Client;
 import java.sql.Connection;
@@ -14,14 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistence.OracleDb;
-import persistence.SQLConnection;
 
 /**
  *
  * @author nuno
  */
-public class ClientDAO extends GenericDAO<Client> {
+public class CostumerDAO extends GenericDAO<Client> {
 
     private final static String TABLENAME = "CLIENTE";
 
@@ -41,7 +38,7 @@ public class ClientDAO extends GenericDAO<Client> {
      * Construtor responsavel por cria uma conexao.
      *
      */
-    public ClientDAO(Connection con) {
+    public CostumerDAO(Connection con) {
         super(con, TABLENAME);
     }
 
@@ -67,7 +64,7 @@ public class ClientDAO extends GenericDAO<Client> {
                 nextId = executeQuery.getInt(1);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CostumerDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return nextId;
@@ -102,7 +99,7 @@ public class ClientDAO extends GenericDAO<Client> {
             return prepareStatement.execute();
 
         } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, "Not possible to register :" + novoCliente, ex);
+            Logger.getLogger(CostumerDAO.class.getName()).log(Level.SEVERE, "Not possible to register :" + novoCliente, ex);
         }
 
         return false;
@@ -136,7 +133,7 @@ public class ClientDAO extends GenericDAO<Client> {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CostumerDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

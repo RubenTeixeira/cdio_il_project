@@ -9,21 +9,20 @@ package dal;
  */
 public enum Table {
 
-    DROPPOINT,
-    COSTUMER,
-    CLASS_DIMENSION,
-    CABINET,
-    RESERVATION,
-    CELL,
-    PICKUP,
-    DELIVERY,
-    MANAGER,
-    CLASS_TEMPERATURE,
-    TOKEN,
-    TOKEN_TYPE, 
     ADDRESS,
+    CABINET,
+    CELL,
+    CLASS_DIMENSION,
+    CLASS_TEMPERATURE,
+    COSTUMER,
+    DELIVERY,
+    DROPPOINT,
+    INCIDENT,
+    INCIDENT_TYPE,
     MAINTENANCE_PICKUP,
-    CLIENTE,
-    MORADA
-
+    MANAGER,
+    PICKUP,
+    RESERVATION,
+    TOKEN,
+    TOKEN_TYPE
 }

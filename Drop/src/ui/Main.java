@@ -22,7 +22,7 @@ public class Main {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
         //versaoGraficaParaCliente();
-        //versaoConsola();
+        versaoConsola();
         //colabroradorConsola();
         //colaboradorAPP();
 
@@ -31,9 +31,9 @@ public class Main {
     public static void menu()
     {
         String menu = "---------MENU---------\n"
-                + "1. Abrir Prateleira\n"
-                + "2. Colaborador\n"
-                + "0. Sair";
+                + "1. Open Cell\n"
+                + "2. Maintenance Assistant\n"
+                + "0. Exit";
         System.out.println(menu);
     }
 
@@ -58,7 +58,7 @@ public class Main {
                     exit(0);
                     break;
                 default:
-                    System.out.println("Opção inválida");
+                    System.out.println("Invalid Option");
             }
         } while (op != 0);
     }
@@ -70,11 +70,11 @@ public class Main {
 
     private static void colaboradorConsola() throws SQLException
     {
-        System.out.println("--------------------Colaborador------------");
-        String menu = "1. Iniciar Manutenção\n"
-                + "2. Recolher Entregas Expiradas\n"
-                + "3. Efectuar Manutenção\n"
-                + "0. Voltar";
+        System.out.println("--------------Maintenance Assistant------------");
+        String menu = "1. Start Maintenance\n"
+                + "2. Pickup past Deliveries\n"
+                + "3. Make Maintenance\n"
+                + "0. Go back";
         int op;
         do
         {
@@ -95,7 +95,7 @@ public class Main {
                     versaoConsola();
                     break;
                 default:
-                    System.out.println("Opção inválida.");
+                    System.out.println("Invalid Option");
                     break;
             }
 
@@ -104,9 +104,9 @@ public class Main {
 
     private static void gestorConsola()
     {
-        System.out.println("--------------------Gestor------------");
-        String menu = "1. Gestão DropPoint\n"
-                + "0. Sair";
+        System.out.println("-----------------Manager---------------");
+        String menu = "1. Droppoint Management\n"
+                + "0. Exit";
         int op = 0;
         do
         {
@@ -126,7 +126,7 @@ public class Main {
                     exit(0);
                     break;
                 default:
-                    System.out.println("Opção inválida.");
+                    System.out.println("Invalid Option");
                     break;
             }
 

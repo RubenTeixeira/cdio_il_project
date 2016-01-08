@@ -28,7 +28,7 @@ public class MaintenanceUI {
     private void run() throws SQLException
     {
         int num = 1;
-        System.out.println("-------------Armarios-----------\n");
+        System.out.println("-------------Cabinets-----------\n");
         List<Cabinet> lstOfCabinets = controller.getListOfCabinetsNotInMaintenance(localDropID);
         if (!lstOfCabinets.isEmpty())
         {
@@ -37,8 +37,8 @@ public class MaintenanceUI {
                 System.out.println(num + ". " + cabinet.getName());
                 num++;
             }
-            System.out.println("0. Voltar");
-            System.out.println("Selecione Armario:");
+            System.out.println("0. Go Back");
+            System.out.println("Select Cabinet:");
             int op = in.nextInt();
             if (op != 0)
             {
@@ -49,13 +49,13 @@ public class MaintenanceUI {
                     new MakeMaintenanceUI(FILE);
                 } else
                 {
-                    System.out.println("Erro ao Realizar operação\nTente Novamente mais tarde!");
+                    System.out.println("The operation failed\nTry again later!");
                     System.out.println(" ");
                 }
             }
         } else
         {
-            System.out.println("Armarios ja em Manutenção...\nPor favor tente mais tarde...");
+            System.out.println("Cabinets already in maintenance...\nPlease try again later...");
             System.out.println(" ");
         }
     }

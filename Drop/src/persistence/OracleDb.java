@@ -18,8 +18,10 @@ import dal.DropPointDAO;
 import dal.DeliveryDAO;
 import dal.CellDAO;
 import dal.CabinetDAO;
-import dal.ClientDAO;
+import dal.CostumerDAO;
 import dal.GenericDAO;
+import dal.IncidentDAO;
+import dal.IncidentTypeDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -78,24 +80,26 @@ public class OracleDb implements SQLConnection, Settings {
         switch (t) {
             case ADDRESS:
                 return new AddressDAO(this.con);
-            case PICKUP:
-                return new PickUpDAO(this.con);
-            case DELIVERY:
-                return new DeliveryDAO(this.con);
-            case TOKEN:
-                return new TokenDAO(this.con);
-            case CELL:
-                return new CellDAO(this.con);
-            case DROPPOINT:
-                return new DropPointDAO(this.con);
             case CABINET:
                 return new CabinetDAO(this.con);
+            case CELL:
+                return new CellDAO(this.con);
+            case COSTUMER:
+                return new CostumerDAO(this.con);
+            case DELIVERY:
+                return new DeliveryDAO(this.con);
+            case DROPPOINT:
+                return new DropPointDAO(this.con);
+            case INCIDENT:
+                return new IncidentDAO(this.con);
+            case INCIDENT_TYPE:
+                return new IncidentTypeDAO(this.con);
+            case PICKUP:
+                return new PickUpDAO(this.con);
+            case TOKEN:
+                return new TokenDAO(this.con);
             case MAINTENANCE_PICKUP:
                 return new MaintenancePickupDAO(this.con);
-            case CLIENTE:
-                return new ClientDAO(this.con);
-            case MORADA:
-                return new AddressDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");
         }

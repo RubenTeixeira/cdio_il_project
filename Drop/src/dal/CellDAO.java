@@ -90,13 +90,16 @@ public class CellDAO extends GenericDAO<Cell> {
                 + "p.ID_ARMARIO= a.ID_ARMARIO "
                 + "INNER JOIN DROPPOINT d ON "
                 + "a.ID_DROPPOINT=d.ID_DROPPOINT "
-                + "WHERE a.MANUTENCAO = ? AND a.ID_ARMARIO= ? AND p.OCUPADO= ?";
+                + "WHERE a.MANUTENCAO = ? AND a.ID_ARMARIO= ? "
+                + "AND p.OCUPADO= ? AND p.IS_OPERATIONAL = ? AND p.ATIVO=?";
 
         PreparedStatement stmnt = this.con.prepareStatement(query);
 
         stmnt.setInt(1, 1);
         stmnt.setInt(2, cabinet.getId());
         stmnt.setInt(3, 0);
+        stmnt.setInt(4, 1);
+        stmnt.setInt(5, 1);
 
         ResultSet result = stmnt.executeQuery();
 

@@ -9,6 +9,7 @@ import controller.MakeMaintenanceController;
 import domain.Cabinet;
 import domain.Cell;
 import domain.DropPoint;
+import domain.IncidentType;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -63,10 +64,27 @@ class MakeMaintenanceUI {
                     if(!controller.insertReport(report)) {
                         System.out.println("Not possible register report!");
                     }
-                    System.out.println("Is cell operational? (0-No, 1-Yes)");
-                    op = ReadFromKeyboard.read();
-                    if(!controller.setCellOperational(op)) {
-                        System.out.println("Not possible set cell operational!");
+                    do {
+                        System.out.println("Is cell operational? (0-No, 1-Yes)");
+                        op = ReadFromKeyboard.read();
+                    } while (op != 0 && op != 1);
+                    if(op == 0) {
+                        controller.createIncident(op);
+                        System.out.println("Choose the incident type:");
+                        List<IncidentType> listIncidType = controller.getIncidentsType();
+                        i = 0;
+                        for (IncidentType iType : listIncidType) {
+                            System.out.println(iType.getIncidentType_id() + " : " + iType.getDescription());
+                            i++;
+                        }
+                        int i_type;
+                        do {
+                            i_type = ReadFromKeyboard.read();
+                        } while (i_type <= 0 || i_type > i);
+                        if(!controller.selectIncidentType(op))
+                        {
+                            System.out.println("Not possible register the incident!");
+                        }
                     }
                     System.out.println("Cell is closed y/n?");
                     confirm = ReadFromKeyboard.readString();
