@@ -81,10 +81,10 @@ public class TokenDAO extends GenericDAO<Token> {
         ResultSet rs;
         if(obj.getReservationId()==0){
             String query = "insert into token ("
-                + "id_token, data_geracao, data_validade, ativo, id_reserva, codigo) "
+                + "id_token, data_geracao, data_validade, id_tipo_token, ativo, id_reserva, codigo) "
                 + " VALUES (" + obj.getId() + "," + "to_date('" + obj.getGenerationDate() + "', 'dd-mm-yyyy HH24:MI'),"
-                + "to_date('" + obj.getExpirationDate() + "', 'dd-mm-yyyy HH24:MI')," + obj.getState() 
-                + ",null, '" + obj.getCode() + "')";
+                + "to_date('" + obj.getExpirationDate() + "', 'dd-mm-yyyy HH24:MI'), 3," + obj.getState() 
+                + ", null, '" + obj.getCode() + "')";
         rs = executeQuery(query);
         }else{
         String query = "insert into token ("
@@ -152,7 +152,7 @@ public class TokenDAO extends GenericDAO<Token> {
      * @return Token implementation class object (TokenClient, TokenCourier
      * (...))
      */
-    private Token createToken(int id, String generationDate, String expirationDate, String description, int state, String code, int idReservation) {
+    public Token createToken(int id, String generationDate, String expirationDate, String description, int state, String code, int idReservation) {
         Token token;
 
         switch (description.toLowerCase()) {

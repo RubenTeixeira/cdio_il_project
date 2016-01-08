@@ -100,12 +100,12 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     @Override
     public boolean update(Delivery delivery) {
-        String query = "update entrega set data_abre_prateleira=TO_DATE('"+delivery.getOpenedDate()+"','dd-mm-yyyy'),"
-                + "data_fecha_prateleira=TO_DATE('"+delivery.getClosedDate()+"','dd-mm-yyyy'),"
-                + "id_reserva="+delivery.getReservationID()+","
-                + "id_prateleira="+delivery.getCellID()+","
-                + "id_token_estafeta="+delivery.getCourierTokenID()+","
-                + "id_token_colaborador="+delivery.getAssistantTokenID()+","
+        String query = "update entrega set data_abre_prateleira=TO_DATE('"+delivery.getOpenedDate().split(" ")[0]+"','dd-mm-yyyy'),"
+                + " data_fecha_prateleira=TO_DATE('"+delivery.getClosedDate().split(" ")[0]+"','dd-mm-yyyy'),"
+                + " id_reserva="+delivery.getReservationID()+","
+                + " id_prateleira="+delivery.getCellID()+","
+                + " id_token_estafeta="+delivery.getCourierTokenID()+","
+                + " id_token_colaborador="+delivery.getAssistantTokenID()
                 + " where id_entrega = "+delivery.getDeliveryID();
         ResultSet rs = executeQuery(query);
         return rs != null;

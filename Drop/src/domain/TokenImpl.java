@@ -14,6 +14,7 @@ public abstract class TokenImpl implements Token {
     private int id;
     private String generationDate;
     private String expirationDate;
+    private int tokenType;
     private int state;
     private String code;
     private int idReservation;
@@ -63,6 +64,11 @@ public abstract class TokenImpl implements Token {
     }
 
     @Override
+    public int getTokenType() {
+        return tokenType;
+    }  
+
+    @Override
     public int getState() {
         return state;
     }
@@ -90,6 +96,11 @@ public abstract class TokenImpl implements Token {
     @Override
     public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    @Override
+    public void setTokenType(int tokenType) {
+        this.tokenType = tokenType;
     }
 
     @Override

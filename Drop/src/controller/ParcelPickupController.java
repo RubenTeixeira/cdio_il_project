@@ -65,5 +65,13 @@ public class ParcelPickupController {
     public boolean updateDelivery(Delivery delivery){
         return deliveryDAO.update(delivery);
     }
+    
+    public boolean insertNewToken(Token token){
+        return getTokenDAO().insertNew(token);
+    }
+    
+    public Delivery getDeliveryByReservationID(int reservationId){
+        return getDeliveryDAO().getDeliveryByReservationID(reservationId);
+    }
   
 }

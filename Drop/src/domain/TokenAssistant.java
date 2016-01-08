@@ -23,7 +23,7 @@ public class TokenAssistant extends TokenImpl{
         super(id, generationDate, expirationDate, state, code, idReservation);
     }
     
-    public TokenAssistant(int id, String generationDate, String expirationDate, int state, String code) {
+    public TokenAssistant(int id, String generationDate, String expirationDate, int TokenType, int state, String code, int idReservation) {
         super(id, generationDate, expirationDate, state, code);
     }
     

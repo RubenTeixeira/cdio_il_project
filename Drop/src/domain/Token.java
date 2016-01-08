@@ -19,6 +19,7 @@ public interface Token {
     int getId();
     String getGenerationDate();
     String getExpirationDate();
+    int getTokenType();
     int getState();   
     String getCode();
     int getReservationId();
@@ -29,6 +30,7 @@ public interface Token {
     void setId(int id);
     void setGenerationDate(String generationDate);
     void setExpirationDate(String expirationDate);
+    void setTokenType(int TokenType);
     void setState(int state);
     void setCode(String code);
     void setReservationId(int reservationID);
