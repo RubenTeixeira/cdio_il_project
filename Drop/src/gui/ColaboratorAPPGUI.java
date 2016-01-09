@@ -1,18 +1,35 @@
 package gui;
 
 import java.awt.CardLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author 1130874
+ * @author André 1130874
  */
 public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
+    String chosenDP = "São Bento";
+    private DefaultListModel DropPointListModel;
+
+    /**
+     * Creates new form ColaboratorAPP
+     */
     public ColaboratorAPPGUI()
     {
         initComponents();
+        this.DropPointListModel = new DefaultListModel();
+        this.listDropPoints.setModel(DropPointListModel);
+        //run();
+
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void run()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -27,29 +44,90 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
         pRoot = new javax.swing.JPanel();
         pInicio = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnWorkPlan = new javax.swing.JButton();
-        pWorkPlan = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        listDropPoints = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        btnDoneWork = new javax.swing.JButton();
+        btnChosenDP = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        pMenu = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnWorkPlan = new javax.swing.JButton();
+        lblChosenDP = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("DropPoint Maintenance");
+        setTitle("DropPoint Maintenance APP");
         setResizable(false);
 
         pRoot.setName("pRoot"); // NOI18N
         pRoot.setLayout(new java.awt.CardLayout());
 
-        pInicio.setBorder(new javax.swing.border.MatteBorder(null));
-        pInicio.setName(""); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("DropPoint Maintenance App");
+
+        jScrollPane1.setViewportView(listDropPoints);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setText("DropPoints to visit:");
+
+        btnChosenDP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChosenDP.setText("NEXT >>");
+        btnChosenDP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnChosenDP.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnChosenDPActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRefresh.setText("Refresh");
+        btnRefresh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout pInicioLayout = new javax.swing.GroupLayout(pInicio);
+        pInicio.setLayout(pInicioLayout);
+        pInicioLayout.setHorizontalGroup(
+            pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pInicioLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addGroup(pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pInicioLayout.createSequentialGroup()
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnChosenDP, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(42, 42, 42))
+            .addGroup(pInicioLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pInicioLayout.setVerticalGroup(
+            pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pInicioLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChosenDP, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(240, Short.MAX_VALUE))
+        );
+
+        pRoot.add(pInicio, "cardInicio");
+
+        pMenu.setBorder(new javax.swing.border.MatteBorder(null));
+        pMenu.setName(""); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("DropPoint Maintenance");
+        jLabel1.setText("DropPoint:");
 
         btnWorkPlan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnWorkPlan.setText("Work Plan");
@@ -62,93 +140,36 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout pInicioLayout = new javax.swing.GroupLayout(pInicio);
-        pInicio.setLayout(pInicioLayout);
-        pInicioLayout.setHorizontalGroup(
-            pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pInicioLayout.createSequentialGroup()
+        lblChosenDP.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout pMenuLayout = new javax.swing.GroupLayout(pMenu);
+        pMenu.setLayout(pMenuLayout);
+        pMenuLayout.setHorizontalGroup(
+            pMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pMenuLayout.createSequentialGroup()
                 .addGap(72, 72, 72)
                 .addComponent(jLabel1)
-                .addContainerGap(81, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pInicioLayout.createSequentialGroup()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblChosenDP, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pMenuLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnWorkPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addGap(110, 110, 110))
         );
-        pInicioLayout.setVerticalGroup(
-            pInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pInicioLayout.createSequentialGroup()
+        pMenuLayout.setVerticalGroup(
+            pMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pMenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblChosenDP))
                 .addGap(18, 18, 18)
                 .addComponent(btnWorkPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(452, Short.MAX_VALUE))
+                .addContainerGap(481, Short.MAX_VALUE))
         );
 
-        pRoot.add(pInicio, "cardInicio");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setText("Work Plan");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("DropPoints to visit:");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Description (Optional):");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        btnDoneWork.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDoneWork.setText("Done");
-        btnDoneWork.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnDoneWork.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnDoneWorkActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pWorkPlanLayout = new javax.swing.GroupLayout(pWorkPlan);
-        pWorkPlan.setLayout(pWorkPlanLayout);
-        pWorkPlanLayout.setHorizontalGroup(
-            pWorkPlanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pWorkPlanLayout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
-                .addGroup(pWorkPlanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(pWorkPlanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pWorkPlanLayout.createSequentialGroup()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(142, 142, 142))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pWorkPlanLayout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(32, 32, 32)))
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDoneWork, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        pWorkPlanLayout.setVerticalGroup(
-            pWorkPlanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pWorkPlanLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnDoneWork, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
-        );
-
-        pRoot.add(pWorkPlan, "cardWorkPlan");
+        pRoot.add(pMenu, "cardMenu");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,29 +187,37 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void btnWorkPlanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnWorkPlanActionPerformed
     {//GEN-HEADEREND:event_btnWorkPlanActionPerformed
-        CardLayout card = (CardLayout) pRoot.getLayout();
-        card.show(pRoot, "cardWorkPlan");
+
     }//GEN-LAST:event_btnWorkPlanActionPerformed
 
-    private void btnDoneWorkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnDoneWorkActionPerformed
-    {//GEN-HEADEREND:event_btnDoneWorkActionPerformed
-        CardLayout card = (CardLayout) pRoot.getLayout();
-        card.show(pRoot, "cardInicio");
-    }//GEN-LAST:event_btnDoneWorkActionPerformed
-
+    private void btnChosenDPActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnChosenDPActionPerformed
+    {//GEN-HEADEREND:event_btnChosenDPActionPerformed
+        chosenDP = (String) listDropPoints.getSelectedValue();
+        if (chosenDP != null)
+        {
+            CardLayout card = (CardLayout) pRoot.getLayout();
+            card.show(pRoot, "cardMenu");
+            lblChosenDP.setText(chosenDP);
+        } else
+        {
+            JOptionPane.showMessageDialog(this, "You need to select a DropPoint to continue.",
+                    "Selection Error", JOptionPane.INFORMATION_MESSAGE, null);
+        }
+    }//GEN-LAST:event_btnChosenDPActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDoneWork;
+    private javax.swing.JButton btnChosenDP;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnWorkPlan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel lblChosenDP;
+    private javax.swing.JList listDropPoints;
     private javax.swing.JPanel pInicio;
+    private javax.swing.JPanel pMenu;
     private javax.swing.JPanel pRoot;
-    private javax.swing.JPanel pWorkPlan;
     // End of variables declaration//GEN-END:variables
+
 }
