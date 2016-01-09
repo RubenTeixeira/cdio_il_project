@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import maps.domain.RequestAPI;
+import maps.domain.Root;
 
 /**
  *
@@ -21,6 +23,8 @@ public class Main {
     {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
+        //Root root = RequestAPI.getRoot(41.1796524, -8.1729746, 41.181332, -8.1731463);
+        //System.out.println(root);
         //versaoGraficaParaCliente();
         versaoConsola();
         //colabroradorConsola();
