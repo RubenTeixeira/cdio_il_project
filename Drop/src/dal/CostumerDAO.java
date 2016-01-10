@@ -23,19 +23,20 @@ public class CostumerDAO extends GenericDAO<Client> {
     private final static String TABLENAME = "CLIENTE";
 
     /**
-     * Define-se queries que serao utilizadas pelos metodos.
+     * Define queries that will be used by methods.
      *
      */
+    private String clientById = "Select * FROM " + TABLENAME + " WHERE IDCLIENTE=?";
     private String nextId = "select nvl(max(id_cliente),0)+1 from cliente";
-    private String delete = "DELETE FROM CLIENTE WHERE IDCLIENTE=?";
-    private String login = "SELECT * FROM CLIENTE WHERE USERNAME=? AND UPASSWORD=?";
-    private String insert = "Insert Into CLIENTE (id_Cliente,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,ID_MORADA)"
+    private String delete = "DELETE FROM " + TABLENAME + " WHERE IDCLIENTE=?";
+    private String login = "SELECT * FROM " + TABLENAME + " WHERE USERNAME=? AND UPASSWORD=?";
+    private String insert = "Insert Into " + TABLENAME + " (id_Cliente,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,ID_MORADA)"
             + " VALUES (?,?,?,?,?,?,?,?)";
-    private String update = "Update CLIENTE set USERNAME=?, PASSWORD=?"
+    private String update = "Update " + TABLENAME + " set USERNAME=?, PASSWORD=?"
             + " WHERE IDCLIENTE =?";
 
     /**
-     * Construtor responsavel por cria uma conexao.
+     * Builder responsible for creating a connection.
      *
      * @param con
      */
@@ -44,7 +45,7 @@ public class CostumerDAO extends GenericDAO<Client> {
     }
 
     /**
-     * Devolve conecxao utilizada.
+     * Returns connection used.
      *
      * @return SQLConnection
      */
@@ -53,7 +54,7 @@ public class CostumerDAO extends GenericDAO<Client> {
     }
 
     /**
-     * Devolve o proximo id a ser utilizador pela base de dados.
+     * Returns the next ID to be used by the database.
      *
      * @return int
      */
@@ -72,8 +73,8 @@ public class CostumerDAO extends GenericDAO<Client> {
     }
 
     /**
-     * Dado um objecto tipo cliente, este e processado e guardado na base de
-     * dados.
+     * Given a customer object type, this and processed and stored in the
+     * database.
      *
      * @param novoCliente
      * @return boolean
@@ -107,8 +108,8 @@ public class CostumerDAO extends GenericDAO<Client> {
     }
 
     /**
-     * Dado o username e password, verfica se existe algum cliente com
-     * respectivas credencias.
+     * Given the username and password, see if any client with their
+     * credentials.
      *
      * @param username
      * @param password
@@ -140,25 +141,33 @@ public class CostumerDAO extends GenericDAO<Client> {
     }
 
     /**
-     * Devolve novo objecto do tipo Client
+     * Returns new Client object type
      *
      * @param id
-     * @param nome
+     * @param name
      * @param NIF
      * @param username
      * @param password
-     * @param morada
+     * @param address
      * @param email
-     * @param telemovel
+     * @param mobilePhone
      * @return Client
      */
-    public Client newClient(int id, String nome, int NIF, String username, String password, Address morada, String email, int telemovel) {
-        return new Client(id, nome, NIF, username, password, morada, email, telemovel);
+    public Client newClient(int id, String name, int NIF,
+            String username, String password, Address address,
+            String email, int mobilePhone) {
+        return new Client(id, name, NIF, username, password, address, email, mobilePhone);
     }
 
+    /**
+     * Register new customer in the database
+     *
+     * @param newClient
+     * @return boolean
+     */
     @Override
-    public boolean insertNew(Client obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean insertNew(Client newClient) {
+        return this.clientRegister(newClient);
     }
 
     @Override
@@ -166,14 +175,57 @@ public class CostumerDAO extends GenericDAO<Client> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Delets customer from the database.
+     *
+     * @param client
+     */
     @Override
-    public void delete(Client obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(Client client) {
+        try {
+            PreparedStatement prepareStatement = con.prepareStatement(delete);
+            prepareStatement.setInt(0, client.getId());
+
+            prepareStatement.executeLargeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CostumerDAO.class.getName()).log(Level.SEVERE,
+                    "It was not possible to delete customer", ex);
+        }
     }
 
+    /**
+     * Return client by id parameter.
+     *
+     * @param id
+     * @return Client
+     */
     @Override
     public Client get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement prepareStatement = con.prepareStatement(clientById);
+            prepareStatement.setInt(0, id);
+            ResultSet result = prepareStatement.executeQuery();
+            String username = "";
+            String pass = "";
+
+            if (result.next()) {
+                username = result.getString("USERNAME");
+                pass = result.getString("PASSWORD");
+            }
+
+            if (username.isEmpty() && pass.isEmpty()) {
+                return null;
+            }
+
+            return login(username, pass);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CostumerDAO.class.getName()).log(Level.SEVERE,
+                    "It was not possible to find customer", ex);
+        }
+
+        return null;
     }
 
 }

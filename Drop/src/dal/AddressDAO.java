@@ -22,11 +22,13 @@ public class AddressDAO extends GenericDAO<Address> {
 
     private final static String TABLENAME = "MORADA";
 
-    private String nextId = "select nvl(max(ID_MORADA),0)+1 from Morada";
-    private String insert = "INSERT INTO Morada (ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
+    private String nextId = "select nvl(max(ID_MORADA),0)+1 from" + TABLENAME;
+    private String insert = "INSERT INTO "
+            + TABLENAME
+            + "(ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (?, ?, ?, ?)";
 
     /**
-     * Construtor responsavel por cria uma conexao.
+     * Builder responsible for creating a connection.
      *
      * @param con
      */
@@ -35,7 +37,7 @@ public class AddressDAO extends GenericDAO<Address> {
     }
 
     /**
-     * Devolve conecxao utilizada.
+     * Returns connection used.
      *
      * @return SQLConnection
      */
@@ -43,6 +45,11 @@ public class AddressDAO extends GenericDAO<Address> {
         return con;
     }
 
+    /**
+     * Returns the next ID to be used by the database.
+     *
+     * @return int
+     */
     private int nextId() {
         ResultSet executeQuery = executeQuery(nextId);
 
@@ -52,20 +59,21 @@ public class AddressDAO extends GenericDAO<Address> {
             lastId = Integer.valueOf(executeQuery.getString(1));
 
         } catch (SQLException ex) {
-            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Not possible to get next id.", ex);
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE,
+                    "Not possible to get next id.", ex);
         }
         return lastId;
     }
 
     /**
-     * Dado um objecto do tipo morada, seus atributos são processados de forma a
-     * serem introduzidos na base de dados.
+     * Given an address type object, its attributes are processed so as to be
+     * introduced into the database.
      *
-     * @param morada
+     * @param address
      * @return boolean
      */
-    public boolean registerAddress(Address morada) {
-        if(!morada.validate()) {
+    public boolean registerAddress(Address address) {
+        if (!address.validate()) {
             return false;
         }
 
@@ -74,29 +82,31 @@ public class AddressDAO extends GenericDAO<Address> {
             int id = nextId();
 
             prepareStatement.setInt(1, id);
-            prepareStatement.setString(2, morada.getStreet());
-            prepareStatement.setString(3, morada.getPostalCode());
-            prepareStatement.setString(4, morada.getLocality());
-            morada.setId(id);
+            prepareStatement.setString(2, address.getStreet());
+            prepareStatement.setString(3, address.getPostalCode());
+            prepareStatement.setString(4, address.getLocality());
+            address.setId(id);
             return prepareStatement.execute();
 
         } catch (SQLException ex) {
-            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, "Not possible to register the folling data: " + morada, ex);
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+                    "Not possible to register the following data: " + address, ex);
         }
 
         return false;
     }
 
     /**
-     * Returns a String object with the street, the postal code and the
-     * locality info of a specified address
+     * Returns a String object with the street, the postal code and the locality
+     * info of a specified address
      *
      * @param adressID the address id
      * @return an address
      * @throws SQLException
      */
     public String getAdressByID(int adressID) throws SQLException {
-        ResultSet rs = executeQuery("SELECT rua, codpostal, localidade FROM morada WHERE id_morada = " + adressID + "");
+        ResultSet rs = executeQuery("SELECT rua, codpostal, localidade FROM "
+                + TABLENAME + " WHERE id_morada = " + adressID + "");
         String adress = "";
         while (rs.next()) {
             adress = String.format("%s\n"
@@ -116,7 +126,8 @@ public class AddressDAO extends GenericDAO<Address> {
      * @throws SQLException
      */
     public String getCoordinatesByAddressID(int adressID) throws SQLException {
-        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from morada where ID_MORADA = " + adressID + "");
+        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from "
+                + TABLENAME + " where ID_MORADA = " + adressID + "");
         String adress = "";
         while (rs.next()) {
             adress = String.format("%s;%s",
@@ -127,7 +138,7 @@ public class AddressDAO extends GenericDAO<Address> {
     }
 
     /**
-     * Devolve novo objecto do tipo morada.
+     * Returns new object of type address.
      *
      * @param rua
      * @param codigoPostal
@@ -139,23 +150,69 @@ public class AddressDAO extends GenericDAO<Address> {
     }
 
     @Override
-    public boolean insertNew(Address obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean insertNew(Address address) {
+        return this.registerAddress(address);
     }
 
     @Override
-    public boolean update(Address obj) {
+    public boolean update(Address address) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Deletes address row from database;
+     *
+     * @param address
+     */
     @Override
-    public void delete(Address obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(Address address) {
+        try {
+            String query = "DELETE FROM "
+                    + TABLENAME + " where id_morada=?";
+
+            PreparedStatement prepareStatement = con.prepareStatement(query);
+            prepareStatement.setInt(0, address.getId());
+
+            prepareStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        }
+
     }
 
+    /**
+     * Return address object built with information from the database
+     *
+     * @param idAddress
+     * @return Address
+     */
     @Override
-    public Address get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Address get(int idAddress) {
+        ResultSet rs = executeQuery("SELECT rua, codpostal, localidade FROM "
+                + "morada WHERE id_morada = " + idAddress + "");
+        int id = 0;
+        String street = "";
+        String postalCode = "";
+        String locality = "";
+        try {
+            if (rs.next()) {
+                id = rs.getInt("ID_MORADA");
+                street = rs.getString("RUA");
+                postalCode = rs.getString("CODPOSTAL");
+                locality = rs.getString("LOCALIDADE");
+            }
+
+            Address address1 = new Address(street, postalCode, locality);
+            address1.setId(id);
+
+            return address1;
+        } catch (SQLException ex) {
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+                    "Not possible to get the address data: " + idAddress, ex);
+        }
+        return null;
     }
 
 }
