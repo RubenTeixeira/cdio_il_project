@@ -68,7 +68,7 @@ public class RegistoMorada {
             lastId = Integer.valueOf(executeQuery.getString(1));
             
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Not possible to get next id.", ex);
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Not possible to get next id.", ex);
         }
         return lastId;
     }

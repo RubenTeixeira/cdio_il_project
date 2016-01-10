@@ -50,7 +50,7 @@ public class TokenClient extends TokenImpl {
         try {
             cell = ((CellDAO)manager.getDAO(Table.CELL)).findCellForPickUp(getCode());
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
         }
         return cell;
     }
@@ -64,7 +64,8 @@ public class TokenClient extends TokenImpl {
             recolhaDAO.insertNew((PickUp)transaction);
             
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, 
+                    "Error contacting the Database.");
         }
         
     }

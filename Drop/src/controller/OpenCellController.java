@@ -75,6 +75,6 @@ public class OpenCellController {
         if (this.transaction.validate())
             this.token.close(manager, this.transaction);
         else
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Invalid data, please verify.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Invalid data, please verify.");
     }
 }

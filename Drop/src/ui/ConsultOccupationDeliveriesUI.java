@@ -5,31 +5,32 @@
  */
 package ui;
 
-import controller.ConsultarOcupacaoEntregasController;
+import controller.ConsultOccupationDeliveriesController;
+import domain.DropPoint;
 import java.util.List;
 
 /**
  *
  * @author vascopinho
  */
-public class ConsultarOcupacaoEntregaUI {
+public class ConsultOccupationDeliveriesUI {
 
-    private controller.ConsultarOcupacaoEntregasController controller;
+    private controller.ConsultOccupationDeliveriesController controller;
 
-    public ConsultarOcupacaoEntregaUI() {
-        controller = new ConsultarOcupacaoEntregasController();
+    public ConsultOccupationDeliveriesUI() {
+        controller = new ConsultOccupationDeliveriesController(Main.CREDENTIALS_FILE);
         run();
     }
 
     private void run()  {
        
         
-        String iniciarConsultaEntregasRecolhasDroppoint = controller.iniciarConsultaEntregasRecolhasDroppoint();
-        System.out.println(iniciarConsultaEntregasRecolhasDroppoint);
+        List<DropPoint> deliveriesConsultationCollectionsDropPoint = controller.deliveriesConsultationCollectionsDropPoint();
+        System.out.println(deliveriesConsultationCollectionsDropPoint);
 
         System.out.println("Seleccione id do DropPoint: \n");
         int droppoint = utils.ReadFromKeyboard.read();
-        controller.seleccionarDroppoint(droppoint);
+        controller.selectDropPoint(droppoint);
 
         int op = 0;
 
@@ -43,16 +44,16 @@ public class ConsultarOcupacaoEntregaUI {
             op = utils.ReadFromKeyboard.read();
             switch (op) {
                 case 1:
-                    System.out.println(controller.getListaRegistoEntregues());
+                    System.out.println(controller.getListRegisterDelivered());
                     utils.ReadFromKeyboard.pressEnter();
                     break;
 
                 case 2:
-                    System.out.println(controller.getListaRegistoRecolhidas());
+                    System.out.println(controller.getListRegistrationCollected());
                     utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 3:
-                    System.out.println(controller.getOcupacao());
+                    System.out.println(controller.getOccupation());
                     utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 4:

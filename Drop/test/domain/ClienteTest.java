@@ -43,10 +43,10 @@ public class ClienteTest {
     @Test
     public void testGetTelemovel() {
         System.out.println("getTelemovel");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         int expResult = 912221133;
-        instance.setTelemovel(912221133);
-        int result = instance.getTelemovel();
+        instance.setMobilePhone(912221133);
+        int result = instance.getMobilePhone();
         assertEquals(expResult, result);
 
     }
@@ -57,7 +57,7 @@ public class ClienteTest {
     @Test
     public void testGetUsername() {
         System.out.println("getUsername");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         String expResult = "Albert";
         instance.setUsername(expResult);
         String result = instance.getUsername();
@@ -71,7 +71,7 @@ public class ClienteTest {
     @Test
     public void testGetPassword() {
         System.out.println("getPassword");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         String expResult = "1345jhgfds";
         instance.setPassword(expResult);
         String result = instance.getPassword();
@@ -84,10 +84,10 @@ public class ClienteTest {
     @Test
     public void testGetMorada() {
         System.out.println("getMorada");
-        Cliente instance = new Cliente();
-        Morada expResult = new Morada("Rua", "4630", "MCN");
-        Morada result = instance.getMorada();
-        assertTrue(expResult.getRua().equalsIgnoreCase("Rua"));
+        Client instance = new Client();
+        Address expResult = new Address("Rua", "4630", "MCN");
+        Address result = instance.getAddress();
+        assertTrue(expResult.getStreet().equalsIgnoreCase("Rua"));
 
     }
 
@@ -97,7 +97,7 @@ public class ClienteTest {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         int expResult = 2;
         instance.setId(expResult);
         int result = instance.getId();
@@ -110,10 +110,10 @@ public class ClienteTest {
     @Test
     public void testGetNome() {
         System.out.println("getNome");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         String expResult = "Albert";
-        instance.setNome(expResult);
-        String result = instance.getNome();
+        instance.setName(expResult);
+        String result = instance.getName();
         assertEquals(expResult, result);
     }
 
@@ -123,7 +123,7 @@ public class ClienteTest {
     @Test
     public void testGetNIF() {
         System.out.println("getNIF");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         int expResult = 0;
         instance.setNIF(expResult);
         int result = instance.getNIF();
@@ -136,7 +136,7 @@ public class ClienteTest {
     @Test
     public void testGetEmail() {
         System.out.println("getEmail");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         String expResult = "ipsep@isep.com";
         instance.setEmail(expResult);
         String result = instance.getEmail();
@@ -149,9 +149,9 @@ public class ClienteTest {
     @Test
     public void testFailValida() {
         System.out.println("Failvalida");
-        Cliente instance = new Cliente();
+        Client instance = new Client();
         boolean expResult = false;
-        boolean result = instance.valida();
+        boolean result = instance.validate();
         assertEquals(expResult, result);
     }
 
@@ -161,10 +161,10 @@ public class ClienteTest {
     @Test
     public void testValida() {
         System.out.println("valida");
-        Morada morada = new Morada("rua", "2222", "Porto");
-        Cliente instance = new Cliente(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
+        Address morada = new Address("rua", "2222", "Porto");
+        Client instance = new Client(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
         boolean expResult = true;
-        boolean result = instance.valida();
+        boolean result = instance.validate();
         assertEquals(expResult, result);
     }
 
@@ -174,8 +174,8 @@ public class ClienteTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Morada morada = new Morada("rua", "2222", "Porto");
-        Cliente instance = new Cliente(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
+        Address morada = new Address("rua", "2222", "Porto");
+        Client instance = new Client(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
         String result = instance.toString();
         assertTrue(result.contains("Albert"));
     }
@@ -186,9 +186,9 @@ public class ClienteTest {
     @Test
     public void testNotEquals() {
         System.out.println("Notequals");
-        Morada morada = new Morada("rua", "2222", "Porto");
-        Cliente instance = new Cliente(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
-        Cliente obj = new Cliente(2, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);;
+        Address morada = new Address("rua", "2222", "Porto");
+        Client instance = new Client(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
+        Client obj = new Client(2, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);;
         boolean expResult = false;
         boolean result = instance.equals(obj);
         assertEquals(expResult, result);
@@ -200,9 +200,9 @@ public class ClienteTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Morada morada = new Morada("rua", "2222", "Porto");
-        Cliente instance = new Cliente(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
-        Cliente obj = instance.clone();
+        Address morada = new Address("rua", "2222", "Porto");
+        Client instance = new Client(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
+        Client obj = instance.clone();
         boolean expResult = true;
         boolean result = instance.equals(obj);
         assertEquals(expResult, result);
@@ -214,9 +214,9 @@ public class ClienteTest {
     @Test
     public void testCompareTo() {
         System.out.println("compareTo");
-        Morada morada = new Morada("rua", "2222", "Porto");
-        Cliente instance = new Cliente(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
-        Cliente obj = instance.clone();
+        Address morada = new Address("rua", "2222", "Porto");
+        Client instance = new Client(1, "Albert", 2312134, "Eins", "pass", morada, "albert@isep.pt", 912223344);
+        Client obj = instance.clone();
         int expResult = 0;
         int result = instance.compareTo(obj);
         assertEquals(expResult, result);

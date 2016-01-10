@@ -6,7 +6,7 @@
 package dal;
 
 import dal.GenericDAO;
-import domain.Gestao;
+import domain.Management;
 import domain.MaintenancePickup;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

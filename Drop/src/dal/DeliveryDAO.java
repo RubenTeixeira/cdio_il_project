@@ -7,10 +7,15 @@ package dal;
 
 import dal.GenericDAO;
 import domain.Delivery;
+import domain.DropPoint;
 import domain.Token;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,7 +96,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public boolean insertNew(Delivery obj) {
         String query = "INSERT INTO ENTREGA ("
                 + "ID_ENTREGA,ID_PRATELEIRA,ID_RESERVA,ID_TOKEN_ESTAFETA,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA) "
-                + " VALUES (" + obj.getDeliveryID() + "," + obj.getCellID() + "," + obj.getReservationID() + "," + obj.getCourierTokenID()+ ","
+                + " VALUES (" + obj.getDeliveryID() + "," + obj.getCellID() + "," + obj.getReservationID() + "," + obj.getCourierTokenID() + ","
                 + "TO_DATE('" + obj.getOpenedDate() + "', 'dd-mm-yyyy HH24:MI'),"
                 + "TO_DATE('" + obj.getClosedDate() + "', 'dd-mm-yyyy HH24:MI'))";
         ResultSet rs = executeQuery(query);
@@ -100,13 +105,13 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
 
     @Override
     public boolean update(Delivery delivery) {
-        String query = "update entrega set data_abre_prateleira=TO_DATE('"+delivery.getOpenedDate().split(" ")[0]+"','dd-mm-yyyy'),"
-                + " data_fecha_prateleira=TO_DATE('"+delivery.getClosedDate().split(" ")[0]+"','dd-mm-yyyy'),"
-                + " id_reserva="+delivery.getReservationID()+","
-                + " id_prateleira="+delivery.getCellID()+","
-                + " id_token_estafeta="+delivery.getCourierTokenID()+","
-                + " id_token_colaborador="+delivery.getAssistantTokenID()
-                + " where id_entrega = "+delivery.getDeliveryID();
+        String query = "update entrega set data_abre_prateleira=TO_DATE('" + delivery.getOpenedDate().split(" ")[0] + "','dd-mm-yyyy'),"
+                + " data_fecha_prateleira=TO_DATE('" + delivery.getClosedDate().split(" ")[0] + "','dd-mm-yyyy'),"
+                + " id_reserva=" + delivery.getReservationID() + ","
+                + " id_prateleira=" + delivery.getCellID() + ","
+                + " id_token_estafeta=" + delivery.getCourierTokenID() + ","
+                + " id_token_colaborador=" + delivery.getAssistantTokenID()
+                + " where id_entrega = " + delivery.getDeliveryID();
         ResultSet rs = executeQuery(query);
         return rs != null;
     }
@@ -192,4 +197,77 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         return -1;
 
     }
+
+    /**
+     * Returns the delivery list.
+     *
+     * @param idDropPoint
+     * @return String
+     */
+    public String deliveriesList(DropPoint idDropPoint) {
+        List<String> aux = new ArrayList<>();
+
+        ResultSet executeQuery = executeQuery("select e.DATAENT, p.idprateleira, e.idtoken "
+                + "  from entrega e, prateleira p, armario a, droppoint d"
+                + " where e.idprateleira = p.idprateleira"
+                + "   and p.idarmario = a.idarmario"
+                + "   and a.iddroppoint = d.iddroppoint"
+                + "   and d.iddroppoint = " + idDropPoint.getId());
+
+        try {
+            String str = "";
+            while (executeQuery.next()) {
+
+                str += "Delivery date: " + executeQuery.getString("dataent") + ". ID Cell: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+                aux.add(str);
+            }
+            if (str.isEmpty()) {
+                str = "Does not exist.";
+            }
+
+            return str;
+        } catch (SQLException ex) {
+            Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    /**
+     * Give the list of deliveries collected.
+     *
+     * @param idDropPoint
+     * @return String
+     */
+    public String collectedList(DropPoint idDropPoint) {
+        List<String> aux = new ArrayList<>();
+
+        ResultSet executeQuery = executeQuery("select r.DATAREC, p.idprateleira, r.idtoken "
+                + "  from recolha r, entrega e, prateleira p, armario a, droppoint d"
+                + "  where r.identrega = e.idtoken"
+                + "   and e.idprateleira = p.idprateleira"
+                + "   and p.idarmario = a.idarmario"
+                + "   and a.iddroppoint = d.iddroppoint"
+                + "   and d.iddroppoint = " + idDropPoint.getId());
+        try {
+            String str = "";
+            while (executeQuery.next()) {
+
+                str += "Delivery date: " + executeQuery.getString("DATAREC") + ". ID Cell: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+
+            }
+
+            if (str.isEmpty()) {
+                str = "Does not exist.";
+            }
+
+            return str;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
 }

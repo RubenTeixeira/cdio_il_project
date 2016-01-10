@@ -23,10 +23,10 @@ public class Main {
     {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
-        Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
-        System.out.println(route.getDistance());
-        //versaoGraficaParaCliente();
-        versaoConsola();
+        //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
+        //System.out.println(route.getDistance());
+        versaoGraficaParaCliente();
+        //versaoConsola();
         //colabroradorConsola();
         //colaboradorAPP();
 
@@ -120,7 +120,7 @@ public class Main {
                 case 1:
                     try
                     {
-                        new ConsultarOcupacaoEntregaUI();
+                        new ConsultOccupationDeliveriesUI();
                     } catch (RuntimeException e)
                     {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());

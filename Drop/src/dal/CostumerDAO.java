@@ -37,6 +37,7 @@ public class CostumerDAO extends GenericDAO<Client> {
     /**
      * Construtor responsavel por cria uma conexao.
      *
+     * @param con
      */
     public CostumerDAO(Connection con) {
         super(con, TABLENAME);

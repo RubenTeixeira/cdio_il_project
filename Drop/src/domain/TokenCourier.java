@@ -56,7 +56,8 @@ public class TokenCourier extends TokenImpl {
             String pickUpToken = deliveryDAO.getPickUpToken(delivery);
             Notice.enviarEmail(email, pickUpToken);
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, 
+                    "Error contacting the Database.");
         }
     }
     

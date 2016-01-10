@@ -1,17 +1,22 @@
 package controller;
 
 import domain.Client;
-import domain.Gestao;
+import domain.Management;
 import dal.CostumerDAO;
+import dal.DropPointDAO;
 import dal.Table;
+import domain.DropPoint;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistence.SQLConnection;
 
 public class BuyDropPointServiceController {
 
-    private Gestao gestao;
+    private Management managment;
     private CostumerDAO registoCliente;
+    private DropPointDAO dropPoint;
     private Client login;
     private int idDropPoint;
     private int idPrerenciasTemp;
@@ -19,10 +24,15 @@ public class BuyDropPointServiceController {
     private int idToken;
     private SQLConnection manager;
 
-    public BuyDropPointServiceController(String file) throws SQLException {
+    public BuyDropPointServiceController(String file)  {
         this.manager = persistence.OracleDb.getInstance(file);
-        this.gestao = new Gestao();
-        registoCliente = (CostumerDAO) this.manager.getDAO(Table.COSTUMER);
+        this.managment = new Management();
+        try {
+            dropPoint = (DropPointDAO) this.manager.getDAO(Table.DROPPOINT);
+            registoCliente = (CostumerDAO) this.manager.getDAO(Table.COSTUMER);
+        } catch (SQLException ex) {
+            Logger.getLogger(BuyDropPointServiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -35,8 +45,8 @@ public class BuyDropPointServiceController {
         return login != null;
     }
 
-    public String listDropPoints() {
-        return gestao.listarDropPoint();
+    public List<DropPoint> listDropPoints() {
+        return this.dropPoint.getListDropPoints();
     }
 
     public void selectDropPoint(int idDP) {
@@ -44,7 +54,7 @@ public class BuyDropPointServiceController {
     }
 
     public List<String> preferredTemperatureList() {
-        return this.gestao.ListarPreferenciasTemperatura();
+        return this.managment.ListPreferencesTemperature();
     }
 
     public void selectPreferredTemperature(int temp) {
@@ -52,7 +62,7 @@ public class BuyDropPointServiceController {
     }
 
     public List<String> preferredDimensionsList() {
-        return this.gestao.ListarPreferenciasDimensao();
+        return this.managment.ListPreferencesDimension();
     }
 
     public void selectPreferredDimensions(int dim) {
@@ -60,13 +70,15 @@ public class BuyDropPointServiceController {
     }
 
     public boolean confirmRegister() {
-        idToken = gestao.reservaPrateleira(login.getId(), idDropPoint, idPrerenciasTemp, idPrerenciasDim);
+        idToken = managment
+                .reserveCell(login.getId(), idDropPoint,
+                        idPrerenciasTemp, idPrerenciasDim);
 
         return idToken != 0;
     }
 
     public String tokenClient() {
-        return gestao.tokenReferentReservaId(idToken);
+        return managment.tokenReferentReservaId(idToken);
     }
 
 }

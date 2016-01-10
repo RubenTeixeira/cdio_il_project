@@ -5,7 +5,7 @@
  */
 package dal;
 
-import domain.Gestao;
+import domain.Management;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,7 +76,7 @@ public abstract class GenericDAO<T> {
                 return null;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Gestao.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
         }
         return rs;
     }
