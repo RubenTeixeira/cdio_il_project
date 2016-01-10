@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import ui.Main;
 
 /**
  *
@@ -20,7 +21,10 @@ import static org.junit.Assert.*;
  */
 public class BuyDropPointServiceControllerTest {
     
+    BuyDropPointServiceController instance;
+    
     public BuyDropPointServiceControllerTest() {
+        instance = new BuyDropPointServiceController(Main.CREDENTIALS_FILE);
     }
     
     @BeforeClass
@@ -45,14 +49,12 @@ public class BuyDropPointServiceControllerTest {
     @Test
     public void testClientLogin() {
         System.out.println("clientLogin");
-        String username = "";
-        String password = "";
-        BuyDropPointServiceController instance = null;
+        String username = "joao";
+        String password = "pass2";
         boolean expResult = false;
         boolean result = instance.clientLogin(username, password);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+       
     }
 
     /**
@@ -61,12 +63,10 @@ public class BuyDropPointServiceControllerTest {
     @Test
     public void testClientWithLoginMade() {
         System.out.println("clientWithLoginMade");
-        BuyDropPointServiceController instance = null;
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.clientWithLoginMade();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -75,12 +75,10 @@ public class BuyDropPointServiceControllerTest {
     @Test
     public void testListDropPoints() {
         System.out.println("listDropPoints");
-        BuyDropPointServiceController instance = null;
         String expResult = "";
         List<DropPoint> result = instance.listDropPoints();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(!result.isEmpty());
+        
     }
 
     /**
@@ -90,24 +88,8 @@ public class BuyDropPointServiceControllerTest {
     public void testSelectDropPoint() {
         System.out.println("selectDropPoint");
         int idDP = 0;
-        BuyDropPointServiceController instance = null;
         instance.selectDropPoint(idDP);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of preferredTemperatureList method, of class BuyDropPointServiceController.
-     */
-    @Test
-    public void testPreferredTemperatureList() {
-        System.out.println("preferredTemperatureList");
-        BuyDropPointServiceController instance = null;
-        List<String> expResult = null;
-        List<String> result = instance.preferredTemperatureList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+       
     }
 
     /**
@@ -117,26 +99,10 @@ public class BuyDropPointServiceControllerTest {
     public void testSelectPreferredTemperature() {
         System.out.println("selectPreferredTemperature");
         int temp = 0;
-        BuyDropPointServiceController instance = null;
         instance.selectPreferredTemperature(temp);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of preferredDimensionsList method, of class BuyDropPointServiceController.
-     */
-    @Test
-    public void testPreferredDimensionsList() {
-        System.out.println("preferredDimensionsList");
-        BuyDropPointServiceController instance = null;
-        List<String> expResult = null;
-        List<String> result = instance.preferredDimensionsList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
+   
     /**
      * Test of selectPreferredDimensions method, of class BuyDropPointServiceController.
      */
@@ -144,10 +110,7 @@ public class BuyDropPointServiceControllerTest {
     public void testSelectPreferredDimensions() {
         System.out.println("selectPreferredDimensions");
         int dim = 0;
-        BuyDropPointServiceController instance = null;
         instance.selectPreferredDimensions(dim);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -156,12 +119,9 @@ public class BuyDropPointServiceControllerTest {
     @Test
     public void testConfirmRegister() {
         System.out.println("confirmRegister");
-        BuyDropPointServiceController instance = null;
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.confirmRegister();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -170,12 +130,9 @@ public class BuyDropPointServiceControllerTest {
     @Test
     public void testTokenClient() {
         System.out.println("tokenClient");
-        BuyDropPointServiceController instance = null;
-        String expResult = "";
         String result = instance.tokenClient();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(!result.isEmpty());
+        
     }
     
 }

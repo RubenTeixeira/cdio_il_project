@@ -19,7 +19,10 @@ import ui.Main;
  */
 public class ClientRegisterControllerTest {
 
+    ClientRegisterController instance;
+
     public ClientRegisterControllerTest() {
+        this.instance = new ClientRegisterController(Main.CREDENTIALS_FILE);
     }
 
     @BeforeClass
@@ -47,7 +50,6 @@ public class ClientRegisterControllerTest {
         String rua = "Dragao";
         String codigoPostal = "4812";
         String localidade = "Porto";
-        ClientRegisterController instance = new ClientRegisterController(Main.CREDENTIALS_FILE);
         boolean expResult = true;
         boolean result = instance.newAddress(rua, codigoPostal, localidade);
         assertEquals(expResult, result);
@@ -67,7 +69,6 @@ public class ClientRegisterControllerTest {
         String password = "joana";
         String email = "joana@mail.com";
         int telemovel = 912223344;
-        ClientRegisterController instance = new ClientRegisterController(Main.CREDENTIALS_FILE);;
         boolean expResult = true;
         boolean result = instance.newClient(id, nome, NIF, username, password, email, telemovel);
         assertEquals(expResult, result);
