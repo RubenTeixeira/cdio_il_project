@@ -64,19 +64,17 @@ public class IncidentDAO extends GenericDAO<Incident> {
     @Override
     public boolean insertNew(Incident obj) {
         CallableStatement callableStatement = null;
-        String insertStoreProc = "{call insertIncident(?,?,?,?,?)}";
+        String insertStoreProc = "{call insertIncident(?,?,?,?)}";
 
         try {
             try {
                 callableStatement = con.prepareCall(insertStoreProc);
 
                 callableStatement.setInt(1,obj.getIncident_type_id());
-                callableStatement.setInt(2,obj.getDroppoint_id());
-                callableStatement.setInt(3,obj.getCell_id());
-                callableStatement.setDate(4, new java.sql.Date(obj.getIncident_date().getTime()));
-                callableStatement.setInt(5,obj.getMaintenance_assistant_id());
+                callableStatement.setInt(2,obj.getCell_id());
+                callableStatement.setDate(3, new java.sql.Date(obj.getIncident_date().getTime()));
+                callableStatement.setInt(4,1601091);
 
-                // execute insertDBUSER store procedure
                 callableStatement.executeUpdate();
 
                 System.out.println("Record is inserted into Indident table!");

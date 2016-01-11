@@ -154,17 +154,12 @@ public class MakeMaintenanceController {
     }
 
     /**
-     * Returns true if the cell is closed and marked as active or not depending
-     * on the specified option, or false if is not closed
+     * Returns true if the cell is closed and marked as active
      *
-     * @param op option
      * @return true if closed or false not closed
      * @throws SQLException
      */
-    public boolean closeCell(int op) throws SQLException {
-        if(op == 0) {
-            return this.cellDAO.updateCell(cell, CellDAO.OPEN);
-        }
+    public boolean closeCell() throws SQLException {
         return this.cellDAO.updateCell(cell, CellDAO.CLOSE);
     }
 
@@ -172,10 +167,8 @@ public class MakeMaintenanceController {
      * Mark cell as non operational and creates an Incident that describe what
      * is the problem with the cell
      *
-     * @param no the operational state
      */
-    public void createIncident(int no) {
-        this.cell.setIsOperational(no);
+    public void createIncident() {
         this.incident = this.incidentDAO.newIncident();
         this.incident.setCell_id(this.cell.getId());
     }

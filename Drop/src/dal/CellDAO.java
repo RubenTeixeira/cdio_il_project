@@ -85,7 +85,7 @@ public class CellDAO extends GenericDAO<Cell> {
     public Deque<Cell> cellsToOpen(Cabinet cabinet) throws SQLException {
         Deque<Cell> data = new LinkedList<>();
 
-        String query = "select p.ID_PRATELEIRA, d.ID_DROPPOINT, p.NUMERO_PRATELEIRA, a.ID_ARMARIO from PRATELEIRA p "
+        String query = "select p.ID_PRATELEIRA, d.ID_DROPPOINT, p.NUMERO_PRATELEIRA, a.ID_ARMARIO, p.IS_OPERATIONAL from PRATELEIRA p "
                 + "INNER JOIN ARMARIO a ON "
                 + "p.ID_ARMARIO= a.ID_ARMARIO "
                 + "INNER JOIN DROPPOINT d ON "
@@ -106,6 +106,7 @@ public class CellDAO extends GenericDAO<Cell> {
         while (result.next()) {
             Cell newCell = new Cell();
             newCell.setId(result.getInt(1));
+            newCell.setIsOperational(result.getInt("IS_OPERATIONAL"));
             String description = "Cell number: " + result.getString(3);
             newCell.setDescription(description);
             data.push(newCell);
@@ -115,15 +116,13 @@ public class CellDAO extends GenericDAO<Cell> {
 
     public boolean updateCell(Cell cell, int state) throws SQLException {
         String query = "UPDATE PRATELEIRA "
-                + "SET ATIVO=? ,"
-                + "is_operational =? "
+                + "SET ATIVO=?"
                 + "WHERE ID_PRATELEIRA=? ";
 
         PreparedStatement stmnt = this.con.prepareStatement(query);
 
         stmnt.setInt(1, state);
-        stmnt.setInt(2, cell.isOperational());
-        stmnt.setInt(3, cell.getId());
+        stmnt.setInt(2, cell.getId());
         stmnt.executeUpdate();
         return true;
     }
@@ -217,7 +216,7 @@ public class CellDAO extends GenericDAO<Cell> {
         }
         return listCells;
     }
-    
+
     @Override
     public boolean insertNew(Cell obj) {
         // Nao e necessario por enquanto

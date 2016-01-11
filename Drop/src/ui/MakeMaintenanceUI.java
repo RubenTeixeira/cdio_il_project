@@ -69,7 +69,7 @@ class MakeMaintenanceUI {
                         op = ReadFromKeyboard.read();
                     } while (op != 0 && op != 1);
                     if(op == 0) {
-                        controller.createIncident(op);
+                        controller.createIncident();
                         System.out.println("Choose the incident type:");
                         List<IncidentType> listIncidType = controller.getIncidentsType();
                         i = 0;
@@ -81,7 +81,7 @@ class MakeMaintenanceUI {
                         do {
                             i_type = ReadFromKeyboard.read();
                         } while (i_type <= 0 || i_type > i);
-                        if(!controller.selectIncidentType(op))
+                        if(!controller.selectIncidentType(i_type))
                         {
                             System.out.println("Not possible register the incident!");
                         }
@@ -89,7 +89,7 @@ class MakeMaintenanceUI {
                     System.out.println("Cell is closed y/n?");
                     confirm = ReadFromKeyboard.readString();
                     if(confirm.equalsIgnoreCase("y")) {
-                        if(controller.closeCell(op)) {
+                        if(controller.closeCell()) {
                             System.out.println("Successfully processed!");
                         }
                     }

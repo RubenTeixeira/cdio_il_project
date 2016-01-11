@@ -63,7 +63,7 @@ public class IncidentTypeDAO extends GenericDAO<IncidentType> {
             try {
                 while (rs.next()) {
                     IncidentType iType = new IncidentType();
-                    iType.setIncidentType_id(rs.getInt("INCIDENT_TYPE_ID"));
+                    iType.setIncidentType_id(rs.getInt("ID_INCIDENT_TYPE"));
                     iType.setDescription(rs.getString("DESCRIPTION"));
                     lstIncidentTypes.add(iType);
                 }
