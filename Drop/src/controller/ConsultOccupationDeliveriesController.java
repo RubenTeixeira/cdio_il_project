@@ -59,8 +59,7 @@ public class ConsultOccupationDeliveriesController {
     }
 
     public String getOccupation() {
-        return dropDao.consultOccupation(dropList.get(idDropPoint));
-        
+        return dropDao.consultOccupation(dropList.get(idDropPoint-1));
     }
 
 }

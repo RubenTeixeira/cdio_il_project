@@ -93,34 +93,34 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
      * @param idDropPoint
      * @return String
      */
-    public String consultOccupation(DropPoint idDropPoint) {
+    public String consultOccupation(DropPoint DropPoint) {
         ResultSet executeQuery
-                = executeQuery("SELECT COUNT(idPrateleira) "
-                        + "FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (idarmario)) "
-                        + "USING (idDroppoint)) WHERE iddroppoint = " + idDropPoint.getId());
+                = executeQuery("SELECT COUNT(id_Prateleira) "
+                        + "FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (id_armario)) "
+                        + "USING (id_Droppoint)) WHERE id_droppoint = " + DropPoint.getId());
         String total = "";
         try {
             while (executeQuery.next()) {
 
-                total += executeQuery.getString("COUNT(idPrateleira)");
+                total += executeQuery.getString("COUNT(id_Prateleira)");
 
             }
         } catch (SQLException ex) {
             Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        ResultSet executeQuery2 = executeQuery("SELECT COUNT(idPrateleira) FROM (SELECT iddroppoint, idPrateleira FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (idarmario)) USING (idDroppoint)) WHERE iddroppoint =" + idDropPoint.getId() + ")"
+        ResultSet executeQuery2 = executeQuery("SELECT COUNT(id_Prateleira) FROM (SELECT id_droppoint, id_Prateleira FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (id_armario)) USING (id_Droppoint)) WHERE id_droppoint =" + DropPoint.getId() + ")"
                 + "INNER JOIN "
-                + "(SELECT idprateleira FROM Prateleira NATURAL JOIN Entrega WHERE idprateleira NOT IN ("
-                + "SELECT idprateleira FROM"
-                + "Entrega JOIN Recolha ON Entrega.idToken = Recolha.idEntrega)) USING (idprateleira)");
+                + "(SELECT id_prateleira FROM Prateleira NATURAL JOIN Entrega WHERE id_prateleira NOT IN ("
+                + "SELECT id_prateleira FROM "
+                + "Entrega JOIN Recolha ON Entrega.id_Entrega = Recolha.id_Entrega)) USING (id_prateleira)");
         try {
             while (executeQuery2.next()) {
                 String ocupada = "";
 
-                ocupada += executeQuery2.getString("COUNT(idPrateleira)");
+                ocupada += executeQuery2.getString("COUNT(id_Prateleira)");
                 return "The Drop Point with id "
-                        + idDropPoint.getId()
+                        + DropPoint.getId()
                         + " has " + ocupada
                         + " occupied shelves, a total of "
                         + total + ".";
@@ -131,6 +131,51 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
         }
 
         return null;
+    }
+
+    public double getOccupationRate(DropPoint DropPoint) {
+        Double capacity= 0.0;
+        Double busy = 0.0;
+        
+        ResultSet executeQuery
+                = executeQuery("SELECT COUNT(id_Prateleira) "
+                        + "FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (id_armario)) "
+                        + "USING (id_Droppoint)) WHERE id_droppoint = " + DropPoint.getId());
+        String total = "";
+        try {
+            while (executeQuery.next()) {
+
+                total += executeQuery.getString("COUNT(id_Prateleira)");
+                capacity = Double.valueOf(total);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        ResultSet executeQuery2 = executeQuery("SELECT COUNT(id_Prateleira) FROM (SELECT id_droppoint, id_Prateleira FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (id_armario)) USING (id_Droppoint)) WHERE id_droppoint =" + DropPoint.getId() + ")"
+                + "INNER JOIN "
+                + "(SELECT id_prateleira FROM Prateleira NATURAL JOIN Entrega WHERE id_prateleira NOT IN ("
+                + "SELECT id_prateleira FROM "
+                + "Entrega JOIN Recolha ON Entrega.id_Entrega = Recolha.id_Entrega)) USING (id_prateleira)");
+        try {
+            while (executeQuery2.next()) {
+                String ocupada = "";
+
+                ocupada += executeQuery2.getString("COUNT(id_Prateleira)");
+                busy = Double.valueOf(ocupada);
+                
+                
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        double rate = busy/capacity;
+       
+
+        return rate;
     }
 
 }

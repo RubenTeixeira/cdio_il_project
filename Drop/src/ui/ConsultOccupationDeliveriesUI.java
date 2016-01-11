@@ -40,7 +40,8 @@ public class ConsultOccupationDeliveriesUI {
                     + "1. Consultar Entregas\n"
                     + "2. Consultas Recolhas\n"
                     + "3. Consultar Ocupação\n"
-                    + "4. Voltar\n");
+                    + "4. Consultar Incidentes\n"
+                    + "0. Voltar\n");
             op = utils.ReadFromKeyboard.read();
             switch (op) {
                 case 1:
@@ -56,7 +57,7 @@ public class ConsultOccupationDeliveriesUI {
                     System.out.println(controller.getOccupation());
                     utils.ReadFromKeyboard.pressEnter();
                     break;
-                case 4:
+                case 0:
                     break;
                 default:
                     System.out.println("Opção inválida");
