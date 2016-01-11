@@ -21,9 +21,19 @@ import java.util.logging.Logger;
  * @author vascopinho
  */
 public class SLA {
-    
+    /**
+     * DropPoint List
+     */
     private List<DropPoint> lsdroppoint;
+    
+    /**
+     * HashMap with DropPoint ID and occupancy rate
+     */
     HashMap<Integer, Double> map;
+    
+    /**
+     * Database Connection (DAO)
+     */
     private DropPointDAO dpDAO;
     
     public SLA() {
@@ -39,6 +49,11 @@ public class SLA {
         }
     }
     
+    
+    /**
+     * Creates a priority map concerning occupancy rate
+     * @return HashMap with ID and rate
+     */
     public HashMap<Integer, Double> buildPriorityMap(){
         for (DropPoint lsdroppoint1 : lsdroppoint) {
             double occupationRate = dpDAO.getOccupationRate(lsdroppoint1);
