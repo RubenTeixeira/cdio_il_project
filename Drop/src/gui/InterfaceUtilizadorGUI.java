@@ -142,7 +142,7 @@ public class InterfaceUtilizadorGUI extends javax.swing.JFrame {
                 if(idToken){
                     this.dispose();
                     String tokenEstafeta=controller.tokenClient();
-                    JOptionPane.showMessageDialog(this, "Dados da Reserva\nDropPoint: "+dropChoosed.getNome()+"\nToken: "+tokenEstafeta, "Reserva efetuada com sucesso!", JOptionPane.INFORMATION_MESSAGE, null);
+                    JOptionPane.showMessageDialog(this, "Dados da Reserva\nDropPoint: "+dropChoosed.getName()+"\nToken: "+tokenEstafeta, "Reserva efetuada com sucesso!", JOptionPane.INFORMATION_MESSAGE, null);
                 }
                 
             }

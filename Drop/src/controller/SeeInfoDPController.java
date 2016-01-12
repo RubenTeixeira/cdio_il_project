@@ -80,7 +80,7 @@ public class SeeInfoDPController {
      * @return name of the droppoint
      */
     public String getDropPointName() {
-        return this.dropPoint.getNome();
+        return this.dropPoint.getName();
     }
 
     /**
@@ -91,8 +91,8 @@ public class SeeInfoDPController {
      */
     public String getDropPointInfo() throws SQLException{
         return String.format("%s\n%s\n%s",
-                this.dropPoint.getNome(),
-                this.addressDAO.getAdressByID(dropPoint.getIdMorada()),
+                this.dropPoint.getName(),
+                this.addressDAO.getAdressByID(dropPoint.getIdAddress()),
                 this.cellDAO.getCellsByDropPointID(dropPoint.getId()));
     }
 
@@ -102,7 +102,7 @@ public class SeeInfoDPController {
      * @throws SQLException 
      */
     public String getDropPointCoor() throws SQLException{
-        return this.addressDAO.getCoordinatesByAddressID(dropPoint.getIdMorada());
+        return this.addressDAO.getCoordinatesByAddressID(dropPoint.getIdAddress());
     }
 
 }

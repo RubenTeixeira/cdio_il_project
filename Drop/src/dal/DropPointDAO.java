@@ -35,8 +35,8 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
                 while (rs.next()) {
                     DropPoint drop = new DropPoint();
                     drop.setId(rs.getInt("ID_DROPPOINT"));
-                    drop.setNome(rs.getString("NOME_DROPPOINT"));
-                    drop.setIdMorada(rs.getInt("ID_MORADA"));
+                    drop.setName(rs.getString("NOME_DROPPOINT"));
+                    drop.setIdAddress(rs.getInt("ID_MORADA"));
                     drop.setFree_Days(rs.getInt("FREE_DAYS"));
                     lstDroPoint.add(drop);
                 }
