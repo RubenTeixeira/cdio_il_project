@@ -72,6 +72,12 @@ public class MaintenanceDPController {
         cabinet.setMaintenance(1);
         return cabinetDAO.putInMaintenance(cabinet);
     }
+    
+    public boolean putInSuspendMode() {
+        cabinet.setMaintenance(0);
+        return cabinetDAO.update(cabinet);
+    }
+    
 
     /**
      * Stop the Job of Maintenance of Cabinet
