@@ -47,11 +47,13 @@ public class MaintenanceUI {
                             int run = makeMaintenanceUI.run();
                             if (run == -1) {
                                 op = 2;
+                            }else{
+                                 break;
                             }
                         } else {
                             System.out.println("The operation failed\nTry again later!");
+                            break;
                         }
-                        break;
                     case 2:
                         controller.putInSuspendMode();
                         return this;
