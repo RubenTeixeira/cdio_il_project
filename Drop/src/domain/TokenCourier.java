@@ -12,6 +12,7 @@ import dal.DeliveryDAO;
 import dal.CellDAO;
 import persistence.SQLConnection;
 import dal.Table;
+import java.util.Objects;
 
 /**
  *
@@ -59,6 +60,26 @@ public class TokenCourier extends TokenImpl {
             Logger.getLogger(Management.class.getName()).log(Level.SEVERE, 
                     "Error contacting the Database.");
         }
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        TokenCourier other = (TokenCourier) o;
+        if (this.getId()==other.getId() 
+                && this.getGenerationDate()==other.getGenerationDate() 
+                && this.getExpirationDate()==other.getExpirationDate()
+                && this.getState()==other.getState()
+                && this.getCode()==other.getCode()
+                && this.getReservationId()==other.getReservationId()) {
+            return false;
+        }
+        return true;
     }
     
 }

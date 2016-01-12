@@ -73,5 +73,9 @@ public class ParcelPickupController {
     public Delivery getDeliveryByReservationID(int reservationId){
         return getDeliveryDAO().getDeliveryByReservationID(reservationId);
     }
+    
+    public int getNextTokenID(){
+        return getTokenDAO().getNextId();
+    }
   
 }

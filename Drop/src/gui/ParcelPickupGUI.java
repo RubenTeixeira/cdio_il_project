@@ -110,14 +110,14 @@ public class ParcelPickupGUI extends javax.swing.JFrame {
         DateFormat df = new SimpleDateFormat("yy.MM.dd");
         Date today = Calendar.getInstance().getTime();
         String data = df.format(today);
-        Token newToken = new TokenAssistant(controller.getTokenDAO().getNextId(), data, data, 1, code, 0);      
+        Token newToken = new TokenAssistant(controller.getNextTokenID(), data, data, 1, code, 0);      
         if (controller.insertNewToken(newToken)) {
             tokenTXT.setText(code);
         }
         for (Token t : controller.checkValidity()) {
             Delivery delivery = controller.getDeliveryByReservationID(t.getReservationId());
             delivery.setAssistantTokenID(newToken.getId());
-            controller.getDeliveryDAO().update(delivery);
+            controller.updateDelivery(delivery);
         }
     }
 

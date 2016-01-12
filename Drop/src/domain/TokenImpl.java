@@ -37,6 +37,14 @@ public abstract class TokenImpl implements Token {
         this.idReservation = idReservation;
     }
     
+    /**
+     * Constructor with the following parametres:
+     * @param id
+     * @param generationDate
+     * @param expirationDate
+     * @param state
+     * @param code 
+     */
     public TokenImpl(int id, String generationDate, String expirationDate, int state, String code) {
         this.id = id;
         this.generationDate = generationDate;
@@ -45,9 +53,13 @@ public abstract class TokenImpl implements Token {
         this.code = code;
     }
 
+    /**
+     * Constructor with no parametres
+     */
     public TokenImpl() {
     }
 
+    //getter methods
     @Override
     public int getId() {
         return id;
@@ -83,6 +95,7 @@ public abstract class TokenImpl implements Token {
         return idReservation;
     }
 
+    //setter methods
     @Override
     public void setId(int id) {
         this.id = id;
@@ -116,6 +129,26 @@ public abstract class TokenImpl implements Token {
     @Override
     public void setReservationId(int idReserva) {
         this.idReservation = idReserva;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        TokenCourier other = (TokenCourier) o;
+        if (this.id==other.getId() 
+                && this.generationDate==other.getGenerationDate() 
+                && this.expirationDate==other.getExpirationDate()
+                && this.state==other.getState()
+                && this.code==other.getCode()
+                && this.idReservation==other.getReservationId()) {
+            return false;
+        }
+        return true;
     }
 
 }
