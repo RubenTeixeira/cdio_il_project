@@ -15,6 +15,7 @@ public class MaintenanceUI {
     private MaintenanceDPController controller;
     private MakeMaintenanceUI makeMaintenanceUI;
     List<Cabinet> lstOfCabinets;
+    private final int SUSPEND = -1;
 
     private int localDropID = 1;
     static String FILE;
@@ -60,8 +61,8 @@ public class MaintenanceUI {
                     controller.selectCabinet(cabinet);
                     if (controller.putInMaintenance()) {
                         makeMaintenanceUI = new MakeMaintenanceUI(FILE);
-                        int run = makeMaintenanceUI.run();
-                        if (run == -1) {
+                        int flag = makeMaintenanceUI.run();
+                        if (flag == SUSPEND) {
                             menu = 2;
                         } else {
                             controller.stopMaintenance();
