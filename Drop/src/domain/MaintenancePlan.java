@@ -17,7 +17,9 @@ public class MaintenancePlan implements WorkPlan {
     
     private List<Maintenance> planPath;
 
-    
+    /**
+     * Empty constructor
+     */
     public MaintenancePlan() {
         this.planPath = new ArrayList<>();
     }
@@ -28,7 +30,7 @@ public class MaintenancePlan implements WorkPlan {
 
     // Getter and Setter
     public List<Maintenance> getPlanPath() {return planPath;}
-    public void setPlanPath(ArrayList<Maintenance> planPath) {this.planPath = planPath;}
+    public void setPlanPath(List<Maintenance> planPath) {this.planPath = planPath;}
 
     @Override
     public int hashCode() {
