@@ -36,7 +36,7 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
             try {
                 rs.next();
                 maintenance = new Maintenance(
-                        rs.getInt("ID_MANUTENCAO"), dp, rs.getString("DATA_INICIO"), rs.getString("DATA_FIM"));
+                        rs.getInt("ID_MANUTENCAO"), dp, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"));
             } catch (SQLException ex) {
             }
         }
