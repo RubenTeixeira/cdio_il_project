@@ -17,23 +17,22 @@ import maps.domain.Edge;
 public class Main {
 
     static Scanner in = new Scanner(System.in);
+    private static MaintenanceUI maintenanceUI;
     public static final String CREDENTIALS_FILE = "settings/settings.txt";
 
-    public static void main(String[] args) throws SQLException
-    {
+    public static void main(String[] args) throws SQLException {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
 
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
-        versaoGraficaParaCliente();
+        //versaoGraficaParaCliente();
         //versaoConsola();
-        //colabroradorConsola();
+        colaboradorConsola();
         //colaboradorAPP();
 
     }
 
-    public static void menu()
-    {
+    public static void menu() {
         String menu = "---------MENU---------\n"
                 + "1. Open Cell\n"
                 + "2. Maintenance Assistant\n"
@@ -41,16 +40,13 @@ public class Main {
         System.out.println(menu);
     }
 
-    private static void versaoConsola() throws SQLException
-    {
+    private static void versaoConsola() throws SQLException {
         int op;
 
-        do
-        {
+        do {
             menu();
             op = in.nextInt();
-            switch (op)
-            {
+            switch (op) {
                 case 1:
                     new OpenCellUI();
 
@@ -67,34 +63,41 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void versaoGraficaParaCliente()
-    {
+    private static void versaoGraficaParaCliente() {
         new DropGUI(CREDENTIALS_FILE);
     }
 
-    private static void colaboradorConsola() throws SQLException
-    {
+    private static void colaboradorConsola() throws SQLException {
+        
         System.out.println("--------------Maintenance Assistant------------");
         String menu = "1. Start Maintenance\n"
                 + "2. Pickup past Deliveries\n"
                 + "3. Make Maintenance\n"
+                + "4. Resume Maintenance\n"
                 + "0. Go back";
         int op;
-        do
-        {
+        do {
             System.out.println(menu);
             op = in.nextInt();
-            switch (op)
-            {
+            switch (op) {
                 case 1:
-                    new MaintenanceUI(CREDENTIALS_FILE);
+                    maintenanceUI = new MaintenanceUI(CREDENTIALS_FILE);
+                    MaintenanceUI run = maintenanceUI.run();
+                    if(run != null){
+                        // CHAMAR O QUE FOR Necessario;
+                    }
                     break;
                 case 2:
-                   new MaintenancePickupUI();
+                    new MaintenancePickupUI();
                     break;
                 case 3:
                     new MakeMaintenanceUI(CREDENTIALS_FILE);
                     break;
+                case 4:
+                    if(maintenanceUI!=null)
+                        maintenanceUI.resume();
+                    else
+                        System.out.println("Nothing in resume mode!");
                 case 0:
                     versaoConsola();
                     break;
@@ -106,23 +109,18 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void gestorConsola()
-    {
+    private static void gestorConsola() {
         System.out.println("-----------------Manager---------------");
         String menu = "1. Droppoint Management\n"
                 + "0. Exit";
         int op = 0;
-        do
-        {
+        do {
             System.out.println(menu);
-            switch (op)
-            {
+            switch (op) {
                 case 1:
-                    try
-                    {
+                    try {
                         new ConsultOccupationDeliveriesUI();
-                    } catch (RuntimeException e)
-                    {
+                    } catch (RuntimeException e) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());
                     }
                     break;
@@ -137,8 +135,7 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void colaboradorAPP()
-    {
+    private static void colaboradorAPP() {
         new ColaboratorAPPGUI();
     }
 

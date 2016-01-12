@@ -11,53 +11,68 @@ import java.util.Scanner;
  * @author 1130874
  */
 public class MaintenanceUI {
-    
 
     private MaintenanceDPController controller;
+    private MakeMaintenanceUI makeMaintenanceUI;
     private int localDropID = 1;
-    static Scanner in = new Scanner(System.in);
     static String FILE;
-
-    public MaintenanceUI(String file) throws SQLException
-    {
+    static Scanner in = new Scanner(System.in);
+    
+    public MaintenanceUI(String file) throws SQLException {
         FILE = file;
         this.controller = new MaintenanceDPController(file);
-        run();
+
     }
 
-    private void run() throws SQLException
-    {
+    public MaintenanceUI run() throws SQLException {
         int num = 1;
         System.out.println("-------------Cabinets-----------\n");
         List<Cabinet> lstOfCabinets = controller.getListOfCabinetsNotInMaintenance(localDropID);
-        if (!lstOfCabinets.isEmpty())
-        {
-            for (Cabinet cabinet : lstOfCabinets)
-            {
+        if (!lstOfCabinets.isEmpty()) {
+            for (Cabinet cabinet : lstOfCabinets) {
                 System.out.println(num + ". " + cabinet.getName());
                 num++;
             }
-            System.out.println("0. Go Back");
-            System.out.println("Select Cabinet:");
-            int op = in.nextInt();
-            if (op != 0)
-            {
-                Cabinet cabinet = lstOfCabinets.get(op - 1);
-                controller.selectCabinet(cabinet);
-                if (controller.putInMaintenance())
-                {
-                    new MakeMaintenanceUI(FILE);
-                } else
-                {
-                    System.out.println("The operation failed\nTry again later!");
-                    System.out.println(" ");
+            int op = 0;
+            do {
+                System.out.println("1 - Make maintenance\n2 - Suspend maintenance\n3 - Back");
+                op = in.nextInt();
+
+                switch (op) {
+                    case 1:
+                        Cabinet cabinet = lstOfCabinets.get(op - 1);
+                        controller.selectCabinet(cabinet);
+                        if (controller.putInMaintenance()) {
+                            makeMaintenanceUI = new MakeMaintenanceUI(FILE);
+                            int run = makeMaintenanceUI.run();
+                            if (run == -1) {
+                                op = 2;
+                            }
+                        } else {
+                            System.out.println("The operation failed\nTry again later!");
+                        }
+                        break;
+                    case 2:
+                        controller.putInSuspendMode();
+                        return this;
+                    case 3:
+                        return null;
+                    default:
+                        System.out.println("Option not aviable!");
+
                 }
-            }
-        } else
-        {
+            } while (op != 0);
+
+        } else {
             System.out.println("Cabinets already in maintenance...\nPlease try again later...");
             System.out.println(" ");
         }
+        return null;
     }
-}
 
+    public void resume() throws SQLException {
+        controller.putInMaintenance();
+        makeMaintenanceUI.resume();
+    }
+
+}

@@ -24,13 +24,14 @@ import utils.ReadFromKeyboard;
 class MakeMaintenanceUI {
 
     private MakeMaintenanceController controller;
+    private Deque<Cell> cellsToOpen;
 
     public MakeMaintenanceUI(String file) throws SQLException {
         controller = new MakeMaintenanceController(file);
-        run();
+
     }
 
-    private void run() throws SQLException {
+    public int run() throws SQLException {
         System.out.println("Select Cabinet ID:");
 
         List<Cabinet> listCabinetsInMaintenance = new ArrayList<>();
@@ -49,26 +50,31 @@ class MakeMaintenanceUI {
         int op = ReadFromKeyboard.read();
         controller.selectCabinet(listCabinetsInMaintenance.get(op - 1));
 
-        Deque<Cell> cellsToOpen = controller.cellsToOpen();
-        Iterator<Cell> iterator = cellsToOpen.iterator();
+        cellsToOpen = controller.cellsToOpen();
+        return runMaintenance(cellsToOpen);
+    }
 
+    public int runMaintenance(Deque<Cell> cellsToOpen) throws SQLException {
+        int i;
+        int op;
+        Iterator<Cell> iterator = cellsToOpen.iterator();
         while (iterator.hasNext()) {
             Cell next = iterator.next();
             System.out.println("Open " + next.getDescription() + " Confirm y/n?");
             String confirm = ReadFromKeyboard.readString();
-            if(confirm.equalsIgnoreCase("Y")) {
-                if(controller.openCell(next)) {
+            if (confirm.equalsIgnoreCase("Y")) {
+                if (controller.openCell(next)) {
                     System.out.println("Cell is open!");
                     System.out.println("Insert report:");
                     String report = ReadFromKeyboard.readString();
-                    if(!controller.insertReport(report)) {
+                    if (!controller.insertReport(report)) {
                         System.out.println("Not possible register report!");
                     }
                     do {
                         System.out.println("Is cell operational? (0-No, 1-Yes)");
                         op = ReadFromKeyboard.read();
                     } while (op != 0 && op != 1);
-                    if(op == 0) {
+                    if (op == 0) {
                         controller.createIncident();
                         System.out.println("Choose the incident type:");
                         List<IncidentType> listIncidType = controller.getIncidentsType();
@@ -81,21 +87,32 @@ class MakeMaintenanceUI {
                         do {
                             i_type = ReadFromKeyboard.read();
                         } while (i_type <= 0 || i_type > i);
-                        if(!controller.selectIncidentType(i_type))
-                        {
+                        if (!controller.selectIncidentType(i_type)) {
                             System.out.println("Not possible register the incident!");
                         }
                     }
                     System.out.println("Cell is closed y/n?");
                     confirm = ReadFromKeyboard.readString();
-                    if(confirm.equalsIgnoreCase("y")) {
-                        if(controller.closeCell()) {
+                    if (confirm.equalsIgnoreCase("y")) {
+                        if (controller.closeCell()) {
                             System.out.println("Successfully processed!");
+                            cellsToOpen.remove(next);
+                            System.out.println("Suspend Maintenabce? y/n");
+                            confirm = ReadFromKeyboard.readString();
+                            if (confirm.equalsIgnoreCase("y")) {
+                                return -1;
+                            }
                         }
                     }
 
                 }
             }
         }
+        return 0;
     }
+
+    public void resume() throws SQLException {
+        runMaintenance(cellsToOpen);
+    }
+
 }
