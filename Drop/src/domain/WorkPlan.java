@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface WorkPlan {
 
-    //void setWorkList(List<> list);
-    List<WorkPlan> calcPlanPath();
+    void setPlannableList(List<Plannable> list);
+    List<Plannable> calcPlanPath();
 
     @Override
     String toString();

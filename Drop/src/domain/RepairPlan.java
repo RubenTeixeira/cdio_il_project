@@ -69,7 +69,12 @@ public class RepairPlan implements WorkPlan {
     }
 
     @Override
-    public List<WorkPlan> calcPlanPath() {
+    public void setPlannableList(List<Plannable> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Plannable> calcPlanPath() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -14,6 +14,7 @@ import java.util.Objects;
 class Repair implements Plannable {
     
     private int incidentID;
+    private DropPoint droppoint;
     private String repairDate;
     private String observations;
     private String partsUsed;
@@ -26,6 +27,14 @@ class Repair implements Plannable {
         return incidentID;
     }
 
+    public DropPoint getDroppoint() {
+        return droppoint;
+    }
+
+    public void setDroppoint(DropPoint droppoint) {
+        this.droppoint = droppoint;
+    }
+    
     public void setIncidentID(int incidentID) {
         this.incidentID = incidentID;
     }
