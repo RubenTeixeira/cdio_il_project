@@ -9,6 +9,6 @@ package domain;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-class Repair implements Plannable {
+public interface Plannable {
     
 }
