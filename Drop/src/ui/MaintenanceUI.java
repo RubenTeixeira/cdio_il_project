@@ -14,17 +14,19 @@ public class MaintenanceUI {
 
     private MaintenanceDPController controller;
     private MakeMaintenanceUI makeMaintenanceUI;
+    List<Cabinet> lstOfCabinets;
+
     private int localDropID = 1;
     static String FILE;
     static Scanner in = new Scanner(System.in);
-    
+
     public MaintenanceUI(String file) throws SQLException {
         FILE = file;
         this.controller = new MaintenanceDPController(file);
 
     }
 
-    public MaintenanceUI run() throws SQLException {
+    public void displayCabinets() {
         int num = 1;
         System.out.println("-------------Cabinets-----------\n");
         List<Cabinet> lstOfCabinets = controller.getListOfCabinetsNotInMaintenance(localDropID);
@@ -33,42 +35,57 @@ public class MaintenanceUI {
                 System.out.println(num + ". " + cabinet.getName());
                 num++;
             }
-            int op = 0;
-            do {
-                System.out.println("1 - Make maintenance\n2 - Suspend maintenance\n3 - Back");
-                op = in.nextInt();
+        }
+    }
 
-                switch (op) {
-                    case 1:
-                        Cabinet cabinet = lstOfCabinets.get(op - 1);
-                        controller.selectCabinet(cabinet);
-                        if (controller.putInMaintenance()) {
-                            makeMaintenanceUI = new MakeMaintenanceUI(FILE);
-                            int run = makeMaintenanceUI.run();
-                            if (run == -1) {
-                                op = 2;
-                            }else{
-                                 break;
-                            }
+    public MaintenanceUI run() throws SQLException {
+
+        int cabinetOp;
+
+        displayCabinets();
+
+        if (lstOfCabinets.isEmpty()) {
+            return null;
+        }
+
+        int menu = 0;
+        do {
+            System.out.println("1 - Make maintenance\n2 - Suspend maintenance\n3 - Back");
+            menu = in.nextInt();
+
+            switch (menu) {
+                case 1:
+                    cabinetOp = in.nextInt();
+                    Cabinet cabinet = lstOfCabinets.get(cabinetOp - 1);
+                    controller.selectCabinet(cabinet);
+                    if (controller.putInMaintenance()) {
+                        makeMaintenanceUI = new MakeMaintenanceUI(FILE);
+                        int run = makeMaintenanceUI.run();
+                        if (run == -1) {
+                            menu = 2;
                         } else {
-                            System.out.println("The operation failed\nTry again later!");
+                            controller.stopMaintenance();
+                            displayCabinets();
+                            if (lstOfCabinets.isEmpty()) {
+                                return null;
+                            }
                             break;
                         }
-                    case 2:
-                        controller.putInSuspendMode();
-                        return this;
-                    case 3:
-                        return null;
-                    default:
-                        System.out.println("Option not aviable!");
+                    } else {
+                        System.out.println("The operation failed\nTry again later!");
+                        break;
+                    }
+                case 2:
+                    controller.putInSuspendMode();
+                    return this;
+                case 3:
+                    return null;
+                default:
+                    System.out.println("Option not aviable!");
 
-                }
-            } while (op != 0);
+            }
+        } while (menu != 0);
 
-        } else {
-            System.out.println("Cabinets already in maintenance...\nPlease try again later...");
-            System.out.println(" ");
-        }
         return null;
     }
 
