@@ -18,12 +18,16 @@ public class MaintenancePlan implements WorkPlan {
     private List<Maintenance> planPath;
 
     /**
-     * Empty constructor
+     * Constructor with no parametre
      */
     public MaintenancePlan() {
         this.planPath = new ArrayList<>();
     }
 
+    /**
+     * Constructor with a planPath as parametre
+     * @param planPath 
+     */
     public MaintenancePlan(List<Maintenance> planPath) {
         this.planPath = planPath;
     }
@@ -39,6 +43,11 @@ public class MaintenancePlan implements WorkPlan {
         return hash;
     }
 
+    /**
+     * Checks if the parametre is equal to the instance of MaintenancePlan
+     * @param obj
+     * @return 
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -54,6 +63,10 @@ public class MaintenancePlan implements WorkPlan {
         return true;
     }
 
+    /**
+     * Description of an instance of MaintenancePlan
+     * @return 
+     */
     @Override
     public String toString() {
         StringBuilder planStr = new StringBuilder();

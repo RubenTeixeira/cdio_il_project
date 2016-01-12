@@ -22,17 +22,31 @@ public class Delivery implements CellTransaction {
     private int courierTokenID;
     private int assistantTokenID;
 
+    /**
+     * Constructor with cellID, reservationID and tokenID as parametres
+     * @param cellID
+     * @param reservationID
+     * @param tokenID 
+     */
     public Delivery(int cellID, int reservationID, int tokenID) {
         this.cellID = cellID;
         this.reservationID = reservationID;
         this.courierTokenID = tokenID;
     }
 
+    /**
+     * Constructor with reservationID and tokenID as parametres
+     * @param reservationID
+     * @param tokenID 
+     */
     public Delivery(int reservationID, int tokenID) {
         this.reservationID = reservationID;
         this.courierTokenID = tokenID;
     }
 
+    /**
+     * Constructor with no parametres
+     */
     public Delivery() {
     }
 
@@ -63,6 +77,12 @@ public class Delivery implements CellTransaction {
 
     public int getAssistantTokenID() {
         return assistantTokenID;
+    }   
+
+    private String getDateStr() {
+        Date data = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        return ft.format(data);
     }
 
     /*Setter methods*/
@@ -85,12 +105,6 @@ public class Delivery implements CellTransaction {
         this.closedDate = getDateStr();
     }
 
-    private String getDateStr() {
-        Date data = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        return ft.format(data);
-    }
-
     public void setReservationID(int reservationID) {
         this.reservationID = reservationID;
     }
@@ -103,11 +117,19 @@ public class Delivery implements CellTransaction {
         this.assistantTokenID = assistantTokenID;
     }
 
+    /**
+     * Validates a Delivery instance
+     * @return 
+     */
     @Override
     public boolean validate() {
         return cellID > 0 && reservationID > 0 && courierTokenID > 0 && openedDate != null && closedDate != null;
     }
 
+    /**
+     * Description of a Delivery instance
+     * @return 
+     */
     @Override
     public String toString() {
         return "Delivery{" + "deliveryID=" + deliveryID + ", cellID=" + cellID + ", openedDate=" + openedDate + ", closedDate=" + closedDate + ", reservationID=" + reservationID + ", tokenID=" + courierTokenID + '}';

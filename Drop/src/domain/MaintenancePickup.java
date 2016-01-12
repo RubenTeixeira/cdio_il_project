@@ -18,6 +18,15 @@ public class MaintenancePickup {
     private int tokenId;
     private String filePath;
 
+    /**
+     * Constructor of MaintenancePickup with the following parametres:
+     * @param maintenancePickupId
+     * @param dateOpen
+     * @param dateClose
+     * @param deliveryId
+     * @param tokenId
+     * @param filePath 
+     */
     public MaintenancePickup(int maintenancePickupId, String dateOpen, String dateClose, int deliveryId, int tokenId, String filePath) {
         this.maintenancePickupId=maintenancePickupId;
         this.dateOpen=dateOpen;
@@ -27,6 +36,9 @@ public class MaintenancePickup {
         this.filePath=filePath;
     }
     
+    /**
+     * Constructor of MaintenancePickup with no parametres
+     */
     public MaintenancePickup(){
     }
 
@@ -80,6 +92,10 @@ public class MaintenancePickup {
         this.filePath = filePath;
     }
     
+    /**
+     * Validates an instance of MaintenancePickup
+     * @return 
+     */
     public boolean validate() {
         return maintenancePickupId > 0 
                 && deliveryId > 0 
@@ -88,6 +104,10 @@ public class MaintenancePickup {
                 && dateClose != null;
     }
 
+    /**
+     * Description of an instance of MaintenancePickup
+     * @return 
+     */
     @Override
     public String toString() {
         return "Recolha de Manutenção: \n"

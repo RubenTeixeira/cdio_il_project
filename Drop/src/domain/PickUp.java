@@ -23,6 +23,13 @@ public class PickUp implements CellTransaction {
     public PickUp() {
     }
 
+    /**
+     * Constructor with the following parametres:
+     * @param pickUpID
+     * @param deliveryID
+     * @param openedDate
+     * @param tokenID 
+     */
     public PickUp(int pickUpID, int deliveryID, String openedDate, int tokenID) {
         this.pickUpID = pickUpID;
         this.deliveryID = deliveryID;
@@ -30,6 +37,11 @@ public class PickUp implements CellTransaction {
         this.tokenID = tokenID;
     }
 
+    /**
+     * Constructor with the following parametres:
+     * @param deliveryID
+     * @param tokenID 
+     */
     public PickUp(int deliveryID, int tokenID) {
         this.deliveryID = deliveryID;
         this.tokenID = tokenID;
@@ -74,11 +86,19 @@ public class PickUp implements CellTransaction {
         this.deliveryID = deliveryID;
     }
 
+    /**
+     * Validates an instance of Pickup
+     * @return 
+     */
     @Override
     public boolean validate() {
         return deliveryID > 0 && tokenID > 0 && openedDate != null && closedDate != null;
     }
 
+    /**
+     * Description of an instance of Pickup
+     * @return 
+     */
     @Override
     public String toString() {
         return "PickUp{" + "pickUpID=" + pickUpID + ", deliveryID=" + deliveryID + ", openedDate=" + openedDate + ", closedDate=" + closedDate + ", tokenID=" + tokenID + '}';
