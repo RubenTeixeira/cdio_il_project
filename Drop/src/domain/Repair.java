@@ -11,10 +11,10 @@ import java.util.Objects;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-class Repair implements Plannable {
+public class Repair implements Plannable {
     
     private int incidentID;
-    private DropPoint droppoint;
+    private DropPoint dropPoint;
     private String repairDate;
     private String observations;
     private String partsUsed;
@@ -27,12 +27,13 @@ class Repair implements Plannable {
         return incidentID;
     }
 
-    public DropPoint getDroppoint() {
-        return droppoint;
+    @Override
+    public DropPoint getDropPoint() {
+        return dropPoint;
     }
 
-    public void setDroppoint(DropPoint droppoint) {
-        this.droppoint = droppoint;
+    public void setDropPoint(DropPoint dropPoint) {
+        this.dropPoint = dropPoint;
     }
     
     public void setIncidentID(int incidentID) {

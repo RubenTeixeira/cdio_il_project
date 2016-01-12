@@ -5,9 +5,18 @@
  */
 package domain;
 
+import dal.DropPointDAO;
+import dal.MaintenanceDAO;
+import dal.Table;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import persistence.SQLConnection;
 
 /**
  *
@@ -22,6 +31,7 @@ public class MaintenancePlan implements WorkPlan {
      */
     public MaintenancePlan() {
         this.planPath = new ArrayList<>();
+        populateMaintenanceList();
     }
 
     /**
@@ -77,13 +87,31 @@ public class MaintenancePlan implements WorkPlan {
     }
 
     @Override
-    public void setPlannableList(List<Plannable> list) {
+    public List<Plannable> calcPlanPath() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<Plannable> calcPlanPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void populateMaintenanceList() {
+        SQLConnection manager = persistence.OracleDb.getInstance();
+        DropPointDAO dropPointDAO = null;
+        MaintenanceDAO maintenanceDAO = null;
+        List<DropPoint> lstDropPoint;
+        
+        try {
+            dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
+            maintenanceDAO = (MaintenanceDAO)manager.getDAO(Table.MANUTENCAO);
+        } catch (SQLException ex) {
+            Logger.getLogger(MaintenancePlan.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (dropPointDAO != null) {
+            lstDropPoint = dropPointDAO.getListDropPoints();
+            Map<DropPoint,Integer> mapDropPoints = new HashMap();
+            for (DropPoint dp : lstDropPoint) {
+                //mapDropPoints.put(dp, )
+            }
+                
+        }
     }
     
     

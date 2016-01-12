@@ -12,15 +12,19 @@ import java.util.List;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-class Maintenance implements Plannable {
+public class Maintenance implements Plannable {
     
+    private int id;
     private DropPoint dropPoint;
-    private List<Cell> lstCells;
-    private String date;
+    private List<Integer> lstCells;
+    private String startDate;
+    private String finishDate;
 
-    public Maintenance(DropPoint dropPoint, String date) {
+    public Maintenance(int id, DropPoint dropPoint, String startDate, String finishDate) {
+        this.id = id;
         this.dropPoint = dropPoint;
-        this.date = date;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
         this.lstCells = new ArrayList<>();
     }
 
@@ -28,6 +32,15 @@ class Maintenance implements Plannable {
         this.lstCells = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
     public DropPoint getDropPoint() {
         return dropPoint;
     }
@@ -36,22 +49,36 @@ class Maintenance implements Plannable {
         this.dropPoint = dropPoint;
     }
 
-    public List<Cell> getLstCells() {
+    public List<Integer> getLstCells() {
         return lstCells;
     }
 
-    public void setLstCells(List<Cell> lstCells) {
+    public void setLstCells(List<Integer> lstCells) {
         this.lstCells = lstCells;
     }
 
-    public String getDate() {
-        return date;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(String finishDate) {
+        this.finishDate = finishDate;
     }
     
+    public boolean addCellMaintenance(Integer id) {
+        return this.lstCells.add(id);
+    }
     
+    public boolean removeCellMaintenance(Integer id) {
+        return this.lstCells.remove(id);
+    }
     
 }

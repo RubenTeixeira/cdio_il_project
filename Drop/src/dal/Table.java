@@ -19,9 +19,11 @@ public enum Table {
     DROPPOINT,
     INCIDENT,
     INCIDENT_TYPE,
+    MANUTENCAO,
     MAINTENANCE_PICKUP,
     MANAGER,
     PICKUP,
+    REPAIR,
     RESERVATION,
     TOKEN,
     TOKEN_TYPE

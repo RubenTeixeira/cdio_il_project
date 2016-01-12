@@ -13,7 +13,6 @@ import java.util.List;
  */
 public interface WorkPlan {
 
-    void setPlannableList(List<Plannable> list);
     List<Plannable> calcPlanPath();
 
     @Override
