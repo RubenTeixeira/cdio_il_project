@@ -57,4 +57,10 @@ public interface Token {
      */
     void close(SQLConnection manager, CellTransaction transaction);
  
+    /**
+     * Compares the parametre with the previous instance of token and returns true if every attribute is the same
+     * @param o 
+     * @return
+     */
+    boolean equals(Object o);
 }
