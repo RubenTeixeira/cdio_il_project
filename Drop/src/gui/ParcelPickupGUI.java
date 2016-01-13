@@ -7,6 +7,7 @@ package gui;
 
 import controller.ParcelPickupController;
 import domain.Delivery;
+import domain.DropPoint;
 import domain.Token;
 import domain.TokenAssistant;
 import java.awt.TextField;
@@ -28,20 +29,18 @@ import javax.swing.JOptionPane;
  */
 public class ParcelPickupGUI extends javax.swing.JFrame {
 
-    //private JFrame parentFrame;
+    private JFrame parentFrame;
+    private DropPoint dropPoint;
     private ParcelPickupController controller;
 
-    //private DefaultComboBoxModel modelTokenCB;
-    public ParcelPickupGUI() {
+    public ParcelPickupGUI(JFrame parentFrame, DropPoint dp) {
         super("Recolha de Encomendas não Levantadas");
-        //this.parentFrame = parentFrame;
+        this.parentFrame = parentFrame;
+        dropPoint = dp;
         controller = new ParcelPickupController();
         initComponents();
         tokenTXT.setEditable(false);
         generateToken();
-        /*modelTokenCB = new DefaultComboBoxModel();
-        tokenCB.setModel(modelTokenCB);
-        addElementsTokenCB();*/
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -110,14 +109,16 @@ public class ParcelPickupGUI extends javax.swing.JFrame {
         DateFormat df = new SimpleDateFormat("yy.MM.dd");
         Date today = Calendar.getInstance().getTime();
         String data = df.format(today);
-        Token newToken = new TokenAssistant(controller.getNextTokenID(), data, data, 1, code, 0);      
+        Token newToken = new TokenAssistant(controller.getNextTokenID(), data, data, 1, code, 0);
         if (controller.insertNewToken(newToken)) {
             tokenTXT.setText(code);
         }
         for (Token t : controller.checkValidity()) {
-            Delivery delivery = controller.getDeliveryByReservationID(t.getReservationId());
-            delivery.setAssistantTokenID(newToken.getId());
-            controller.updateDelivery(delivery);
+            Delivery delivery = controller.getDeliveryByReservationIDFromDP(t.getReservationId(), dropPoint);
+            if (delivery != null) {
+                delivery.setAssistantTokenID(newToken.getId());
+                controller.updateDelivery(delivery);
+            }
         }
     }
 
