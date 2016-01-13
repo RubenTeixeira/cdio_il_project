@@ -91,9 +91,11 @@ public class RepairPlan implements WorkPlan {
     @Override
     public String toString() {
         StringBuilder planStr = new StringBuilder();
-        for (Repair repair : planPath)
-            planStr.append(repair+"\n");
-        
+        int i = 1;
+        for (Repair repair : planPath) {
+            planStr.append(i).append(" - ").append(repair).append("\n");
+            i++;
+        }
         return planStr.toString();
     }
 
@@ -102,8 +104,8 @@ public class RepairPlan implements WorkPlan {
         List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap());
         List<Incident> lstIncidents;
         DropPoint dp;
-                
-        for (int i = 0; i < lstDropPoints.size(); i++) {
+        int size = lstDropPoints.size();
+        for (int i = 0; i < size; i++) {
             dp = lstDropPoints.get(i);
             lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
             for (Incident in : lstIncidents)
@@ -133,6 +135,15 @@ public class RepairPlan implements WorkPlan {
         }
         
         return true;
+    }
+
+    @Override
+    public String getElements() {
+        StringBuilder strB = new StringBuilder();
+        for (String in : incidentDAO.getAllIncidents())
+            strB.append(in).append("\n");
+        
+        return strB.toString();
     }
     
 }

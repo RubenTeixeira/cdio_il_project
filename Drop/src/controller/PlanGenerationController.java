@@ -27,11 +27,9 @@ public class PlanGenerationController {
     /**
      * Controller Constructor
      *
-     * @param file settings file containing the credentials to create the DAL
-     * SQL connection
      */
-    public PlanGenerationController(String file) {
-        manager = persistence.OracleDb.getInstance(file);
+    public PlanGenerationController() {
+        manager = persistence.OracleDb.getInstance();
     }
 
     public boolean startRepairPlanGeneration() {
@@ -53,13 +51,18 @@ public class PlanGenerationController {
         }
         return true;
     }
+    
+    public String getStartingList() {
+        return this.plan.getElements();
+    }
 
-    public String getPlannableList() {
+    public String getPlannedList() {
         this.plan.calcPlanPath();
         return this.plan.toString();
     }
 
-    public void submitPlan(List<DropPoint> list) {
+    public void submitPlan() {
         this.plan.submitPlanPath();
     }
+
 }

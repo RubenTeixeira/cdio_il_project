@@ -133,6 +133,25 @@ public class IncidentDAO extends GenericDAO<Incident> {
         return lstincidents;
     }
     
-    
+    public List<String> getAllIncidents() {
+        List<String> lstincidents = new ArrayList<>();
+        ResultSet rs = executeQuery("SELECT t.DESCRIPTION, p.ID_PRATELEIRA, a.ID_ARMARIO, d.NOME_DROPPOINT  FROM INCIDENT i, INCIDENT_TYPE t, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
+                                "      WHERE i.ID_INCIDENT_TYPE = t.ID_INCIDENT_TYPE\n" +
+                                "      AND i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
+                                "      AND p.ID_ARMARIO = a.ID_ARMARIO\n" +
+                                "      AND a.ID_DROPPOINT = d.ID_DROPPOINT");
+        if (rs != null) {
+                try {
+                    while (rs.next()) {
+                        lstincidents.add(
+                                rs.getString("NOME_DROPPOINT")+": "+rs.getString("DESCRIPTION")
+                                        +" on Cell Nº "+rs.getInt("ID_PRATELEIRA")
+                                        +" Cabinet Nº "+rs.getInt("ID_ARMARIO"));
+                    }
+                } catch (SQLException ex) {
+                }
+        }
+        return lstincidents;
+    }
 
 }

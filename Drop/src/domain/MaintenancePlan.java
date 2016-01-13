@@ -98,9 +98,11 @@ public class MaintenancePlan implements WorkPlan {
     @Override
     public String toString() {
         StringBuilder planStr = new StringBuilder();
-        for (Maintenance maintenance : planPath)
-            planStr.append(maintenance+"\n");
-        
+        int i = 1;
+        for (Maintenance maintenance : planPath) {
+            planStr.append(i).append(" - ").append(maintenance).append("\n");
+            i++;
+        }
         return planStr.toString();
     }
 
@@ -124,14 +126,7 @@ public class MaintenancePlan implements WorkPlan {
     private Map<DropPoint, Float> createDropPointMap() {
         SQLConnection manager = persistence.OracleDb.getInstance();
         List<DropPoint> lstDropPoint;
-        
-        try {
-            
-            maintenanceDAO = (MaintenanceDAO)manager.getDAO(Table.MANUTENCAO);
-        } catch (SQLException ex) {
-            Logger.getLogger(MaintenancePlan.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
         if (dropPointDAO != null) {
             lstDropPoint = dropPointDAO.getListDropPoints();
             Map<DropPoint,Float> mapDropPoints = new HashMap();
@@ -165,6 +160,15 @@ public class MaintenancePlan implements WorkPlan {
         }
         
         return true;
+    }
+
+    @Override
+    public String getElements() {
+        StringBuilder strB = new StringBuilder();
+        for (DropPoint dp : dropPointDAO.getListDropPoints())
+            strB.append(dp.getName());
+        
+        return strB.toString();
     }
     
     
