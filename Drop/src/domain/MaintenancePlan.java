@@ -8,6 +8,7 @@ package domain;
 import dal.DropPointDAO;
 import dal.MaintenanceDAO;
 import dal.Table;
+import esinf.dropGraph.GraphDropPointNet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +89,8 @@ public class MaintenancePlan implements WorkPlan {
     @Override
     public List<Plannable> calcPlanPath() {
         Map<DropPoint, Float> map = createDropPointMap();
-        return esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(map); // .. a alterar nome do metodo
+        GraphDropPointNet graphDropPointNet = new GraphDropPointNet();
+        return graphDropPointNet.buildPathWithPriority(map);
     }
 
 
