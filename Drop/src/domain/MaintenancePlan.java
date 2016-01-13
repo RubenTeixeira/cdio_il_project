@@ -32,6 +32,7 @@ public class MaintenancePlan implements WorkPlan {
     private List<Maintenance> planPath;
     private MaintenanceDAO maintenanceDAO;
     private DropPointDAO dropPointDAO;
+    private GraphDropPointNet graph;
 
     /**
      * Constructor with no parametre
@@ -42,6 +43,7 @@ public class MaintenancePlan implements WorkPlan {
         SQLConnection manager = persistence.OracleDb.getInstance();
         maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
         dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
+        graph = new GraphDropPointNet();
     }
 
     /**
@@ -108,7 +110,7 @@ public class MaintenancePlan implements WorkPlan {
     @Override
     public void calcPlanPath() {
         Map<DropPoint, Float> map = createDropPointMap();
-        List<DropPoint> lstDropPoints = esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(map); // .. a alterar nome do metodo
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map); // .. a alterar nome do metodo
         
         for (int i = 0; i < lstDropPoints.size(); i++) {
             DropPoint dp = lstDropPoints.get(i);
