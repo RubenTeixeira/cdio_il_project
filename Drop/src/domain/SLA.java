@@ -56,11 +56,11 @@ public class SLA {
      */
     public HashMap<Integer, Double> buildPriorityMap(){
         for (DropPoint lsdroppoint1 : lsdroppoint) {
-            double occupationRate = dpDAO.getOccupationRate(lsdroppoint1);
-            map.put(lsdroppoint1.getId(), occupationRate);
+            double priorityRate = dpDAO.getPriority(lsdroppoint1);
+            map.put(lsdroppoint1.getId(), priorityRate);
         }
         
         return map;
-    }   
-
+    }
+    
 }
