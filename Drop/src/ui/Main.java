@@ -4,6 +4,7 @@ import dal.AddressDAO;
 import dal.DropPointDAO;
 import dal.GenericDAO;
 import dal.Table;
+import domain.DropPoint;
 import esinf.graph.Graph;
 import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
@@ -11,12 +12,11 @@ import static java.lang.System.exit;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import maps.domain.RequestAPI;
-import maps.domain.Edge;
-import maps.domain.Point;
 import persistence.SQLConnection;
 
 /**
@@ -36,10 +36,22 @@ public class Main {
         AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
         
         esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
-        gra.buildGraph(dao.getListDropPoints(), adressDao.getListOfAddress());
-        gra.show();
-        ArrayList<Deque<Point>> allPath = gra.allPath(null, null);
-        System.out.println("");
+        
+        HashMap<DropPoint,Float> m = new HashMap<>();
+        
+        List<DropPoint> listDropPoints = dao.getListDropPoints();
+        DropPoint get = listDropPoints.get(0);
+        DropPoint get1 = listDropPoints.get(1);
+        DropPoint get2 = listDropPoints.get(2);
+        Float fg = (float) 2.0;
+        Float fg1 = (float) 3.0;
+        Float fg12 = new Float(3.0);
+        m.put(get, fg);
+        m.put(get1, fg1);
+        m.put(get1, fg12);
+        
+        gra.buildPathWithPriority(m);
+        
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
         //versaoGraficaParaCliente();
