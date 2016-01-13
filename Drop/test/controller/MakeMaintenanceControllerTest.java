@@ -134,7 +134,7 @@ public class MakeMaintenanceControllerTest {
         System.out.println("closeCell");
         int op = 0;
         boolean expResult = true;
-        boolean result = instance.closeCell(op);
+        boolean result = instance.closeCell();
         assertEquals(expResult, result);
     }
 

@@ -56,7 +56,7 @@ public class AnomalyReportController {
         StringBuilder strBuild = new StringBuilder();
         
         strBuild.append("This is an anomaly notification for the Authorities.\n");
-        strBuild.append("\nLocation: "+this.dropPoint.getNome()+"\n");
+        strBuild.append("\nLocation: "+this.dropPoint.getName()+"\n");
         strBuild.append("\nDescription:\n");
         strBuild.append(this.description+"\n");
         strBuild.append("\nReporter:\nDropPoint Inc.\n\nBest Regards.");

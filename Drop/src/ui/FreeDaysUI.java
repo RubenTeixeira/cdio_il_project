@@ -26,7 +26,7 @@ class FreeDaysUI {
     private void run() {
         List<DropPoint> initializeFreeDays = controller.initializeFreeDays();
         for (DropPoint dp : initializeFreeDays) {
-            System.out.printf("%3d %30s %5s %15s %2d\n", dp.getId(), dp.getNome(), "-", "Dias Grátis:", dp.getFree_Days());
+            System.out.printf("%3d %30s %5s %15s %2d\n", dp.getId(), dp.getName(), "-", "Dias Grátis:", dp.getFree_Days());
         }
 
         System.out.println("Seleccione id do DropPoint: \n");
@@ -42,7 +42,7 @@ class FreeDaysUI {
 
         initializeFreeDays = controller.initializeFreeDays();
         for (DropPoint dp : initializeFreeDays) {
-            System.out.printf("%3d %30s %5s %15s %2d\n", dp.getId(), dp.getNome(), "-", "Dias Grátis:", dp.getFree_Days());
+            System.out.printf("%3d %30s %5s %15s %2d\n", dp.getId(), dp.getName(), "-", "Dias Grátis:", dp.getFree_Days());
         }
 
     }
