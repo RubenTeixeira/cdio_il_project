@@ -35,7 +35,8 @@ CREATE TABLE DropPoint (
 	nome_DropPoint varchar2(255),
 	id_gestor number(10),
 	ID_MORADA number(10),
-	free_days number(10)
+	free_days number(10),
+	max_rate number(1,3)
 );
 
 CREATE TABLE Cliente (
@@ -328,7 +329,7 @@ ALTER TABLE Repair ADD CONSTRAINT FK_Repair_idIncd_Incd FOREIGN KEY (id_Incident
 ALTER TABLE Repair ADD CONSTRAINT FK_Repair_idRpPlan_RpPlan FOREIGN KEY (id_Repair_Plan) REFERENCES Repair_Plan (id_Repair_Plan);
 
 
--- TRIGGER PARA MUDAR O VALOR DE OCUPA«AO DA PRATELEIRA CONSOANTE UMA ENTREGA
+-- TRIGGER PARA MUDAR O VALOR DE OCUPAï¿½AO DA PRATELEIRA CONSOANTE UMA ENTREGA
 
 ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE'; --necessario para nao dar erro de compilacao
 
@@ -342,7 +343,7 @@ BEGIN
 END;
 /
 
--- TRIGGER PARA MUDAR O VALOR DE OCUPA«AO DA PRATELEIRA CONSOANTE UMA RECOLHA
+-- TRIGGER PARA MUDAR O VALOR DE OCUPAï¿½AO DA PRATELEIRA CONSOANTE UMA RECOLHA
 
 create or replace TRIGGER TRG_PRATELEIRA_OCUPACAO_R
 BEFORE INSERT or UPDATE ON RECOLHA
@@ -363,7 +364,7 @@ BEGIN
       where ID_PRATELEIRA = idPrateleira;
   exception
     when others then
-      raise_application_error(-20001, 'Nao foi possÌvel atualizar o estado da prateleira');
+      raise_application_error(-20001, 'Nao foi possï¿½vel atualizar o estado da prateleira');
   end;
   
 exception
@@ -396,7 +397,7 @@ BEGIN
 END;
 /
 
--- TRIGGER PARA MUDAR O VALOR DE OCUPAÇAO DA PRATELEIRA CONSOANTE UMA RECOLHA 
+-- TRIGGER PARA MUDAR O VALOR DE OCUPAï¿½AO DA PRATELEIRA CONSOANTE UMA RECOLHA 
 -- PELA EQUIPA DE MANUTENCAO
 
 create or replace TRIGGER TRG_PRATELEIRA_OCUPACAO_MP
@@ -418,7 +419,7 @@ BEGIN
       where ID_PRATELEIRA = idPrateleira;
   exception
     when others then
-      raise_application_error(-20001, 'Não foi possível atualizar o estado da prateleira');
+      raise_application_error(-20001, 'Nï¿½o foi possï¿½vel atualizar o estado da prateleira');
   end;
   
 exception
@@ -427,7 +428,7 @@ exception
 END;
 /
 
--- TRIGGER PARA MUDAR A PRATELEIRA para inoperacional CONSOANTE a inserção de um incidente 
+-- TRIGGER PARA MUDAR A PRATELEIRA para inoperacional CONSOANTE a inserï¿½ï¿½o de um incidente 
 -- PELA EQUIPA DE MANUTENCAO
 
 create or replace TRIGGER TRG_CELL_NOT_OPERATIONAL_I
@@ -445,7 +446,7 @@ BEGIN
       where ID_PRATELEIRA = :new.id_prateleira;
   exception
     when others then
-      raise_application_error(-20004, 'Não foi possível atualizar o estado da prateleira');
+      raise_application_error(-20004, 'Nï¿½o foi possï¿½vel atualizar o estado da prateleira');
   end;
   
 exception
@@ -537,7 +538,7 @@ end;
 
   --MORADA -> INSERT INTO Morada (ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (Int, String, String, String);
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
-  VALUES (1, 'Rua Dr. AntÛnio Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893,17');
+  VALUES (1, 'Rua Dr. Antï¿½nio Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893,17');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (2, 'Rua Jaime Lopes Amorim',20, '4465-004', 'S. Mamede de Infesta','41.1898662','-8.6015942,17');
@@ -555,13 +556,13 @@ INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE
   VALUES (6, 'Rua Sara Afonso',105, '4460-841', 'Senhora da Hora','41.1807708','-8.6567255,17');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
-  VALUES (7, 'PraÁa de Almeida Garrett',46, '4000-069', 'Porto','41.1455754','-8.6106484,19');
+  VALUES (7, 'Praï¿½a de Almeida Garrett',46, '4000-069', 'Porto','41.1455754','-8.6106484,19');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (8, 'Rua de Cam?es',19, '4000-124', 'Porto','41.1524433','-8.6096905,17.75');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
-  VALUES (9, 'Rua DR. Pl·cido da Costa',40, '4200-450', 'Porto','41.1804142','-8.6063489,17');
+  VALUES (9, 'Rua DR. Plï¿½cido da Costa',40, '4200-450', 'Porto','41.1804142','-8.6063489,17');
 
   --CLIENTE -> INSERT INTO Cliente (ID_CLIENTE,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,ID_MORADA) VALUES (int, String, String, String,int,String, String, int);
 INSERT INTO Cliente (ID_CLIENTE,NOME,NIF,EMAIL,TELEMOVEL,USERNAME,UPASSWORD,ID_MORADA) 
@@ -595,10 +596,11 @@ INSERT INTO Gestor (ID_GESTOR,NOME,UPASSWORD,USERNAME) VALUES (3, 'Gestor LPOUY'
 INSERT INTO Gestor (ID_GESTOR,NOME,UPASSWORD,USERNAME) VALUES (4, 'Gestor POLGH','Gest4','pass4');
 
   --DropPoint
-INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS) VALUES (1, 6, 1,'DP NorteShopping',0);
-INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS) VALUES (2, 7, 2,'DP Estação CP São Bento',0);
-INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS) VALUES (3, 8, 3,'DP Estação Metro Trindade',0);
-INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS) VALUES (4, 9, 4,'DP Campus S. João',0);
+INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS,MAX_RATE) VALUES (1, 6, 1,'DP NorteShopping',0,0.8);
+INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS,MAX_RATE) VALUES (2, 7, 2,'DP EstaÃ§Ã£o CP SÃ£o Bento',0,0.9);
+INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS,MAX_RATE) VALUES (3, 8, 3,'DP EstaÃ§Ã£o Metro Trindade',0,0.75);
+INSERT INTO DropPoint (ID_DROPPOINT,ID_MORADA,ID_GESTOR,NOME_DROPPOINT,FREE_DAYS,MAX_RATE) VALUES (4, 9, 4,'DP Campus S. JoÃ£o',0,0.50);
+
 
   --ARMARIO
 INSERT INTO Armario (ID_ARMARIO,ID_DROPPOINT,MANUTENCAO,NOME) VALUES (111, 1, 0,'DP1ARM1');
@@ -824,8 +826,8 @@ COMMIT;
 
  
 /*
----SELECT¥S SPRINT 4
---Select's OcupaÁ„o
+---SELECTï¿½S SPRINT 4
+--Select's Ocupaï¿½ï¿½o
     --Total prateleiras de um droppoint
 SELECT COUNT(ID_PRATELEIRA) FROM (DROPPOINT JOIN (Armario JOIN Prateleira USING (ID_ARMARIO)) USING (ID_DROPPOINT)) WHERE ID_DROPPOINT = 1;
     --Total de prateleiras ocupadas
@@ -857,7 +859,7 @@ select r.DATA_FECHA_PRATELEIRA, p.ID_PRATELEIRA, r.ID_TOKEN_CLIENTE
    and a.ID_DROPPOINT = d.ID_DROPPOINT
    and d.ID_DROPPOINT = 1;
 
---SELECT¥S SPRINT 5
+--SELECTï¿½S SPRINT 5
   ---ABRIR PRATELEIRA  - Estafeta
   select p.NUMERO_PRATELEIRA,p.ID_PRATELEIRA
   from prateleira p, reserva r, armario a
