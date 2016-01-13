@@ -11,6 +11,7 @@ import dal.Table;
 import esinf.dropGraph.GraphDropPointNet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,26 +26,44 @@ import persistence.SQLConnection;
  */
 public class MaintenancePlan implements WorkPlan {
     
+    private int id;
+    private int teamID;
+    private Date planDate;
     private List<Maintenance> planPath;
+    private MaintenanceDAO maintenanceDAO;
+    private DropPointDAO dropPointDAO;
 
     /**
      * Constructor with no parametre
+     * @throws java.sql.SQLException
      */
-    public MaintenancePlan() {
+    public MaintenancePlan() throws SQLException {
         this.planPath = new ArrayList<>();
+        SQLConnection manager = persistence.OracleDb.getInstance();
+        maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
+        dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
     }
 
     /**
      * Constructor with a planPath as parametre
      * @param planPath 
      */
-    public MaintenancePlan(List<Maintenance> planPath) {
+    public MaintenancePlan(List<Maintenance> planPath) throws SQLException {
         this.planPath = planPath;
+        SQLConnection manager = persistence.OracleDb.getInstance();
+        maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
+        dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
     }
 
     // Getter and Setter
     public List<Maintenance> getPlanPath() {return planPath;}
     public void setPlanPath(List<Maintenance> planPath) {this.planPath = planPath;}
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public int getTeamID() {return teamID;}
+    public void setTeamID(int teamID) {this.teamID = teamID;}
+    public Date getPlanDate() {return planDate;}
+    public void setPlanDate(Date planDate) {this.planDate = planDate;}
 
     @Override
     public int hashCode() {
@@ -87,21 +106,28 @@ public class MaintenancePlan implements WorkPlan {
     }
 
     @Override
-    public List<Plannable> calcPlanPath() {
+    public void calcPlanPath() {
         Map<DropPoint, Float> map = createDropPointMap();
-        GraphDropPointNet graphDropPointNet = new GraphDropPointNet();
-        return graphDropPointNet.buildPathWithPriority(map);
+        List<DropPoint> lstDropPoints = esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(map); // .. a alterar nome do metodo
+        
+        for (int i = 0; i < lstDropPoints.size(); i++) {
+            DropPoint dp = lstDropPoints.get(i);
+            Maintenance maintenance = new Maintenance(maintenanceDAO.getNextId(), i, dp, null, null, 0);
+            this.planPath.add(maintenance);
+        }
+
     }
 
-
+    /**
+     * Cretes HashMap with key Droppoint and Value its Maintenance prospected duration
+     * @return HashMap
+     */
     private Map<DropPoint, Float> createDropPointMap() {
         SQLConnection manager = persistence.OracleDb.getInstance();
-        DropPointDAO dropPointDAO = null;
-        MaintenanceDAO maintenanceDAO = null;
         List<DropPoint> lstDropPoint;
         
         try {
-            dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
+            
             maintenanceDAO = (MaintenanceDAO)manager.getDAO(Table.MANUTENCAO);
         } catch (SQLException ex) {
             Logger.getLogger(MaintenancePlan.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,6 +143,28 @@ public class MaintenancePlan implements WorkPlan {
             return mapDropPoints;
         }
         return null;
+    }
+
+    /**
+     * Submits all maintenance jobs to DB aswell as its corresponding Plan
+     * @return true if successfull, false otherwise
+     */
+    @Override
+    public boolean submitPlanPath() {
+
+        this.id = maintenanceDAO.getNextPlanId();
+        this.teamID = 1; // still testing
+        this.planDate = new Date();
+        if (!maintenanceDAO.insertPlan(this))
+            return false;
+        
+        for (Maintenance m : this.planPath) {
+            m.setPlanID(this.id);
+            if (!maintenanceDAO.insertNew(m))
+                return false;
+        }
+        
+        return true;
     }
     
     

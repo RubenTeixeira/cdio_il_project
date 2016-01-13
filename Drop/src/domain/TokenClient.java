@@ -69,7 +69,24 @@ public class TokenClient extends TokenImpl {
         }
         
     }
-
- 
     
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        TokenClient other = (TokenClient) o;
+        if (this.getId()==other.getId() 
+                && this.getGenerationDate()==other.getGenerationDate() 
+                && this.getExpirationDate()==other.getExpirationDate()
+                && this.getState()==other.getState()
+                && this.getCode()==other.getCode()
+                && this.getReservationId()==other.getReservationId()) {
+            return false;
+        }
+        return true;
+    }   
 }

@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Repair implements Plannable {
     
     private int incidentID;
+    private int index;
     private DropPoint dropPoint;
     private String repairDate;
     private String observations;
@@ -25,6 +26,14 @@ public class Repair implements Plannable {
 
     public int getIncidentID() {
         return incidentID;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override
