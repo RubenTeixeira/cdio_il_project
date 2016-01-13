@@ -8,6 +8,8 @@ public class Address implements Comparable<Address> {
     private String street;
     private String postalCode;
     private String locality;
+    private double latitude;
+    private double longitude;
 
     /**
      * Main constructor.
@@ -67,6 +69,22 @@ public class Address implements Comparable<Address> {
         return locality;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+    
     /**
      * Set street value attribute
      *
