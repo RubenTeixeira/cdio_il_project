@@ -7,6 +7,7 @@ package dal;
 
 import domain.DropPoint;
 import domain.Maintenance;
+import domain.MaintenancePlan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
  */
 public class MaintenanceDAO extends GenericDAO<Maintenance> {
 
-    private final static String TABLENAME = "TOKEN";
+    private final static String TABLENAME = "MANUTENCAO";
     
     public MaintenanceDAO(Connection con) {
         super(con, TABLENAME);
@@ -36,7 +37,7 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
             try {
                 rs.next();
                 maintenance = new Maintenance(
-                        rs.getInt("ID_MANUTENCAO"), rs.getInt("INDEX"), dp, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"));
+                        rs.getInt("ID_MANUTENCAO"), rs.getInt("VISIT_INDEX"), dp, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"), rs.getInt("ID_MAINT_PLAN"));
             } catch (SQLException ex) {
             }
         }
@@ -74,6 +75,42 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         return null;
     }
+    
+    /**
+     * Retrieves incremental ID for this object correponding Table
+     *
+     * @return int ID
+     */
+    public int getNextId() {
+        String query = "select nvl(max(id_manutencao),0)+1 as id from "+TABLENAME;
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
+                return rs.getInt("id");
+            } catch (SQLException ex) {
+            }
+        }
+        return -1;
+    }
+    
+    /**
+     * Retrieves incremental ID for this object correponding Table
+     *
+     * @return int ID
+     */
+    public int getNextPlanId() {
+        String query = "select nvl(max(id_Repair),0)+1 as id from Repair";
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
+                return rs.getInt("id");
+            } catch (SQLException ex) {
+            }
+        }
+        return -1;
+    }
 
     @Override
     public boolean insertNew(Maintenance obj) {
@@ -95,6 +132,19 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public boolean insertPlan(MaintenancePlan plan) {
+        ResultSet rs = executeQuery("INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n" +
+                                    "    VALUES ("+plan.getId()+","+plan.getPlanDate()+","+plan.getTeamID()+")");
+        
+        if (rs != null) {
+                try {
+                    if (rs.next())
+                        return true;
+                } catch (SQLException ex) {
+                }
+        }
+        return false;
+    }
     
     
 }

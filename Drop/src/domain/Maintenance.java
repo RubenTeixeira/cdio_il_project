@@ -46,19 +46,26 @@ public class Maintenance implements Plannable {
     private Date finishDate;
 
     /**
+     * Maintenance corresponding Plan ID
+     */
+    private int planID;
+    
+    /**
      * Constructs an Maintenance object with the specified parameters:
      * @param id the maintenance id
      * @param index
      * @param dropPoint the maintenance droppoint
      * @param startDate the maintenance start date
      * @param finishDate the maintenance finish date
+     * @param planID
      */
-    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate) {
+    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
         this.id = id;
         this.index = index;
         this.dropPoint = dropPoint;
         this.startDate = startDate;
         this.finishDate = finishDate;
+        this.planID = planID;
         this.lstCells = new ArrayList<>();
     }
 
@@ -165,6 +172,15 @@ public class Maintenance implements Plannable {
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
+
+    public int getPlanID() {
+        return planID;
+    }
+
+    public void setPlanID(int planID) {
+        this.planID = planID;
+    }
+    
     
     /**
      * Adds a new cell id to the maintenance list of cells

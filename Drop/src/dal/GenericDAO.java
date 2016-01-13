@@ -76,7 +76,7 @@ public abstract class GenericDAO<T> {
                 return null;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Error contacting the Database.");
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, "Error contacting the Database or malformed SQL statement.");
         }
         return rs;
     }

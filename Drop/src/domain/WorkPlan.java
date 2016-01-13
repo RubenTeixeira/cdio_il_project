@@ -5,15 +5,14 @@
  */
 package domain;
 
-import java.util.List;
-
 /**
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public interface WorkPlan {
 
-    List<Plannable> calcPlanPath();
+    void calcPlanPath();
+    boolean submitPlanPath();
     
     @Override
     String toString();
