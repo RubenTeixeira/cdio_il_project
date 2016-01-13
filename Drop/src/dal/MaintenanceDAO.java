@@ -54,6 +54,21 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         return null;
     }
+    
+    public Float getDropPointMaintenanceDuration(DropPoint dp) {
+
+        ResultSet rs = executeQuery("SELECT SUM(AVG_DURATION) AS DURATION FROM PREEMPTIVE_DP_PLAN p, MAINTENANCE_TASK t\n" +
+                                    "  WHERE p.ID_DROPPOINT = "+dp.getId()+"\n" +
+                                    "  AND p.ID_TASK = t.ID_TASK");
+        if (rs != null) {
+                try {
+                    if (rs.next())
+                        return rs.getFloat("DURATION");
+                } catch (SQLException ex) {
+                }
+        }
+        return null;
+    }
 
     @Override
     public boolean insertNew(Maintenance obj) {

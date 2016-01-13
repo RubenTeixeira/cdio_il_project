@@ -31,7 +31,6 @@ public class MaintenancePlan implements WorkPlan {
      */
     public MaintenancePlan() {
         this.planPath = new ArrayList<>();
-        populateMaintenanceList();
     }
 
     /**
@@ -88,10 +87,12 @@ public class MaintenancePlan implements WorkPlan {
 
     @Override
     public List<Plannable> calcPlanPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<DropPoint, Float> map = createDropPointMap();
+        return esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(map); // .. a alterar nome do metodo
     }
 
-    private void populateMaintenanceList() {
+
+    private Map<DropPoint, Float> createDropPointMap() {
         SQLConnection manager = persistence.OracleDb.getInstance();
         DropPointDAO dropPointDAO = null;
         MaintenanceDAO maintenanceDAO = null;
@@ -106,12 +107,14 @@ public class MaintenancePlan implements WorkPlan {
         
         if (dropPointDAO != null) {
             lstDropPoint = dropPointDAO.getListDropPoints();
-            Map<DropPoint,Integer> mapDropPoints = new HashMap();
+            Map<DropPoint,Float> mapDropPoints = new HashMap();
             for (DropPoint dp : lstDropPoint) {
-                //mapDropPoints.put(dp, )
+                Float maintenanceDuration = maintenanceDAO.getDropPointMaintenanceDuration(dp);
+                mapDropPoints.put(dp, maintenanceDuration);
             }
-                
+            return mapDropPoints;
         }
+        return null;
     }
     
     
