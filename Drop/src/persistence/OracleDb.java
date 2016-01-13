@@ -22,6 +22,8 @@ import dal.CostumerDAO;
 import dal.GenericDAO;
 import dal.IncidentDAO;
 import dal.IncidentTypeDAO;
+import dal.MaintenanceDAO;
+import dal.RepairDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -100,6 +102,10 @@ public class OracleDb implements SQLConnection, Settings {
                 return new TokenDAO(this.con);
             case MAINTENANCE_PICKUP:
                 return new MaintenancePickupDAO(this.con);
+            case MANUTENCAO:
+                return new MaintenanceDAO(this.con);
+            case REPAIR:
+                return new RepairDAO(this.con);
             default:
                 throw new SQLException("Tabela SQL não encontrada");
         }

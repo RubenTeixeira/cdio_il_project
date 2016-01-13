@@ -5,11 +5,15 @@
  */
 package domain;
 
+import dal.RepairDAO;
+import dal.Table;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import persistence.SQLConnection;
 
 /**
  *
@@ -21,20 +25,26 @@ public class RepairPlan implements WorkPlan {
     private int teamID;
     private Date date;
     private List<Repair> planPath;
+    
+    private RepairDAO repairDAO;
 
     /**
      * Empty constructor
      */
-    public RepairPlan() {
+    public RepairPlan() throws SQLException {
         this.planPath = new ArrayList<>();
+        SQLConnection manager = persistence.OracleDb.getInstance();
+        repairDAO = (RepairDAO) manager.getDAO(Table.REPAIR);
     }
 
     /**
      * Constructor with planPath
      * @param planPath ordered path containing planned Repairs 
      */
-    public RepairPlan(List<Repair> planPath) {
+    public RepairPlan(List<Repair> planPath) throws SQLException {
         this.planPath = planPath;
+        SQLConnection manager = persistence.OracleDb.getInstance();
+        repairDAO = (RepairDAO) manager.getDAO(Table.REPAIR);
     }
     
     // Getter and Setter
@@ -84,7 +94,8 @@ public class RepairPlan implements WorkPlan {
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
-        return SLA.buildPriorityMap();
+        List<DropPoint> lstDropPoints = repairDAO.getDropPointsWithIncidents();
+        return SLA.buildPriorityMap(lstDropPoints);
     }
 
     @Override
