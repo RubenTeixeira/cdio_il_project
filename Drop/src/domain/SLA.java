@@ -43,14 +43,13 @@ public class SLA {
      *
      * @return HashMap with ID and rate
      */
-    public static Map<DropPoint, Float> buildPriorityMap() {
+    public static Map<DropPoint, Float> buildPriorityMap(List<DropPoint> lsdroppoint) {
         DropPointDAO dpDAO = getDropPointDAO();
         if (dpDAO != null) {
             Map<DropPoint, Float> map = new HashMap<>();
-            List<DropPoint> lsdroppoint = dpDAO.getListDropPoints();
-            for (DropPoint lsdroppoint1 : lsdroppoint) {
-                float priorityRate = dpDAO.getPriority(lsdroppoint1);
-                map.put(lsdroppoint1, priorityRate);
+            for (DropPoint droppoint : lsdroppoint) {
+                float priorityRate = dpDAO.getPriority(droppoint);
+                map.put(droppoint, priorityRate);
             }
 
             return map;
