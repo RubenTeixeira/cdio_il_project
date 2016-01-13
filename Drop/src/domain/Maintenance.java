@@ -232,4 +232,9 @@ public class Maintenance implements Plannable {
         return this.lstCells.remove(id);
     }
     
+    @Override
+    public String toString()
+    {
+        return "Manutenção: " + this.getId()+" DropPoint: "+this.dropPointID;
+    }
 }
