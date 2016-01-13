@@ -51,6 +51,29 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
         return -1;
 
     }
+    
+    public Delivery getDeliveryByReservationIDFromDP(int reservationId, DropPoint dropPoint){
+        Delivery delivery = null;
+        String qry = "select * from entrega e, reserva r"
+                + " where e." + reservationId + "= r.id_reserva"
+                + " and r.id_dropPoint = "+dropPoint.getId();
+        ResultSet rs = executeQuery(qry);
+        if (rs != null) {
+            try {
+                rs.next();
+                delivery = new Delivery();
+                delivery.setId(rs.getInt("id_reserva"));
+                delivery.setDateOpen();
+                delivery.setDateClose();
+                delivery.setReservationID(reservationId);
+                delivery.setCellID(rs.getInt("id_prateleira"));
+                delivery.setCourierTokenID(rs.getInt("id_token_estafeta"));
+                delivery.setAssistantTokenID(rs.getInt("id_token_colaborador"));
+            } catch (SQLException e) {
+            }
+        }
+        return delivery;
+    }
 
     public Delivery getDeliveryByReservationID(int reservationId) {
         Delivery delivery = null;
