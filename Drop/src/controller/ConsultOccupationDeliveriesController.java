@@ -9,7 +9,6 @@ import dal.DeliveryDAO;
 import dal.DropPointDAO;
 import dal.Table;
 import domain.DropPoint;
-import domain.Management;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
