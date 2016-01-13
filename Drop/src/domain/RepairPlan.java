@@ -5,18 +5,10 @@
  */
 package domain;
 
-import dal.DropPointDAO;
-import dal.MaintenanceDAO;
-import dal.Table;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import persistence.SQLConnection;
 
 /**
  *
@@ -79,11 +71,11 @@ public class RepairPlan implements WorkPlan {
 
     @Override
     public List<Plannable> calcPlanPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(createDropPointMap()); // .. a alterar nome do metodo
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
-        return null;
+        return SLA.buildPriorityMap();
     }
     
 }
