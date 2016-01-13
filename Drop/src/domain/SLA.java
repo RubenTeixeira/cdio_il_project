@@ -13,6 +13,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,46 +22,42 @@ import java.util.logging.Logger;
  * @author vascopinho
  */
 public class SLA {
-    /**
-     * DropPoint List
-     */
-    private List<DropPoint> lsdroppoint;
-    
-    /**
-     * HashMap with DropPoint ID and occupancy rate
-     */
-    HashMap<DropPoint, Float> map;
-    
-    /**
-     * Database Connection (DAO)
-     */
-    private DropPointDAO dpDAO;
-    
-    public SLA() {
+
+    private static DropPointDAO getDropPointDAO() {
+        DropPointDAO dpdao = null;
+
         try {
-            map = new HashMap<>();
-            dpDAO =(DropPointDAO) persistence.OracleDb
-                            .getInstance()
-                            .getDAO(Table.DROPPOINT);
-            lsdroppoint = dpDAO.getListDropPoints();
-            
+
+            dpdao = (DropPointDAO) persistence.OracleDb
+                    .getInstance()
+                    .getDAO(Table.DROPPOINT);
+
         } catch (SQLException ex) {
             Logger.getLogger(SLA.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return dpdao;
     }
-    
-    
+
     /**
      * Creates a priority map concerning occupancy rate
+     *
      * @return HashMap with ID and rate
      */
-    public HashMap<DropPoint, Float> buildPriorityMap(){
-        for (DropPoint lsdroppoint1 : lsdroppoint) {
-            float priorityRate = dpDAO.getPriority(lsdroppoint1);
-            map.put(lsdroppoint1, priorityRate);
+    public static Map<DropPoint, Float> buildPriorityMap() {
+        DropPointDAO dpDAO = getDropPointDAO();
+        if (dpDAO != null) {
+            Map<DropPoint, Float> map = new HashMap<>();
+            List<DropPoint> lsdroppoint = dpDAO.getListDropPoints();
+            for (DropPoint lsdroppoint1 : lsdroppoint) {
+                float priorityRate = dpDAO.getPriority(lsdroppoint1);
+                map.put(lsdroppoint1, priorityRate);
+            }
+
+            return map;
+
+        } else {
+            return null;
         }
-        
-        return map;
     }
-    
+
 }
