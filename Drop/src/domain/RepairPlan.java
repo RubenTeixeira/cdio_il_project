@@ -6,6 +6,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +17,9 @@ import java.util.Objects;
  */
 public class RepairPlan implements WorkPlan {
     
+    private int id;
+    private int teamID;
+    private Date date;
     private List<Repair> planPath;
 
     /**
@@ -70,12 +74,22 @@ public class RepairPlan implements WorkPlan {
     }
 
     @Override
-    public List<Plannable> calcPlanPath() {
-        return esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(createDropPointMap()); // .. a alterar nome do metodo
+    public void calcPlanPath() {
+        List<DropPoint> lstDropPoints = esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(createDropPointMap()); // .. a alterar nome do metodo
+        for (int i = 0; i < lstDropPoints.size(); i++) {
+            DropPoint dp = lstDropPoints.get(i);
+            Repair repair = new Repair(incident);
+            this.planPath.add(repair);
+        }
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
         return SLA.buildPriorityMap();
+    }
+
+    @Override
+    public boolean submitPlanPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
