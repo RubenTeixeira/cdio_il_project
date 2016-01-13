@@ -29,7 +29,7 @@ public class SLA {
     /**
      * HashMap with DropPoint ID and occupancy rate
      */
-    HashMap<Integer, Double> map;
+    HashMap<DropPoint, Float> map;
     
     /**
      * Database Connection (DAO)
@@ -54,10 +54,10 @@ public class SLA {
      * Creates a priority map concerning occupancy rate
      * @return HashMap with ID and rate
      */
-    public HashMap<Integer, Double> buildPriorityMap(){
+    public HashMap<DropPoint, Float> buildPriorityMap(){
         for (DropPoint lsdroppoint1 : lsdroppoint) {
-            double priorityRate = dpDAO.getPriority(lsdroppoint1);
-            map.put(lsdroppoint1.getId(), priorityRate);
+            float priorityRate = dpDAO.getPriority(lsdroppoint1);
+            map.put(lsdroppoint1, priorityRate);
         }
         
         return map;

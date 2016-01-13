@@ -133,10 +133,10 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
         return null;
     }
 
-    public double getPriority(DropPoint DropPoint) {
-        Double capacity = 0.0;
-        Double busy = 0.0;
-        Double max = 0.0;
+    public float getPriority(DropPoint DropPoint) {
+        float capacity = 0;
+        float busy = 0;
+        float max = 0;
 
         ResultSet executeQuery
                 = executeQuery("SELECT COUNT(id_Prateleira) "
@@ -147,7 +147,7 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
             while (executeQuery.next()) {
 
                 total += executeQuery.getString("COUNT(id_Prateleira)");
-                capacity = Double.valueOf(total);
+                capacity = Float.valueOf(total);
 
             }
         } catch (SQLException ex) {
@@ -164,7 +164,7 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
                 String ocupada = "";
 
                 ocupada += executeQuery2.getString("COUNT(id_Prateleira)");
-                busy = Double.valueOf(ocupada);
+                busy = Float.valueOf(ocupada);
 
             }
         } catch (SQLException ex) {
@@ -177,14 +177,14 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
                 String max_rate = "";
 
                 max_rate += executeQuery3.getString("MAX_RATE");
-                max = Double.valueOf(max_rate);
+                max = Float.valueOf(max_rate);
 
             }
         } catch (SQLException ex) {
             Logger.getLogger(DropPointDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        double rate = busy / capacity;
+        float rate = busy / capacity;
 
         return (max-rate);
     }
