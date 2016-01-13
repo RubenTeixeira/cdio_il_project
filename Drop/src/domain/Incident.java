@@ -65,6 +65,22 @@ public class Incident {
     }
 
     /**
+     * Same as previous but without DropPoint id
+     * @param incident_id
+     * @param incident_type_id
+     * @param cell_id
+     * @param incident_date
+     * @param maintenance_assistant_id 
+     */
+    public Incident(int incident_id, int incident_type_id, int cell_id, Date incident_date, int maintenance_assistant_id) {
+        this.incident_id = incident_id;
+        this.incident_type_id = incident_type_id;
+        this.cell_id = cell_id;
+        this.incident_date = incident_date;
+        this.maintenance_assistant_id = maintenance_assistant_id;
+    }
+    
+    /**
      * Returns the incident id
      *
      * @return the incident_id

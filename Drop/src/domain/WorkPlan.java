@@ -13,8 +13,11 @@ public interface WorkPlan {
 
     void calcPlanPath();
     boolean submitPlanPath();
+    String getElements();
     
     @Override
     String toString();
+
+    
     
 }
