@@ -51,6 +51,11 @@ public class Maintenance implements Plannable {
     private int planID;
     
     /**
+     * DropPoint ID
+     */
+    private int dropPointID;
+    
+    /**
      * Constructs an Maintenance object with the specified parameters:
      * @param index
      * @param dropPoint the maintenance droppoint
@@ -94,7 +99,20 @@ public class Maintenance implements Plannable {
     public int getIndex() {
         return index;
     }
-
+   
+    /**
+     * return the DropPoint ID
+     * @return DropPoint ID
+     */
+    public int getDropPointID()
+    {
+        if(dropPoint==null){
+            return this.dropPointID;
+        }else{
+            return dropPoint.getId();
+        }
+    }
+    
     /**
      * Sets the index
      * @param index 
@@ -110,7 +128,18 @@ public class Maintenance implements Plannable {
     public void setId(int id) {
         this.id = id;
     }
-
+    
+    /**
+     * Sets de DropPoint ID
+     * @param dropPointID DropID
+     */
+    public void setDropPointID(int dropPointID)
+    {
+        if(dropPoint==null){
+            this.dropPointID = dropPointID;
+        }
+    }
+    
     /**
      * Returns the maintenance droppoint
      * @return the droppoint

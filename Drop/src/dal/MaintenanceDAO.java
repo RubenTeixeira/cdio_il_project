@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dal;
 
 import domain.DropPoint;
@@ -11,6 +6,8 @@ import domain.MaintenancePlan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
@@ -154,6 +151,43 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
                 }
         }
         return false;
+    }
+
+    public List<Maintenance> getListMaintenanceCurrentDay() throws SQLException
+    {
+                List<Maintenance> list = new ArrayList<>();
+        ResultSet rs = executeQuery("select m.ID_MANUTENCAO,m.ID_DROPPOINT from MAINTENANCE_PLAN p, MANUTENCAO m\n"
+                + "where p.ID_MAINT_PLAN = m.ID_MAINT_PLAN\n"
+                + "and p.MAINT_PLAN_DATE >= TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')\n"
+                + "and p.MAINT_PLAN_DATE < TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')+1\n"
+                + "and m.DATA_INICIO is null");
+        if (rs != null)
+        {
+            while (rs.next())
+            {
+                Maintenance m = new Maintenance();
+                m.setId(rs.getInt("ID_MANUTENCAO"));
+                m.setDropPointID(rs.getInt("ID_DROPPOINT"));
+                list.add(m);
+            }
+        }
+        return list;
+    }
+
+    public List<String> getTasksOfDropPoint(int id) throws SQLException
+    {
+        List<String> list = new ArrayList<>();
+        ResultSet rs = executeQuery("select m.DESCRIPTION from MAINTENANCE_TASK m,PREEMPTIVE_DP_PLAN p\n" +
+                                    "where m.ID_TASK = p.ID_TASK\n" +
+                                    "and p.ID_DROPPOINT = "+id);
+        if (rs != null)
+        {
+            while (rs.next())
+            {
+                list.add(rs.getString("DESCRIPTION"));
+            }
+        }
+        return list;
     }
     
     
