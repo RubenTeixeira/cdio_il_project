@@ -21,6 +21,11 @@ public class Maintenance implements Plannable {
     private int id;
     
     /**
+     * The maintenance order index within its plan
+     */
+    private int index;
+    
+    /**
      * The maintenance dropoint
      */
     private DropPoint dropPoint;
@@ -43,12 +48,14 @@ public class Maintenance implements Plannable {
     /**
      * Constructs an Maintenance object with the specified parameters:
      * @param id the maintenance id
+     * @param index
      * @param dropPoint the maintenance droppoint
      * @param startDate the maintenance start date
      * @param finishDate the maintenance finish date
      */
-    public Maintenance(int id, DropPoint dropPoint, Date startDate, Date finishDate) {
+    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate) {
         this.id = id;
+        this.index = index;
         this.dropPoint = dropPoint;
         this.startDate = startDate;
         this.finishDate = finishDate;
@@ -68,6 +75,22 @@ public class Maintenance implements Plannable {
      */
     public int getId() {
         return this.id;
+    }
+
+    /**
+     * Returns the index of this maintenance within its plan
+     * @return index
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * Sets the index
+     * @param index 
+     */
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     /**
