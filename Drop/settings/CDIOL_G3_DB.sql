@@ -151,7 +151,7 @@ create table Employee (
 
 create table Manutencao (
 	id_manutencao	number(10) NOT NULL,
-        index           number(5),
+  visit_index number(5),
 	id_DropPoint 	number(10),
 	id_Maint_Plan	number(10),
 	id_Maint_Ass	number(10),
@@ -219,13 +219,13 @@ CREATE TABLE Incident (
 );
 
 CREATE TABLE Repair (
-	id_Repair		number(10),
-        index                   number(5),
-	id_Incident		number(10),
-	id_Repair_Plan          number(10),
-	repair_date		date,
-	observations	varchar2(255),
-	parts_used		varchar2(255)
+	id_Repair number(10),
+  visit_index number(5),
+	id_Incident number(10),
+	id_Repair_Plan number(10),
+	repair_date date,
+	observations varchar2(255),
+	parts_used varchar2(255)
 );
 
 CREATE TABLE Repair_Plan (
@@ -779,24 +779,24 @@ INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,
   
         --Reserva 10 - entrega
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (19,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,10,'plk3kwDC',1);
+  VALUES (19,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,10,'b5tgkwDC',1);
     --Reserva 10 - recolha
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (20,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),2,10,'po5g6dSP',1);
+  VALUES (20,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),2,10,'po5g67UU',1);
   
         --Reserva 11 - entrega
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (21,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,11,'plKDJwDC',1);
+  VALUES (21,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,11,'p433JwDC',1);
     --Reserva 11 - recolha
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
   VALUES (22,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),2,11,'poMjhdSe',1);
   
     --Reserva 12 - entrega
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (23,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,12,'plKDJwDC',1);
+  VALUES (23,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1,12,'pMMMJwDC',1);
     --Reserva 12 - recolha
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (24,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),2,12,'poMjhdSe',1);
+  VALUES (24,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),2,12,'poMj9899',1);
   
  
   
@@ -809,7 +809,7 @@ INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,
  
 
   INSERT INTO Token (ID_TOKEN,DATA_GERACAO,DATA_VALIDADE,ID_TIPO_TOKEN,ID_RESERVA,CODIGO,ATIVO) 
-  VALUES (23,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),3,null,'3pW45xf7Q',1);
+  VALUES (25,TO_DATE('20-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),TO_DATE('27-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),3,null,'3pW45xf7Q',1);
 
 --  ENTREGAS
 INSERT INTO ENTREGA (ID_ENTREGA,ID_PRATELEIRA,ID_RESERVA,ID_TOKEN_ESTAFETA,ID_TOKEN_COLABORADOR,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA) 
