@@ -5,13 +5,11 @@
  */
 package dal;
 
-import domain.DropPoint;
 import domain.Repair;
+import domain.RepairPlan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -26,8 +24,18 @@ public class RepairDAO extends GenericDAO<Repair> {
     }
 
     @Override
-    public boolean insertNew(Repair obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean insertNew(Repair repair) {
+        ResultSet rs = executeQuery("INSERT INTO REPAIR (ID_REPAIR,ID_REPAIR_PLAN,ID_INCIDENT,VISIT_INDEX)\n" +
+                                  "    VALUES ("+repair.getId()+","+repair.getPlanID()+","
+                                                +repair.getIncidentID()+","+repair.getIndex()+")");
+        if (rs != null) {
+                try {
+                    if (rs.next())
+                        return true;
+                } catch (SQLException ex) {
+                }
+        }
+        return false;
     }
 
     @Override
@@ -44,28 +52,44 @@ public class RepairDAO extends GenericDAO<Repair> {
     public Repair get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    public List<DropPoint> getDropPointsWithIncidents() {
-        List<DropPoint> lstDropPoints = null;
-        
-        ResultSet rs = executeQuery("SELECT d.* FROM INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
-                                "    WHERE i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
-                                "    AND p.ID_ARMARIO = a.ID_ARMARIO\n" +
-                                "    AND a.ID_DROPPOINT = d.ID_DROPPOINT");
-        
+    
+    public int getNextId() {
+        String query = "select nvl(max(id_Repair),0)+1 as id from Repair";
+        ResultSet rs = executeQuery(query);
         if (rs != null) {
-            lstDropPoints = new ArrayList<>();
             try {
-                while (rs.next()) {
-                    DropPoint dp = new DropPoint();
-                    dp.setId(rs.getInt("ID_DROPPOINT"));
-                    dp.setName(rs.getString("NOME_DROPPOINT"));
-                    lstDropPoints.add(dp);
-                }
+                rs.next();
+                return rs.getInt("id");
             } catch (SQLException ex) {
             }
         }
-        return lstDropPoints;
+        return -1;
     }
-    
+
+    public int getNextPlanId() {
+        String query = "select nvl(max(id_Repair_Plan),0)+1 as id from Repair_Plan";
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
+                return rs.getInt("id");
+            } catch (SQLException ex) {
+            }
+        }
+        return -1;
+    }
+
+    public boolean insertPlan(RepairPlan plan) {
+        ResultSet rs = executeQuery("INSERT INTO REPAIR_PLAN (ID_REPAIR_PLAN,REPAIR_PLAN_DATE,ID_REPAIR_TEAM)\n" +
+                                    "    VALUES ("+plan.getId()+","+plan.getDate()+","+plan.getTeamID()+")");
+        
+        if (rs != null) {
+                try {
+                    if (rs.next())
+                        return true;
+                } catch (SQLException ex) {
+                }
+        }
+        return false;
+    }
 }

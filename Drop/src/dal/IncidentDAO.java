@@ -5,11 +5,15 @@
  */
 package dal;
 
+import domain.DropPoint;
 import domain.Incident;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -107,6 +111,26 @@ public class IncidentDAO extends GenericDAO<Incident> {
     @Override
     public Incident get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<Incident> getIncidentsFromDropPoint(DropPoint dp) {
+        List<Incident> lstincidents = new ArrayList<>();
+        ResultSet rs = executeQuery("SELECT i.* FROM INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
+                                "    WHERE i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
+                                "    AND p.ID_ARMARIO = a.ID_ARMARIO\n" +
+                                "    AND a.ID_DROPPOINT = d.ID_DROPPOINT\n" +
+                                "    AND d.ID_DROPPOINT = "+dp.getId());
+        if (rs != null) {
+                try {
+                    while (rs.next()) {
+                        lstincidents.add(new Incident(rs.getInt("ID_INCIDENT"),
+                                rs.getInt("ID_INCIDENT_TYPE"), rs.getInt("ID_PRATELEIRA"),
+                                rs.getDate("INCIDENT_DATE"), rs.getInt("REPORTER")));
+                    }
+                } catch (SQLException ex) {
+                }
+        }
+        return lstincidents;
     }
     
     

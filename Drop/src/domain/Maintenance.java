@@ -52,21 +52,24 @@ public class Maintenance implements Plannable {
     
     /**
      * Constructs an Maintenance object with the specified parameters:
-     * @param id the maintenance id
      * @param index
      * @param dropPoint the maintenance droppoint
      * @param startDate the maintenance start date
      * @param finishDate the maintenance finish date
      * @param planID
      */
-    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
-        this.id = id;
+    public Maintenance(int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
         this.index = index;
         this.dropPoint = dropPoint;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.planID = planID;
         this.lstCells = new ArrayList<>();
+    }
+    
+    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
+        this(index, dropPoint, startDate, finishDate, planID);
+        this.id = id;
     }
 
     /**

@@ -5,8 +5,11 @@
  */
 package domain;
 
+import dal.DropPointDAO;
+import dal.IncidentDAO;
 import dal.RepairDAO;
 import dal.Table;
+import esinf.dropGraph.GraphDropPointNet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,31 +28,42 @@ public class RepairPlan implements WorkPlan {
     private int teamID;
     private Date date;
     private List<Repair> planPath;
-    
+    private GraphDropPointNet graph;
     private RepairDAO repairDAO;
+    private DropPointDAO dropPointDAO;
+    private IncidentDAO incidentDAO;
 
     /**
      * Empty constructor
+     * @throws java.sql.SQLException
      */
     public RepairPlan() throws SQLException {
-        this.planPath = new ArrayList<>();
-        SQLConnection manager = persistence.OracleDb.getInstance();
-        repairDAO = (RepairDAO) manager.getDAO(Table.REPAIR);
+        this(new ArrayList<>());
     }
 
     /**
      * Constructor with planPath
      * @param planPath ordered path containing planned Repairs 
+     * @throws java.sql.SQLException 
      */
     public RepairPlan(List<Repair> planPath) throws SQLException {
         this.planPath = planPath;
         SQLConnection manager = persistence.OracleDb.getInstance();
         repairDAO = (RepairDAO) manager.getDAO(Table.REPAIR);
+        dropPointDAO = (DropPointDAO) manager.getDAO(Table.DROPPOINT);
+        incidentDAO = (IncidentDAO) manager.getDAO(Table.INCIDENT);
+        graph = new GraphDropPointNet();
     }
     
     // Getter and Setter
     public List<Repair> getPlanPath() {return planPath;}
     public void setPlanPath(List<Repair> planPath) {this.planPath = planPath;}
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public int getTeamID() {return teamID;}
+    public void setTeamID(int teamID) {this.teamID = teamID;}
+    public Date getDate() {return date;}
+    public void setDate(Date date) {this.date = date;}
 
     
     @Override
@@ -85,22 +99,40 @@ public class RepairPlan implements WorkPlan {
 
     @Override
     public void calcPlanPath() {
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap()); // .. a alterar nome do metodo
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap());
+        List<Incident> lstIncidents;
+        DropPoint dp;
+                
         for (int i = 0; i < lstDropPoints.size(); i++) {
-            DropPoint dp = lstDropPoints.get(i);
-            Repair repair = new Repair(incident);
-            this.planPath.add(repair);
+            dp = lstDropPoints.get(i);
+            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
+            for (Incident in : lstIncidents)
+                this.planPath.add(new Repair(in.getIncident_id(),i));
         }
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
-        List<DropPoint> lstDropPoints = repairDAO.getDropPointsWithIncidents();
+        List<DropPoint> lstDropPoints = dropPointDAO.getDropPointsWithIncidents();
         return SLA.buildPriorityMap(lstDropPoints);
     }
 
     @Override
     public boolean submitPlanPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.date = new Date();
+        this.teamID = 1; // testing purposes
+        this.id = repairDAO.getNextPlanId();
+        
+        if (!repairDAO.insertPlan(this))
+            return false;
+        
+        for (Repair r : this.planPath) {
+            r.setId(repairDAO.getNextId());
+            r.setPlanID(this.id);
+            if (!repairDAO.insertNew(r))
+                return false;
+        }
+        
+        return true;
     }
     
 }
