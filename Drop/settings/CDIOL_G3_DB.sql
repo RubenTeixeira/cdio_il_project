@@ -151,6 +151,7 @@ create table Employee (
 
 create table Manutencao (
 	id_manutencao	number(10) NOT NULL,
+        index           number(5),
 	id_DropPoint 	number(10),
 	id_Maint_Plan	number(10),
 	id_Maint_Ass	number(10),
@@ -219,8 +220,9 @@ CREATE TABLE Incident (
 
 CREATE TABLE Repair (
 	id_Repair		number(10),
+        index                   number(5),
 	id_Incident		number(10),
-	id_Repair_Plan	number(10),
+	id_Repair_Plan          number(10),
 	repair_date		date,
 	observations	varchar2(255),
 	parts_used		varchar2(255)

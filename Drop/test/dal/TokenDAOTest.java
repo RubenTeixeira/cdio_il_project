@@ -6,6 +6,7 @@
 package dal;
 
 import domain.Token;
+import domain.TokenClient;
 import domain.TokenCourier;
 import java.sql.SQLException;
 import java.util.List;
@@ -65,82 +66,20 @@ public class TokenDAOTest {
     }
 
     /**
-     * Test of getNextId method, of class TokenDAO.
-     */
-    @Test
-    public void testGetNextId() {
-        System.out.println("getNextId");
-        TokenDAO instance = null;
-        int expResult = 0;
-        int result = instance.getNextId();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of insertNew method, of class TokenDAO.
-     */
-    @Test
-    public void testInsertNew() {
-        System.out.println("insertNew");
-        Token obj = null;
-        TokenDAO instance = null;
-        boolean expResult = false;
-        boolean result = instance.insertNew(obj);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of update method, of class TokenDAO.
-     */
-    @Test
-    public void testUpdate() {
-        System.out.println("update");
-        Token obj = null;
-        TokenDAO instance = null;
-        boolean expResult = false;
-        boolean result = instance.update(obj);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of delete method, of class TokenDAO.
-     */
-    @Test
-    public void testDelete() {
-        System.out.println("delete");
-        Token obj = null;
-        TokenDAO instance = null;
-        instance.delete(obj);
-    }
-
-    /**
-     * Test of get method, of class TokenDAO.
-     */
-    @Test
-    public void testGet() {
-        System.out.println("get");
-        int id = 0;
-        TokenDAO instance = null;
-        Token expResult = null;
-        Token result = instance.get(id);
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of createToken method, of class TokenDAO.
      */
     @Test
     public void testCreateToken() {
         System.out.println("createToken");
         int id = 0;
-        String generationDate = "";
-        String expirationDate = "";
-        String description = "";
+        String generationDate = "16-10-21";
+        String expirationDate = "16-11-09";
+        String description = "cliente";
         int state = 0;
-        String code = "";
-        int idReservation = 0;
-        TokenDAO instance = null;
-        Token expResult = null;
+        String code = "123";
+        int idReservation = 1;
+        TokenDAO instance = tokenDAO;
+        Token expResult = new TokenClient(0, "16-10-21", "16-11-09", 0, "123", 1);
         Token result = instance.createToken(id, generationDate, expirationDate, description, state, code, idReservation);
         assertEquals(expResult, result);
     }
@@ -151,10 +90,9 @@ public class TokenDAOTest {
     @Test
     public void testCheckValidity() {
         System.out.println("checkValidity");
-        TokenDAO instance = null;
-        List<Token> expResult = null;
+        TokenDAO instance = tokenDAO;
         List<Token> result = instance.checkValidity();
-        assertEquals(expResult, result);
+        assertTrue(!result.isEmpty());
     }
 
 }

@@ -36,7 +36,7 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
             try {
                 rs.next();
                 maintenance = new Maintenance(
-                        rs.getInt("ID_MANUTENCAO"), dp, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"));
+                        rs.getInt("ID_MANUTENCAO"), rs.getInt("INDEX"), dp, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"));
             } catch (SQLException ex) {
             }
         }
@@ -55,6 +55,11 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         return null;
     }
     
+    /**
+     * Returns the total duration of the tasks defined for given DropPoint
+     * @param dp DropPoint
+     * @return total duration
+     */
     public Float getDropPointMaintenanceDuration(DropPoint dp) {
 
         ResultSet rs = executeQuery("SELECT SUM(AVG_DURATION) AS DURATION FROM PREEMPTIVE_DP_PLAN p, MAINTENANCE_TASK t\n" +
