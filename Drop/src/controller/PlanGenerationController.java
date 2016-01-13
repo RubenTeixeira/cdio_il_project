@@ -7,11 +7,9 @@ package controller;
 
 import domain.DropPoint;
 import domain.MaintenancePlan;
-import domain.Plannable;
 import domain.RepairPlan;
 import domain.WorkPlan;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
