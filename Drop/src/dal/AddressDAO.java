@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,7 +61,7 @@ public class AddressDAO extends GenericDAO<Address> {
             lastId = Integer.valueOf(executeQuery.getString(1));
 
         } catch (SQLException ex) {
-            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE,
                     "Not possible to get next id.", ex);
         }
         return lastId;
@@ -214,5 +216,46 @@ public class AddressDAO extends GenericDAO<Address> {
         }
         return null;
     }
+    
+    public List<Address> getListOfAddress(){
+        String query = "Select * from " + TABLENAME;
+        
+        ResultSet executeQuery = executeQuery(query);
+        List<Address> add = new ArrayList();
+        int id;
+        String street = "";
+        String postalCode = "";
+        String locality = "";
+        String lat = "";
+        String lnt = "";
+        
+        try {
+            while(executeQuery.next()){
+                id = executeQuery.getInt("ID_MORADA");
+                street = executeQuery.getString("RUA");
+                postalCode = executeQuery.getString("CODPOSTAL");
+                locality = executeQuery.getString("LOCALIDADE");
+                lat = executeQuery.getString("LATITUDE");
+                lnt = executeQuery.getString("LONGITUDE");
+                
+                lat = lat.replace(',', '.');
+                lnt = lnt.replace(',', '.');
+                String[] split = lnt.split("\\.");
+                lnt = split[0] + "." + split[1];
+                
+                Address address = new Address(street, postalCode, locality);
+                address.setId(id);
+                address.setLatitude(Double.valueOf(lat));
+                address.setLongitude(Double.valueOf(lnt));
+                add.add(address);      
+            }
+            return add;
+        } catch (SQLException ex) {
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
 
 }

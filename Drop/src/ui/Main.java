@@ -1,14 +1,23 @@
 package ui;
 
+import dal.AddressDAO;
+import dal.DropPointDAO;
+import dal.GenericDAO;
+import dal.Table;
+import esinf.graph.Graph;
 import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import maps.domain.RequestAPI;
 import maps.domain.Edge;
+import maps.domain.Point;
+import persistence.SQLConnection;
 
 /**
  *
@@ -22,12 +31,20 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
-
+        SQLConnection instance = persistence.OracleDb.getInstance();
+        DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
+        AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
+        
+        esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
+        gra.buildGraph(dao.getListDropPoints(), adressDao.getListOfAddress());
+        gra.show();
+        ArrayList<Deque<Point>> allPath = gra.allPath(null, null);
+        System.out.println("");
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
         //versaoGraficaParaCliente();
         //versaoConsola();
-        colaboradorConsola();
+        //colaboradorConsola();
         //colaboradorAPP();
 
     }
