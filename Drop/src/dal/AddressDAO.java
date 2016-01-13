@@ -238,11 +238,6 @@ public class AddressDAO extends GenericDAO<Address> {
                 lat = executeQuery.getString("LATITUDE");
                 lnt = executeQuery.getString("LONGITUDE");
                 
-                lat = lat.replace(',', '.');
-                lnt = lnt.replace(',', '.');
-                String[] split = lnt.split("\\.");
-                lnt = split[0] + "." + split[1];
-                
                 Address address = new Address(street, postalCode, locality);
                 address.setId(id);
                 address.setLatitude(Double.valueOf(lat));

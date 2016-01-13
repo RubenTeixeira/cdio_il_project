@@ -85,7 +85,7 @@ public class RepairPlan implements WorkPlan {
 
     @Override
     public void calcPlanPath() {
-        List<DropPoint> lstDropPoints = esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(createDropPointMap()); // .. a alterar nome do metodo
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap()); // .. a alterar nome do metodo
         for (int i = 0; i < lstDropPoints.size(); i++) {
             DropPoint dp = lstDropPoints.get(i);
             Repair repair = new Repair(incident);
