@@ -81,13 +81,13 @@ public class RepairPlan implements WorkPlan {
         List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap()); // .. a alterar nome do metodo
         for (int i = 0; i < lstDropPoints.size(); i++) {
             DropPoint dp = lstDropPoints.get(i);
-            Repair repair = new Repair(incident);
-            this.planPath.add(repair);
+           // Repair repair = new Repair(null);
+           // this.planPath.add(repair);
         }
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
-        return SLA.buildPriorityMap();
+        return null;
     }
 
     @Override
