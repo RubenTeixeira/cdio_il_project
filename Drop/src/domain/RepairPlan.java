@@ -5,6 +5,7 @@
  */
 package domain;
 
+import esinf.dropGraph.GraphDropPointNet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +22,14 @@ public class RepairPlan implements WorkPlan {
     private int teamID;
     private Date date;
     private List<Repair> planPath;
-
+     private GraphDropPointNet graph;
+    
     /**
      * Empty constructor
      */
     public RepairPlan() {
         this.planPath = new ArrayList<>();
+        graph = new GraphDropPointNet();
     }
 
     /**
@@ -75,7 +78,7 @@ public class RepairPlan implements WorkPlan {
 
     @Override
     public void calcPlanPath() {
-        List<DropPoint> lstDropPoints = esinf.dropGraph.GraphDropPointNet.nomeDoMetodo(createDropPointMap()); // .. a alterar nome do metodo
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap()); // .. a alterar nome do metodo
         for (int i = 0; i < lstDropPoints.size(); i++) {
             DropPoint dp = lstDropPoints.get(i);
             Repair repair = new Repair(incident);
