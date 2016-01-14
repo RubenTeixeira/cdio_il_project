@@ -150,4 +150,28 @@ public class RepairDAO extends GenericDAO<Repair>{
         }
         return repairPlan;
     }
+    public List<String> getRepairIncidents(Repair repair) throws SQLException
+    {
+        List<String> listIncidents = new ArrayList<>();
+        ResultSet rs = executeQuery("select p.description from Repair r, incident i, incident_type p\n" +
+                           "where r.id_repair = "+repair.getId()+
+                           " and r.id_incident = i.id_incident\n" +
+                           "and i.id_incident_type = p.id_incident_type");
+        while (rs.next())
+        {
+            listIncidents.add(rs.getString("DESCRIPTION"));
+        }
+         return listIncidents;
+    }
+
+    public int getCorrespondingDropPointID(Repair r) throws SQLException
+    {
+        ResultSet rs = executeQuery("select d.ID_DROPPOINT FROM Repair r, Incident i, Prateleira p, Armario a, DropPoint d\n" +
+                            "Where r.ID_REPAIR = "+r.getId()+
+                            " and r.ID_INCIDENT = i.ID_INCIDENT\n" +
+                            "and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
+                            "and p.ID_ARMARIO = a.ID_ARMARIO\n" +
+                            "and a.ID_DROPPOINT = d.ID_DROPPOINT;");
+        return rs.getInt("ID_DROPPOINT");
+    }
 }
