@@ -6,6 +6,7 @@ import dal.Table;
 import domain.DropPoint;
 import domain.Maintenance;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import persistence.SQLConnection;
 
@@ -27,6 +28,10 @@ public class UpdateMaintenanceController {
      * DropPoint DAO
      */
     private DropPointDAO dropPointDAO;
+    /**
+     * The selected maintenance
+     */
+    private Maintenance maintenance;
 
     /**
      * Constructor for new UpdateMaintenanceController
@@ -81,7 +86,7 @@ public class UpdateMaintenanceController {
      */
     public void setStartDateMaintenance()
     {
-        //.....
+        this.maintenance.setStartDate(new Date());
     }
 
     /**
@@ -89,6 +94,13 @@ public class UpdateMaintenanceController {
      */
     public void setFinishDateMaintenance()
     {
+        this.maintenance.setFinishDate(new Date());
+        this.maintenanceDAO.updateDates(maintenance);
         //.....
+    }
+
+    public void selectMaintenance(Maintenance choosenMaintenence)
+    {
+        this.maintenance= choosenMaintenence;
     }
 }

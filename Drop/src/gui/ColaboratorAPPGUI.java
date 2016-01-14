@@ -1,10 +1,19 @@
 package gui;
 
+import controller.AnomalyReportController;
+import controller.ParcelPickupController;
 import controller.UpdateMaintenanceController;
+import domain.Delivery;
 import domain.DropPoint;
 import domain.Maintenance;
+import domain.Token;
+import domain.TokenAssistant;
 import java.awt.CardLayout;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,9 +27,11 @@ import ui.Main;
  */
 public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
-    private DropPoint chosenDP;
-    private Maintenance chosenMaintenence;
+    private DropPoint choosenDP;
+    private Maintenance choosenMaintenence;
     private UpdateMaintenanceController updateMaintenanceController;
+    private ParcelPickupController seeTokenController;
+    private AnomalyReportController anomalyReportController;
     private DefaultListModel maintenanceListModel;
     private DefaultListModel maintenanceTaskModel;
     private CardLayout card;
@@ -32,6 +43,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     {
         initComponents();
         updateMaintenanceController = new UpdateMaintenanceController(Main.CREDENTIALS_FILE);
+
         this.maintenanceListModel = new DefaultListModel();
         this.maintenanceTaskModel = new DefaultListModel();
         this.listMaintenance.setModel(maintenanceListModel);
@@ -54,7 +66,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void buildTaskListMaintenance() throws SQLException
     {
-        List<String> listTasks = updateMaintenanceController.getTaskOfDropPoint(chosenDP.getId());
+        List<String> listTasks = updateMaintenanceController.getTaskOfDropPoint(choosenDP.getId());
         for (String task : listTasks)
         {
             this.maintenanceTaskModel.addElement(task);
@@ -91,7 +103,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         txtAnomalyText = new javax.swing.JTextArea();
         btnAnomalyCancel = new javax.swing.JButton();
         btnAnomalySend = new javax.swing.JButton();
+        btnCleanAnomalyTxt = new javax.swing.JButton();
         pListRepair = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         pMaintenance = new javax.swing.JPanel();
         btnAnomalyReport = new javax.swing.JButton();
         btnGenerateToken = new javax.swing.JButton();
@@ -102,6 +120,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnBackTaskMaintenance = new javax.swing.JButton();
         btnSubmitMaintenance = new javax.swing.JButton();
+        lblTokenViewMaintenance = new javax.swing.JLabel();
+        pSeeToken = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblSeeToken = new javax.swing.JLabel();
+        btnBackSeeToken = new javax.swing.JButton();
+        pRepair = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DropPoint Maintenance APP");
@@ -116,6 +141,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel2.setText("DropPoint Maintenance App");
 
         btnMaintenance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/MaintenanceIcon.png"))); // NOI18N
         btnMaintenance.setText("Maintenance");
         btnMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnMaintenance.addActionListener(new java.awt.event.ActionListener()
@@ -127,6 +153,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnRepair.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/RepairIcon.png"))); // NOI18N
         btnRepair.setText("Repair");
         btnRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -155,14 +182,14 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addComponent(btnMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(396, Short.MAX_VALUE))
+                .addContainerGap(317, Short.MAX_VALUE))
         );
 
         pRoot.add(pInicio, "cardInicio");
 
         pListMaintenance.setBorder(new javax.swing.border.MatteBorder(null));
         pListMaintenance.setName(""); // NOI18N
-        pListMaintenance.setPreferredSize(new java.awt.Dimension(400, 600));
+        pListMaintenance.setPreferredSize(new java.awt.Dimension(400, 550));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel3.setText("Maintenance List:");
@@ -177,7 +204,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listMaintenance);
 
         btnListMainBack.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListMainBack.setText("<< Back");
+        btnListMainBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnListMainBack.setText("Back");
         btnListMainBack.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnListMainBack.addActionListener(new java.awt.event.ActionListener()
         {
@@ -188,8 +216,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnListMainNext.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListMainNext.setText("Next >>");
+        btnListMainNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
+        btnListMainNext.setText("Next");
         btnListMainNext.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnListMainNext.setIconTextGap(-65);
         btnListMainNext.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -222,7 +252,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
                 .addGroup(pListMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnListMainBack, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnListMainNext, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -233,7 +263,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
         pAnomalyReport.setBorder(new javax.swing.border.MatteBorder(null));
         pAnomalyReport.setName(""); // NOI18N
-        pAnomalyReport.setPreferredSize(new java.awt.Dimension(400, 600));
+        pAnomalyReport.setPreferredSize(new java.awt.Dimension(400, 550));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Report anomaly to the authorities");
@@ -250,13 +280,42 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         txtAnomalyText.setRows(5);
         jScrollPane2.setViewportView(txtAnomalyText);
 
-        btnAnomalyCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAnomalyCancel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnAnomalyCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/cancelIcon.png"))); // NOI18N
         btnAnomalyCancel.setText("Cancel");
         btnAnomalyCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAnomalyCancel.setPreferredSize(new java.awt.Dimension(67, 27));
+        btnAnomalyCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnAnomalyCancelActionPerformed(evt);
+            }
+        });
 
-        btnAnomalySend.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAnomalySend.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnAnomalySend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/SendIcon.png"))); // NOI18N
         btnAnomalySend.setText("Send");
         btnAnomalySend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAnomalySend.setIconTextGap(-67);
+        btnAnomalySend.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnAnomalySendActionPerformed(evt);
+            }
+        });
+
+        btnCleanAnomalyTxt.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnCleanAnomalyTxt.setText("Clean");
+        btnCleanAnomalyTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnCleanAnomalyTxt.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnCleanAnomalyTxtActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pAnomalyReportLayout = new javax.swing.GroupLayout(pAnomalyReport);
         pAnomalyReport.setLayout(pAnomalyReportLayout);
@@ -265,6 +324,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             .addGroup(pAnomalyReportLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pAnomalyReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pAnomalyReportLayout.createSequentialGroup()
+                        .addComponent(btnAnomalyCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAnomalySend, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(pAnomalyReportLayout.createSequentialGroup()
                         .addGroup(pAnomalyReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
@@ -279,15 +343,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pAnomalyReportLayout.createSequentialGroup()
                         .addGap(0, 63, Short.MAX_VALUE)
-                        .addGroup(pAnomalyReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pAnomalyReportLayout.createSequentialGroup()
-                                .addComponent(btnAnomalyCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAnomalySend, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pAnomalyReportLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(60, 60, 60))))))
+                        .addComponent(jLabel4)
+                        .addGap(60, 60, 60))
+                    .addGroup(pAnomalyReportLayout.createSequentialGroup()
+                        .addComponent(btnCleanAnomalyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pAnomalyReportLayout.setVerticalGroup(
             pAnomalyReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,35 +362,84 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCleanAnomalyTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addGroup(pAnomalyReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAnomalyCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAnomalySend, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(192, Short.MAX_VALUE))
+                    .addComponent(btnAnomalyCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAnomalySend, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pRoot.add(pAnomalyReport, "cardAnomalyReport");
 
         pListRepair.setBorder(new javax.swing.border.MatteBorder(null));
-        pListRepair.setPreferredSize(new java.awt.Dimension(400, 600));
+        pListRepair.setPreferredSize(new java.awt.Dimension(400, 550));
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel10.setText("Repair plan for today:");
+
+        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jList1.setModel(new javax.swing.AbstractListModel()
+        {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(jList1);
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        jButton1.setText("Back");
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
+        jButton2.setText("Next");
+        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButton2.setIconTextGap(-65);
 
         javax.swing.GroupLayout pListRepairLayout = new javax.swing.GroupLayout(pListRepair);
         pListRepair.setLayout(pListRepairLayout);
         pListRepairLayout.setHorizontalGroup(
             pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGroup(pListRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         pListRepairLayout.setVerticalGroup(
             pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pListRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pRoot.add(pListRepair, "cardRepair");
 
         pMaintenance.setBorder(new javax.swing.border.MatteBorder(null));
-        pMaintenance.setPreferredSize(new java.awt.Dimension(400, 600));
+        pMaintenance.setPreferredSize(new java.awt.Dimension(400, 550));
 
         btnAnomalyReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAnomalyReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/ReporAnomaly.png"))); // NOI18N
         btnAnomalyReport.setText("Anomaly Report");
         btnAnomalyReport.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAnomalyReport.addActionListener(new java.awt.event.ActionListener()
@@ -342,8 +451,16 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnGenerateToken.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnGenerateToken.setText("Generate Token");
+        btnGenerateToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/ReceiveToken.png"))); // NOI18N
+        btnGenerateToken.setText("See Token");
         btnGenerateToken.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnGenerateToken.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnGenerateTokenActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("DropPoint: ");
@@ -364,7 +481,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel7.setText("Work to do:");
 
         btnBackTaskMaintenance.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnBackTaskMaintenance.setText("<< Back");
+        btnBackTaskMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnBackTaskMaintenance.setText("Back");
         btnBackTaskMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnBackTaskMaintenance.addActionListener(new java.awt.event.ActionListener()
         {
@@ -375,8 +493,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnSubmitMaintenance.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnSubmitMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/loginIcon.png"))); // NOI18N
         btnSubmitMaintenance.setText("Submit");
         btnSubmitMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnSubmitMaintenance.setIconTextGap(-85);
         btnSubmitMaintenance.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -384,6 +504,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 btnSubmitMaintenanceActionPerformed(evt);
             }
         });
+
+        lblTokenViewMaintenance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout pMaintenanceLayout = new javax.swing.GroupLayout(pMaintenance);
         pMaintenance.setLayout(pMaintenanceLayout);
@@ -394,6 +516,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(pMaintenanceLayout.createSequentialGroup()
+                        .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pMaintenanceLayout.createSequentialGroup()
                         .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pMaintenanceLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -402,13 +528,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addGroup(pMaintenanceLayout.createSequentialGroup()
                                 .addComponent(btnGenerateToken, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 128, Short.MAX_VALUE))
-                    .addGroup(pMaintenanceLayout.createSequentialGroup()
-                        .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblTokenViewMaintenance))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pMaintenanceLayout.setVerticalGroup(
@@ -426,7 +549,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGenerateToken, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 207, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(lblTokenViewMaintenance)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -434,6 +559,81 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         );
 
         pRoot.add(pMaintenance, "cardMaintenance");
+
+        pSeeToken.setBorder(new javax.swing.border.MatteBorder(null));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel8.setText("Your Token");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel9.setText("to get a outdated delivery:");
+
+        lblSeeToken.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        lblSeeToken.setText("jLabel10");
+
+        btnBackSeeToken.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnBackSeeToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnBackSeeToken.setText("Back");
+        btnBackSeeToken.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnBackSeeTokenActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pSeeTokenLayout = new javax.swing.GroupLayout(pSeeToken);
+        pSeeToken.setLayout(pSeeTokenLayout);
+        pSeeTokenLayout.setHorizontalGroup(
+            pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pSeeTokenLayout.createSequentialGroup()
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(54, 54, 54))
+            .addGroup(pSeeTokenLayout.createSequentialGroup()
+                .addGroup(pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBackSeeToken, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(lblSeeToken)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pSeeTokenLayout.setVerticalGroup(
+            pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pSeeTokenLayout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(lblSeeToken)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                .addComponent(btnBackSeeToken, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pRoot.add(pSeeToken, "cardSeeToken");
+
+        pRepair.setBorder(new javax.swing.border.MatteBorder(null));
+        pRepair.setPreferredSize(new java.awt.Dimension(400, 550));
+
+        javax.swing.GroupLayout pRepairLayout = new javax.swing.GroupLayout(pRepair);
+        pRepair.setLayout(pRepairLayout);
+        pRepairLayout.setHorizontalGroup(
+            pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 398, Short.MAX_VALUE)
+        );
+        pRepairLayout.setVerticalGroup(
+            pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 548, Short.MAX_VALUE)
+        );
+
+        pRoot.add(pRepair, "cardRepair");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -465,8 +665,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private void btnAnomalyReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalyReportActionPerformed
     {//GEN-HEADEREND:event_btnAnomalyReportActionPerformed
         //CardLayout card = (CardLayout) pRoot.getLayout();
+        anomalyReportController = new AnomalyReportController();
         card.show(pRoot, "cardAnomalyReport");
-        lblAnomalyDrop.setText(chosenDP.getName());
+        lblAnomalyDrop.setText(choosenDP.getName());
 
     }//GEN-LAST:event_btnAnomalyReportActionPerformed
 
@@ -486,10 +687,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void btnListMainNextActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnListMainNextActionPerformed
     {//GEN-HEADEREND:event_btnListMainNextActionPerformed
-        chosenMaintenence = (Maintenance) listMaintenance.getSelectedValue();
-        if (chosenMaintenence != null)
+        choosenMaintenence = (Maintenance) listMaintenance.getSelectedValue();
+        if (choosenMaintenence != null)
         {
-            chosenDP = updateMaintenanceController.getDropPointByID(chosenMaintenence.getDropPointID());
+            updateMaintenanceController.selectMaintenance(choosenMaintenence);
+            choosenDP = updateMaintenanceController.getDropPointByID(choosenMaintenence.getDropPointID());
             try
             {
                 buildTaskListMaintenance();
@@ -498,9 +700,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             {
                 Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+            updateMaintenanceController.setStartDateMaintenance();
             //CardLayout card = (CardLayout) pRoot.getLayout();
             card.show(pRoot, "cardMaintenance");
-            lblMaintenanceDP.setText(chosenDP.getName());
+            lblMaintenanceDP.setText(choosenDP.getName());
         } else
         {
             JOptionPane.showMessageDialog(this, "You need to select a Maintenance to continue.",
@@ -527,6 +730,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         {
             this.updateMaintenanceController.setFinishDateMaintenance();
             this.maintenanceListModel.clear();
+            this.maintenanceTaskModel.clear();
+            this.lblTokenViewMaintenance.setText("");
+            this.lblSeeToken.setText("");
+            btnGenerateToken.setEnabled(true);
             try
             {
                 buildListMaintenance();
@@ -538,29 +745,107 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSubmitMaintenanceActionPerformed
 
+    private void btnAnomalyCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalyCancelActionPerformed
+    {//GEN-HEADEREND:event_btnAnomalyCancelActionPerformed
+        card.show(pRoot, "cardMaintenance");
+
+    }//GEN-LAST:event_btnAnomalyCancelActionPerformed
+
+    private void btnCleanAnomalyTxtActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCleanAnomalyTxtActionPerformed
+    {//GEN-HEADEREND:event_btnCleanAnomalyTxtActionPerformed
+        txtAnomalyText.setText("");
+    }//GEN-LAST:event_btnCleanAnomalyTxtActionPerformed
+
+    private void btnAnomalySendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalySendActionPerformed
+    {//GEN-HEADEREND:event_btnAnomalySendActionPerformed
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you would like to send this report?");
+        if (confirmation != 0)
+        {
+            return;
+        }
+        //int dropPointID = Integer.parseInt(lblAnomalyDrop.getText());
+        String reportText = txtAnomalyText.getText();
+
+        if (!anomalyReportController.beginAnomalyReport(reportText, choosenDP.getId()))
+        {
+            JOptionPane.showMessageDialog(this, "Could not find a DropPoint with the ID provided.", "Not found", JOptionPane.ERROR_MESSAGE);
+        } else
+        {
+            if (!anomalyReportController.sendAnomalyReport())
+            {
+                JOptionPane.showMessageDialog(this, "Unable to dispatch the report.\nPlease try again.", "Report not sent", JOptionPane.ERROR_MESSAGE);
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Report was successfully sent to the authorities.", "Report Successfull", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnAnomalySendActionPerformed
+
+    private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateTokenActionPerformed
+    {//GEN-HEADEREND:event_btnGenerateTokenActionPerformed
+        seeTokenController = new ParcelPickupController();
+        String code = seeTokenController.generateRandomToken();
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
+        Date today = Calendar.getInstance().getTime();
+        String data = df.format(today);
+        Token newToken = new TokenAssistant(seeTokenController.getNextTokenID(), data, data, 1, code, 0);
+        if (seeTokenController.insertNewToken(newToken))
+        {
+            lblSeeToken.setText(code);
+        }
+        for (Token t : seeTokenController.checkValidity())
+        {
+            Delivery delivery = seeTokenController.getDeliveryByReservationIDFromDP(t.getReservationId(), choosenDP);
+            if (delivery != null)
+            {
+                delivery.setAssistantTokenID(newToken.getId());
+                seeTokenController.updateDelivery(delivery);
+            }
+        }
+        card.show(pRoot, "cardSeeToken");
+        btnGenerateToken.setEnabled(false);
+    }//GEN-LAST:event_btnGenerateTokenActionPerformed
+
+    private void btnBackSeeTokenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackSeeTokenActionPerformed
+    {//GEN-HEADEREND:event_btnBackSeeTokenActionPerformed
+        lblTokenViewMaintenance.setText("Your token for a outdated Delivery: "+lblSeeToken.getText());
+        card.show(pRoot, "cardMaintenance");
+    }//GEN-LAST:event_btnBackSeeTokenActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnomalyCancel;
     private javax.swing.JButton btnAnomalyReport;
     private javax.swing.JButton btnAnomalySend;
+    private javax.swing.JButton btnBackSeeToken;
     private javax.swing.JButton btnBackTaskMaintenance;
+    private javax.swing.JButton btnCleanAnomalyTxt;
     private javax.swing.JButton btnGenerateToken;
     private javax.swing.JButton btnListMainBack;
     private javax.swing.JButton btnListMainNext;
     private javax.swing.JButton btnMaintenance;
     private javax.swing.JButton btnRepair;
     private javax.swing.JButton btnSubmitMaintenance;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblAnomalyDrop;
     private javax.swing.JLabel lblMaintenanceDP;
+    private javax.swing.JLabel lblSeeToken;
+    private javax.swing.JLabel lblTokenViewMaintenance;
     private javax.swing.JList listMaintenance;
     private javax.swing.JList listTaskMaintenance;
     private javax.swing.JPanel pAnomalyReport;
@@ -568,7 +853,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pListMaintenance;
     private javax.swing.JPanel pListRepair;
     private javax.swing.JPanel pMaintenance;
+    private javax.swing.JPanel pRepair;
     private javax.swing.JPanel pRoot;
+    private javax.swing.JPanel pSeeToken;
     private javax.swing.JTextArea txtAnomalyText;
     // End of variables declaration//GEN-END:variables
 

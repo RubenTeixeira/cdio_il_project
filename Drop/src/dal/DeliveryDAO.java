@@ -55,7 +55,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public Delivery getDeliveryByReservationIDFromDP(int reservationId, DropPoint dropPoint){
         Delivery delivery = null;
         String qry = "select * from entrega e, reserva r"
-                + " where e." + reservationId + "= r.id_reserva"
+                + " where " + reservationId + "= r.id_reserva"
                 + " and r.id_dropPoint = "+dropPoint.getId();
         ResultSet rs = executeQuery(qry);
         if (rs != null) {
@@ -230,18 +230,18 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public String deliveriesList(DropPoint idDropPoint) {
         List<String> aux = new ArrayList<>();
 
-        ResultSet executeQuery = executeQuery("select e.DATAENT, p.idprateleira, e.idtoken "
+        ResultSet executeQuery = executeQuery("select e.id_entrega, e.data_fecha_prateleira, p.id_prateleira "
                 + "  from entrega e, prateleira p, armario a, droppoint d"
-                + " where e.idprateleira = p.idprateleira"
-                + "   and p.idarmario = a.idarmario"
-                + "   and a.iddroppoint = d.iddroppoint"
-                + "   and d.iddroppoint = " + idDropPoint.getId());
+                + " where e.id_prateleira = p.id_prateleira"
+                + "   and p.id_armario = a.id_armario"
+                + "   and a.id_droppoint = d.id_droppoint"
+                + "   and d.id_droppoint = " + idDropPoint.getId());
 
         try {
             String str = "";
             while (executeQuery.next()) {
 
-                str += "Delivery date: " + executeQuery.getString("dataent") + ". ID Cell: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+                str += " ID:: " + executeQuery.getString("id_entrega") + " Delivery date: " + executeQuery.getString("data_fecha_prateleira") + ". ID Cell: " + executeQuery.getString("id_prateleira") +  "\n";
                 aux.add(str);
             }
             if (str.isEmpty()) {
@@ -265,18 +265,18 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public String collectedList(DropPoint idDropPoint) {
         List<String> aux = new ArrayList<>();
 
-        ResultSet executeQuery = executeQuery("select r.DATAREC, p.idprateleira, r.idtoken "
+        ResultSet executeQuery = executeQuery("select r.DATA_FECHA_PRATELEIRA, p.id_prateleira, r.id_recolha "
                 + "  from recolha r, entrega e, prateleira p, armario a, droppoint d"
-                + "  where r.identrega = e.idtoken"
-                + "   and e.idprateleira = p.idprateleira"
-                + "   and p.idarmario = a.idarmario"
-                + "   and a.iddroppoint = d.iddroppoint"
-                + "   and d.iddroppoint = " + idDropPoint.getId());
+                + "  where r.id_entrega = e.id_entrega"
+                + "   and e.id_prateleira = p.id_prateleira"
+                + "   and p.id_armario = a.id_armario"
+                + "   and a.id_droppoint = d.id_droppoint"
+                + "   and d.id_droppoint = " + idDropPoint.getId());
         try {
             String str = "";
             while (executeQuery.next()) {
 
-                str += "Delivery date: " + executeQuery.getString("DATAREC") + ". ID Cell: " + executeQuery.getString("idprateleira") + " Token: " + executeQuery.getString("idtoken") + "\n";
+                str += "Token: " + executeQuery.getString("id_recolha") + " Delivery date: " + executeQuery.getString("DATA_FECHA_PRATELEIRA") + ". ID Cell: " + executeQuery.getString("id_prateleira") + "\n";
 
             }
 

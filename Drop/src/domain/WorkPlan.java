@@ -5,13 +5,15 @@
  */
 package domain;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
 public interface WorkPlan {
 
-    void calcPlanPath();
+    void calcPlanPath() throws SQLException ;
     boolean submitPlanPath();
     String getElements();
     
