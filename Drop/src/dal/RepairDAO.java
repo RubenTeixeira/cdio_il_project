@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
  */
-public class RepairDAO extends GenericDAO<Repair> {
+public class RepairDAO extends GenericDAO<Repair>{
     
     private final static String TABLENAME = "REPAIR";
     

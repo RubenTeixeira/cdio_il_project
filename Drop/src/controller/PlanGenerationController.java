@@ -33,12 +33,7 @@ public class PlanGenerationController {
     }
 
     public boolean startRepairPlanGeneration() {
-        try {
-            this.plan = new RepairPlan();
-        } catch (SQLException ex) {
-            Logger.getLogger(PlanGenerationController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+        this.plan = new RepairPlan();
         return true;
     }
 

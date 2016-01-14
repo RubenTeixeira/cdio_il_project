@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
@@ -15,21 +17,22 @@ import java.util.List;
 public class MaintenanceDAO extends GenericDAO<Maintenance> {
 
     private final static String TABLENAME = "MANUTENCAO";
-    
+
     public MaintenanceDAO(Connection con) {
         super(con, TABLENAME);
     }
-    
+
     /**
      * Get unexecuted Maintenance corresponding to given DropPoint
+     *
      * @param dp DropPoint
      * @return Maintenance
      */
     public Maintenance getDropPointMaintenance(DropPoint dp) {
         Maintenance maintenance = null;
-        ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO" +
-                                    "  WHERE ID_DROPPOINT = "+dp.getId()+
-                                    "  AND DATA_FIM = NULL");
+        ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO"
+                + "  WHERE ID_DROPPOINT = " + dp.getId()
+                + "  AND DATA_FIM = NULL");
         if (rs != null) {
             try {
                 rs.next();
@@ -40,11 +43,12 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         if (maintenance != null) {
             rs = executeQuery("SELECT * FROM CELL_MAINTENANCE"
-                            + "     WHERE ID_MAINTENANCE = "+maintenance.getId());
+                    + "     WHERE ID_MAINTENANCE = " + maintenance.getId());
             if (rs != null) {
                 try {
-                    while (rs.next())
+                    while (rs.next()) {
                         maintenance.addCellMaintenance(rs.getInt("ID_CELL"));
+                    }
                 } catch (SQLException ex) {
                 }
             }
@@ -52,34 +56,36 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         return null;
     }
-    
+
     /**
      * Returns the total duration of the tasks defined for given DropPoint
+     *
      * @param dp DropPoint
      * @return total duration
      */
     public Float getDropPointMaintenanceDuration(DropPoint dp) {
 
-        ResultSet rs = executeQuery("SELECT SUM(AVG_DURATION) AS DURATION FROM PREEMPTIVE_DP_PLAN p, MAINTENANCE_TASK t\n" +
-                                    "  WHERE p.ID_DROPPOINT = "+dp.getId()+"\n" +
-                                    "  AND p.ID_TASK = t.ID_TASK");
+        ResultSet rs = executeQuery("SELECT SUM(AVG_DURATION) AS DURATION FROM PREEMPTIVE_DP_PLAN p, MAINTENANCE_TASK t\n"
+                + "  WHERE p.ID_DROPPOINT = " + dp.getId() + "\n"
+                + "  AND p.ID_TASK = t.ID_TASK");
         if (rs != null) {
-                try {
-                    if (rs.next())
-                        return rs.getFloat("DURATION");
-                } catch (SQLException ex) {
+            try {
+                if (rs.next()) {
+                    return rs.getFloat("DURATION");
                 }
+            } catch (SQLException ex) {
+            }
         }
         return null;
     }
-    
+
     /**
      * Retrieves incremental ID for this object correponding Table
      *
      * @return int ID
      */
     public int getNextId() {
-        String query = "select nvl(max(id_manutencao),0)+1 as id from "+TABLENAME;
+        String query = "select nvl(max(id_manutencao),0)+1 as id from " + TABLENAME;
         ResultSet rs = executeQuery(query);
         if (rs != null) {
             try {
@@ -90,7 +96,7 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         return -1;
     }
-    
+
     /**
      * Retrieves incremental ID for this object correponding Table
      *
@@ -140,15 +146,16 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
     }
 
     public boolean insertPlan(MaintenancePlan plan) {
-        ResultSet rs = executeQuery("INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n" +
-                                    "    VALUES ("+plan.getId()+","+plan.getPlanDate()+","+plan.getTeamID()+")");
-        
+        ResultSet rs = executeQuery("INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
+                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")");
+
         if (rs != null) {
-                try {
-                    if (rs.next())
-                        return true;
-                } catch (SQLException ex) {
+            try {
+                if (rs.next()) {
+                    return true;
                 }
+            } catch (SQLException ex) {
+            }
         }
         return false;
     }
@@ -188,6 +195,43 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
             }
         }
         return list;
+    }
+    
+        public ArrayList<Maintenance> getCompletedMaintenancebyDropPoint(DropPoint droppoint) {
+        ArrayList<Maintenance> lMaintenance = new ArrayList<Maintenance>();
+        Maintenance maintenance = null;
+        ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO"
+                + "  WHERE ID_DROPPOINT = " + droppoint.getId()
+                + "  AND DATA_FIM = NOT NULL");
+        if (rs != null) {
+            try {
+                while (rs.next()) {
+
+                    rs.next();
+                    maintenance = new Maintenance(
+                            rs.getInt("ID_MANUTENCAO"), rs.getInt("VISIT_INDEX"), droppoint, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"), rs.getInt("ID_MAINT_PLAN"));
+
+                }
+                if (maintenance != null) {
+                    rs = executeQuery("SELECT * FROM CELL_MAINTENANCE"
+                            + "     WHERE ID_MAINTENANCE = " + maintenance.getId());
+                    if (rs != null) {
+                        try {
+                            while (rs.next()) {
+                                maintenance.addCellMaintenance(rs.getInt("ID_CELL"));
+                            }
+                        } catch (SQLException ex) {
+                        }
+                    }
+                    lMaintenance.add(maintenance);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MaintenanceDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return lMaintenance;
+        }
+        return null;
+
     }
     
     

@@ -4,34 +4,36 @@ package domain;
  *
  * @author 11408
  */
-public class DropPoint {
+public class DropPoint implements Comparable<DropPoint> {
 
     /**
      * The droppoint id
      */
     private int m_id;
-    
+
     /**
      * the droppoint name
      */
     private String m_name;
-    
+
     /**
      * The droppoint adress
      */
     private int m_idAddress;
-    
+
     /**
-     * The number of free days in 
+     * The number of free days in
      */
     private int free_days;
 
     /**
      * Constructor with parameters
+     *
      * @param m_id DropPoint ID
      * @param m_name DropPoint name
      * @param m_idAddress DropPoint's address
-     * @param free_days DropPoint's grace period which will be added to the Reservation period
+     * @param free_days DropPoint's grace period which will be added to the
+     * Reservation period
      */
     public DropPoint(int m_id, String m_name, int m_idAddress, int free_days) {
         this.m_id = m_id;
@@ -39,16 +41,16 @@ public class DropPoint {
         this.m_idAddress = m_idAddress;
         this.free_days = free_days;
     }
-    
+
     /**
      * Constructs an droppoint object without paramets
      */
     public DropPoint() {
     }
-    
-    
+
     /**
      * Rturns the droppoint id
+     *
      * @return the id
      */
     public int getId() {
@@ -57,31 +59,35 @@ public class DropPoint {
 
     /**
      * Returns the droppoint name
+     *
      * @return the name
      */
     public String getName() {
         return this.m_name;
     }
-    
+
     /**
      * Returns the droppoint address
+     *
      * @return the adress
      */
     public int getIdAddress() {
         return this.m_idAddress;
     }
-    
+
     /**
      * Returns the dropoint Free Days
+     *
      * @return the free days
      */
-    public int getFree_Days(){
+    public int getFree_Days() {
         return this.free_days;
     }
 
     //SET`S
     /**
      * Sets a new droppoint id
+     *
      * @param m_id the new id
      */
     public void setId(int m_id) {
@@ -90,6 +96,7 @@ public class DropPoint {
 
     /**
      * Sets a new droppoint name
+     *
      * @param m_name the new name
      */
     public void setName(String m_name) {
@@ -98,22 +105,24 @@ public class DropPoint {
 
     /**
      * Sets a new droppoint address id
-     * @param m_idAddress the new address id 
+     *
+     * @param m_idAddress the new address id
      */
     public void setIdAddress(int m_idAddress) {
         this.m_idAddress = m_idAddress;
     }
-    
+
     /**
      * Sets a new droppoint free days period
-     * @param free_days the new free days period 
+     *
+     * @param free_days the new free days period
      */
-    public void setFree_Days(int free_days){
+    public void setFree_Days(int free_days) {
         this.free_days = free_days;
     }
 
     /**
-     * 
+     *
      * @return DropPoint name
      */
     @Override
@@ -121,6 +130,32 @@ public class DropPoint {
 
         return this.m_name;
     }
-    
-    
+
+    @Override
+    public int compareTo(DropPoint other) {
+        return this.getId() - other.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + this.m_id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DropPoint other = (DropPoint) obj;
+        if (this.m_id != other.m_id) {
+            return false;
+        }
+        return true;
+    }
+
 }

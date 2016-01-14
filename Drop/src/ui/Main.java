@@ -13,10 +13,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import maps.domain.Point;
 import persistence.SQLConnection;
 
 /**
@@ -44,13 +46,20 @@ public class Main {
         DropPoint get1 = listDropPoints.get(1);
         DropPoint get2 = listDropPoints.get(2);
         Float fg = (float) 2.0;
-        Float fg1 = (float) 3.0;
+        Float fg1 = (float) -3.0;
         Float fg12 = new Float(3.0);
         m.put(get, fg);
         m.put(get1, fg1);
-        m.put(get1, fg12);
+        m.put(get2, fg12);
         
-        gra.buildPathWithPriority(m);
+        List<DropPoint> buildPathWithPriority = gra.buildPathWithPriority(m);
+        System.out.println(buildPathWithPriority);
+        List<Point> buildPathShortestPath = gra.buildPathShortestPath(gra.getPoints().get(0), gra.getPoints().subList(1, 3));
+        for (Point buildPathShortestPath1 : buildPathShortestPath) {
+            System.out.println(gra.getDropPointByPoint(buildPathShortestPath1));
+        }
+        
+        //gra.show(gra.getPoints(), gra.getPoints(), gra.getPoints());
         
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
