@@ -2,18 +2,12 @@ package ui;
 
 import dal.AddressDAO;
 import dal.DropPointDAO;
-import dal.GenericDAO;
 import dal.Table;
 import domain.DropPoint;
-import esinf.graph.Graph;
-import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -36,11 +30,11 @@ public class Main {
         SQLConnection instance = persistence.OracleDb.getInstance();
         DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
         AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
-        
+
         esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
-        
-        HashMap<DropPoint,Float> m = new HashMap<>();
-        
+
+        HashMap<DropPoint, Float> m = new HashMap<>();
+
         List<DropPoint> listDropPoints = dao.getListDropPoints();
         DropPoint get = listDropPoints.get(0);
         DropPoint get1 = listDropPoints.get(1);
@@ -51,14 +45,14 @@ public class Main {
         m.put(get, fg);
         m.put(get1, fg1);
         m.put(get2, fg12);
-        
+
         List<DropPoint> buildPathWithPriority = gra.buildPathWithPriority(m);
         System.out.println(buildPathWithPriority);
         List<Point> buildPathShortestPath = gra.buildPathShortestPath(gra.getPoints().get(0), gra.getPoints().subList(1, 3));
         for (Point buildPathShortestPath1 : buildPathShortestPath) {
             System.out.println(gra.getDropPointByPoint(buildPathShortestPath1));
         }
-        
+
         //gra.show(gra.getPoints(), gra.getPoints(), gra.getPoints());
         
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
@@ -67,7 +61,7 @@ public class Main {
         //versaoConsola();
         //colaboradorConsola();
         //colaboradorAPP();
-
+        //gestorConsola();
     }
 
     public static void menu() {
@@ -106,7 +100,7 @@ public class Main {
     }
 
     private static void colaboradorConsola() throws SQLException {
-        
+
         System.out.println("--------------Maintenance Assistant------------");
         String menu = "1. Start Maintenance\n"
                 + "2. Pickup past Deliveries\n"
@@ -121,7 +115,7 @@ public class Main {
                 case 1:
                     maintenanceUI = new MaintenanceUI(CREDENTIALS_FILE);
                     MaintenanceUI run = maintenanceUI.run();
-                    if(run != null){
+                    if (run != null) {
                         // CHAMAR O QUE FOR Necessario;
                     }
                     break;
@@ -132,10 +126,11 @@ public class Main {
                     new MakeMaintenanceUI(CREDENTIALS_FILE);
                     break;
                 case 4:
-                    if(maintenanceUI!=null)
+                    if (maintenanceUI != null) {
                         maintenanceUI.resume();
-                    else
+                    } else {
                         System.out.println("Nothing in resume mode!");
+                    }
                 case 0:
                     versaoConsola();
                     break;
@@ -149,11 +144,14 @@ public class Main {
 
     private static void gestorConsola() {
         System.out.println("-----------------Manager---------------");
-        String menu = "1. Droppoint Management\n"
+        String menu = "1. List deliveries, pickups and occupation rate\n"
+                + "2. List maintenances\n"
+                + "3. List repairs\n"
                 + "0. Exit";
         int op = 0;
         do {
             System.out.println(menu);
+            op = in.nextInt();
             switch (op) {
                 case 1:
                     try {
@@ -163,6 +161,13 @@ public class Main {
                     }
                     break;
                 case 2:
+                    try {
+                        new ListMaintenanceUI();
+                    } catch (RuntimeException e) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());
+                    }
+                    break;
+                case 0:
                     exit(0);
                     break;
                 default:
@@ -173,8 +178,9 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void colaboradorAPP() {
-        new ColaboratorAPPGUI();
-    }
-
+//    private static void colaboradorAPP() {
+//        new ColaboratorAPPGUI();
+//    }
 }
+
+
