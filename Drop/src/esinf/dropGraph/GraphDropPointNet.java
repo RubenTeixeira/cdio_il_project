@@ -13,6 +13,7 @@ import domain.Address;
 import domain.DropPoint;
 import esinf.graph.Edge;
 import esinf.graph.Graph;
+import esinf.graph.GraphAlgorithms;
 import esinf.graph.Vertex;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,6 +44,10 @@ public class GraphDropPointNet {
     private List<Address> address;
     private List<Point> points;
 
+    public GraphDropPointNet(boolean isDirected) {
+        this.setDropPointNet(new Graph<>(isDirected));
+    }
+    
     /**
      *
      */
@@ -275,7 +280,12 @@ public class GraphDropPointNet {
         }
         return null;
     }
-
+    
+    public boolean isReachable(Point a,Point b){
+        Deque<Point> vertices = GraphAlgorithms.DepthFirstSearch(dropPointNet, a);
+        return vertices.contains(b);
+    }
+    
     /**
      *
      * @param dropPoint
@@ -362,7 +372,7 @@ public class GraphDropPointNet {
      * @return
      */
     public List<Point> getPathLimitedByTime(Point a, List<Point> waypoints, long time) {
-        List<Point> shortestPath = buildPathShortestPath(a, waypoints);
+        List<Point> shortestPath = computeShortestPath(a, waypoints);
         long temp = 0;
         calculateTime(shortestPath, time, temp);
 
@@ -450,6 +460,13 @@ public class GraphDropPointNet {
 
         return dropPriority;
     }
+    
+    
+    public List<DropPoint> buildPathWithPriority(Map<DropPoint, Float> map, Address origem,Address destino){
+        return null;
+    }
+    
+    
 
     /**
      *
@@ -494,7 +511,7 @@ public class GraphDropPointNet {
      * @param wayPoints
      * @return List
      */
-    public List<Point> buildPathShortestPath(Point a, List<Point> wayPoints) {
+    public List<Point> computeShortestPath(Point a, List<Point> wayPoints) {
         ArrayList<Deque<Point>> allPath = allPath(a, a);
         List<Deque<Point>> aux = new ArrayList<>();
 
