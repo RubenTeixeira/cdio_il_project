@@ -944,6 +944,12 @@ INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_dat
 VALUES (seq_id_incident.nextval,2,2,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
 VALUES (seq_id_incident.nextval,1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
+VALUES (seq_id_incident.nextval,3,34,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
+VALUES (seq_id_incident.nextval,3,11,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
+VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
@@ -959,6 +965,14 @@ VALUES (1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
 VALUES(1,0,2,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
+VALUES(2,0,3,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
+VALUES(3,0,4,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
+VALUES(4,0,5,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
+VALUES(5,0,6,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 
 
 COMMIT;
