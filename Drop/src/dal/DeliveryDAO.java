@@ -55,7 +55,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     public Delivery getDeliveryByReservationIDFromDP(int reservationId, DropPoint dropPoint){
         Delivery delivery = null;
         String qry = "select * from entrega e, reserva r"
-                + " where e." + reservationId + "= r.id_reserva"
+                + " where " + reservationId + "= r.id_reserva"
                 + " and r.id_dropPoint = "+dropPoint.getId();
         ResultSet rs = executeQuery(qry);
         if (rs != null) {
