@@ -110,6 +110,7 @@ public class RepairPlan implements WorkPlan {
     }
     
     private void calcPlanPath(Address initVertex, Address endVertex) {
+        this.planPath.clear();
 //        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
 //        List<Incident> lstIncidents;
 //        DropPoint dp;
@@ -155,13 +156,11 @@ public class RepairPlan implements WorkPlan {
         return strB.toString();
     }
     
-    public List<Repair> updatePlan(Repair finishedRepair) throws SQLException {
-        //this.planPath = currentPlan.getPlanPath();
+    public void updatePlan(Repair finishedRepair) throws SQLException {
         repairDAO.update(finishedRepair);
-        return null;
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        
+        calcPlanPath(initVertex, endVertex);
     }
     
 }

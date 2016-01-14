@@ -94,13 +94,14 @@ CREATE TABLE Recolha (
 );
 
 CREATE TABLE Entrega (
-	id_entrega number(10)NOT NULL,
-	data_abre_prateleira date,
+	id_entrega            number(10)NOT NULL,
+	data_abre_prateleira  date,
 	data_fecha_prateleira date,
-	id_reserva number(10) NOT NULL UNIQUE,
-	id_prateleira number(10),
-	id_token_estafeta numeric(10)NOT NULL UNIQUE,
-	id_token_colaborador numeric(10)
+	id_reserva            number(10) NOT NULL UNIQUE,
+	id_prateleira         number(10),
+	id_token_estafeta     numeric(10)NOT NULL UNIQUE,
+	id_token_colaborador  numeric(10),
+        notification_email    VARCHAR2(255)
 );
 
 CREATE TABLE Gestor (

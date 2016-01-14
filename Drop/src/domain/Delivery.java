@@ -18,6 +18,7 @@ public class Delivery implements CellTransaction {
     private int cellID;
     private String openedDate;
     private String closedDate;
+    private String notificationEmail;
     private int reservationID;
     private int courierTokenID;
     private int assistantTokenID;
@@ -85,6 +86,11 @@ public class Delivery implements CellTransaction {
         return ft.format(data);
     }
 
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+
     /*Setter methods*/
     @Override
     public void setId(int deliveryID) {
@@ -115,6 +121,10 @@ public class Delivery implements CellTransaction {
 
     public void setAssistantTokenID(int assistantTokenID) {
         this.assistantTokenID = assistantTokenID;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
 
     /**

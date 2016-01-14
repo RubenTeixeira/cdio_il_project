@@ -118,10 +118,11 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
     @Override
     public boolean insertNew(Delivery obj) {
         String query = "INSERT INTO ENTREGA ("
-                + "ID_ENTREGA,ID_PRATELEIRA,ID_RESERVA,ID_TOKEN_ESTAFETA,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA) "
+                + "ID_ENTREGA,ID_PRATELEIRA,ID_RESERVA,ID_TOKEN_ESTAFETA,DATA_ABRE_PRATELEIRA,DATA_FECHA_PRATELEIRA,notification_email) "
                 + " VALUES (" + obj.getDeliveryID() + "," + obj.getCellID() + "," + obj.getReservationID() + "," + obj.getCourierTokenID() + ","
                 + "TO_DATE('" + obj.getOpenedDate() + "', 'dd-mm-yyyy HH24:MI'),"
-                + "TO_DATE('" + obj.getClosedDate() + "', 'dd-mm-yyyy HH24:MI'))";
+                + "TO_DATE('" + obj.getClosedDate() + "', 'dd-mm-yyyy HH24:MI'),"
+                +obj.getNotificationEmail()+")";
         ResultSet rs = executeQuery(query);
         return rs != null;
     }
