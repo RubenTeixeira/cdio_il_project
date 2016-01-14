@@ -26,8 +26,9 @@ public class ConsultOccupationDeliveriesUI {
        
         
         List<DropPoint> deliveriesConsultationCollectionsDropPoint = controller.deliveriesConsultationCollectionsDropPoint();
-        System.out.println(deliveriesConsultationCollectionsDropPoint);
-
+        for (DropPoint dp : deliveriesConsultationCollectionsDropPoint) {
+            System.out.println(dp.getId() + ". " +dp.getName());
+        }
         System.out.println("Seleccione id do DropPoint: \n");
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
