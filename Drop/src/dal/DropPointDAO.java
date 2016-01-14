@@ -189,4 +189,22 @@ public class DropPointDAO extends GenericDAO<DropPoint> {
         return (max-rate);
     }
 
+    public List<DropPoint> getDropPointsWithIncidents() {
+        List<DropPoint> lstDropPoints = null;
+        ResultSet rs = executeQuery("SELECT d.* FROM INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" + "    WHERE i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" + "    AND p.ID_ARMARIO = a.ID_ARMARIO\n" + "    AND a.ID_DROPPOINT = d.ID_DROPPOINT");
+        if (rs != null) {
+            lstDropPoints = new ArrayList<>();
+            try {
+                while (rs.next()) {
+                    DropPoint dp = new DropPoint();
+                    dp.setId(rs.getInt("ID_DROPPOINT"));
+                    dp.setName(rs.getString("NOME_DROPPOINT"));
+                    lstDropPoints.add(dp);
+                }
+            } catch (SQLException ex) {
+            }
+        }
+        return lstDropPoints;
+    }
+
 }

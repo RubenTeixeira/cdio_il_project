@@ -39,11 +39,7 @@ public class MaintenancePlan implements WorkPlan {
      * @throws java.sql.SQLException
      */
     public MaintenancePlan() throws SQLException {
-        this.planPath = new ArrayList<>();
-        SQLConnection manager = persistence.OracleDb.getInstance();
-        maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
-        dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
-        graph = new GraphDropPointNet();
+        this(new ArrayList<>());
     }
 
     /**
@@ -55,6 +51,7 @@ public class MaintenancePlan implements WorkPlan {
         SQLConnection manager = persistence.OracleDb.getInstance();
         maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
         dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
+        graph = new GraphDropPointNet();
     }
 
     // Getter and Setter
@@ -101,20 +98,22 @@ public class MaintenancePlan implements WorkPlan {
     @Override
     public String toString() {
         StringBuilder planStr = new StringBuilder();
-        for (Maintenance maintenance : planPath)
-            planStr.append(maintenance+"\n");
-        
+        int i = 1;
+        for (Maintenance maintenance : planPath) {
+            planStr.append(i).append(" - ").append(maintenance).append("\n");
+            i++;
+        }
         return planStr.toString();
     }
 
     @Override
     public void calcPlanPath() {
         Map<DropPoint, Float> map = createDropPointMap();
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map); // .. a alterar nome do metodo
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map);
         
         for (int i = 0; i < lstDropPoints.size(); i++) {
             DropPoint dp = lstDropPoints.get(i);
-            Maintenance maintenance = new Maintenance(maintenanceDAO.getNextId(), i, dp, null, null, 0);
+            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
             this.planPath.add(maintenance);
         }
 
@@ -127,14 +126,7 @@ public class MaintenancePlan implements WorkPlan {
     private Map<DropPoint, Float> createDropPointMap() {
         SQLConnection manager = persistence.OracleDb.getInstance();
         List<DropPoint> lstDropPoint;
-        
-        try {
-            
-            maintenanceDAO = (MaintenanceDAO)manager.getDAO(Table.MANUTENCAO);
-        } catch (SQLException ex) {
-            Logger.getLogger(MaintenancePlan.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
         if (dropPointDAO != null) {
             lstDropPoint = dropPointDAO.getListDropPoints();
             Map<DropPoint,Float> mapDropPoints = new HashMap();
@@ -161,12 +153,22 @@ public class MaintenancePlan implements WorkPlan {
             return false;
         
         for (Maintenance m : this.planPath) {
+            m.setId(maintenanceDAO.getNextId());
             m.setPlanID(this.id);
             if (!maintenanceDAO.insertNew(m))
                 return false;
         }
         
         return true;
+    }
+
+    @Override
+    public String getElements() {
+        StringBuilder strB = new StringBuilder();
+        for (DropPoint dp : dropPointDAO.getListDropPoints())
+            strB.append(dp.getName());
+        
+        return strB.toString();
     }
     
     

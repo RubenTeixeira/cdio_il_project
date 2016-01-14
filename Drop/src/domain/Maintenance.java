@@ -51,22 +51,30 @@ public class Maintenance implements Plannable {
     private int planID;
     
     /**
+     * DropPoint ID
+     */
+    private int dropPointID;
+    
+    /**
      * Constructs an Maintenance object with the specified parameters:
-     * @param id the maintenance id
      * @param index
      * @param dropPoint the maintenance droppoint
      * @param startDate the maintenance start date
      * @param finishDate the maintenance finish date
      * @param planID
      */
-    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
-        this.id = id;
+    public Maintenance(int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
         this.index = index;
         this.dropPoint = dropPoint;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.planID = planID;
         this.lstCells = new ArrayList<>();
+    }
+    
+    public Maintenance(int id, int index, DropPoint dropPoint, Date startDate, Date finishDate, int planID) {
+        this(index, dropPoint, startDate, finishDate, planID);
+        this.id = id;
     }
 
     /**
@@ -91,7 +99,20 @@ public class Maintenance implements Plannable {
     public int getIndex() {
         return index;
     }
-
+   
+    /**
+     * return the DropPoint ID
+     * @return DropPoint ID
+     */
+    public int getDropPointID()
+    {
+        if(dropPoint==null){
+            return this.dropPointID;
+        }else{
+            return dropPoint.getId();
+        }
+    }
+    
     /**
      * Sets the index
      * @param index 
@@ -107,7 +128,18 @@ public class Maintenance implements Plannable {
     public void setId(int id) {
         this.id = id;
     }
-
+    
+    /**
+     * Sets de DropPoint ID
+     * @param dropPointID DropID
+     */
+    public void setDropPointID(int dropPointID)
+    {
+        if(dropPoint==null){
+            this.dropPointID = dropPointID;
+        }
+    }
+    
     /**
      * Returns the maintenance droppoint
      * @return the droppoint
@@ -200,4 +232,9 @@ public class Maintenance implements Plannable {
         return this.lstCells.remove(id);
     }
     
+    @Override
+    public String toString()
+    {
+        return "Manutenção: " + this.getId()+" DropPoint: "+this.dropPointID;
+    }
 }

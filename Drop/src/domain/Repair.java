@@ -5,6 +5,7 @@
  */
 package domain;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -13,15 +14,26 @@ import java.util.Objects;
  */
 public class Repair implements Plannable {
     
+    private int id;
     private int incidentID;
     private int index;
+    private int planID;
     private DropPoint dropPoint;
-    private String repairDate;
+    private Date repairDate;
     private String observations;
     private String partsUsed;
 
-    public Repair(int incidentID) {
+    public Repair(int incidentID, int planID) {
         this.incidentID = incidentID;
+        this.planID = planID;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIncidentID() {
@@ -34,6 +46,14 @@ public class Repair implements Plannable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public int getPlanID() {
+        return planID;
+    }
+
+    public void setPlanID(int planID) {
+        this.planID = planID;
     }
 
     @Override
@@ -49,11 +69,11 @@ public class Repair implements Plannable {
         this.incidentID = incidentID;
     }
 
-    public String getRepairDate() {
+    public Date getRepairDate() {
         return repairDate;
     }
 
-    public void setRepairDate(String repairDate) {
+    public void setRepairDate(Date repairDate) {
         this.repairDate = repairDate;
     }
 
