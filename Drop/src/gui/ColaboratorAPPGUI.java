@@ -372,6 +372,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         pMaintenance.setPreferredSize(new java.awt.Dimension(400, 550));
 
         btnAnomalyReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAnomalyReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/ReporAnomaly.png"))); // NOI18N
         btnAnomalyReport.setText("Anomaly Report");
         btnAnomalyReport.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAnomalyReport.addActionListener(new java.awt.event.ActionListener()
@@ -383,7 +384,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnGenerateToken.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnGenerateToken.setText("Generate Token");
+        btnGenerateToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/ReceiveToken.png"))); // NOI18N
+        btnGenerateToken.setText("See Token");
         btnGenerateToken.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -438,6 +440,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(pMaintenanceLayout.createSequentialGroup()
+                        .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pMaintenanceLayout.createSequentialGroup()
                         .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pMaintenanceLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -446,13 +452,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addGroup(pMaintenanceLayout.createSequentialGroup()
                                 .addComponent(btnGenerateToken, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pMaintenanceLayout.createSequentialGroup()
-                        .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                        .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pMaintenanceLayout.setVerticalGroup(
