@@ -531,6 +531,18 @@ VALUES (seq_id_maintenance.nextval, m_drop,m_plan,m_assist,m_dateS,m_dateF);
 
 END;
 /
+
+CREATE OR REPLACE PROCEDURE updateMaintenanceDate (
+  m_date_i in manutencao.data_inicio%type,
+  m_date_f in manutencao.data_fim%type,
+  m_id in manutencao.id_manutencao%type)
+IS
+BEGIN
+    UPDATE MANUTENCAO SET DATA_INICIO = m_date_i, DATA_FIM = m_date_f
+      where ID_MANUTENCAO = m_id;
+END;
+/
+
 /*
 begin 
 declare c is cursor
