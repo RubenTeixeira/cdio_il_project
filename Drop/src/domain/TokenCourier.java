@@ -12,7 +12,6 @@ import dal.DeliveryDAO;
 import dal.CellDAO;
 import persistence.SQLConnection;
 import dal.Table;
-import java.util.Objects;
 
 /**
  *
@@ -52,10 +51,10 @@ public class TokenCourier extends TokenImpl {
         try {
             deliveryDAO = (DeliveryDAO)manager.getDAO(Table.DELIVERY);
             delivery.setId(deliveryDAO.getNextId());
+            delivery.setNotificationEmail(deliveryDAO.getClientEmail(delivery));
             deliveryDAO.insertNew(delivery);
-            String email = deliveryDAO.getClientEmail(delivery);
             String pickUpToken = deliveryDAO.getPickUpToken(delivery);
-            Notice.enviarEmail(email, pickUpToken);
+            Notice.enviarEmail(delivery.getNotificationEmail(), pickUpToken);
         } catch (SQLException ex) {
             Logger.getLogger(Management.class.getName()).log(Level.SEVERE, 
                     "Error contacting the Database.");
