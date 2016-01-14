@@ -155,13 +155,11 @@ public class RepairPlan implements WorkPlan {
         return strB.toString();
     }
     
-    public List<Repair> updatePlan(Repair finishedRepair) throws SQLException {
-        //this.planPath = currentPlan.getPlanPath();
+    public void updatePlan(Repair finishedRepair) throws SQLException {
         repairDAO.update(finishedRepair);
-        
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        return null;
+        calcPlanPath(initVertex, endVertex);
     }
     
 }
