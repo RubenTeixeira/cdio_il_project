@@ -146,4 +146,9 @@ public class RepairPlan implements WorkPlan {
         return strB.toString();
     }
     
+    public List<Repair> updatePlan(RepairPlan currentPlan, Repair finishedRepair) {
+        this.planPath = currentPlan.getPlanPath();
+        repairDAO.update(finishedRepair);
+    }
+    
 }

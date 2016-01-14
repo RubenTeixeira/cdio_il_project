@@ -545,6 +545,11 @@ end;
 --Dados para testes da Base de Dados, (Inserts)
 
   --MORADA -> INSERT INTO Morada (ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (Int, String, String, String);
+
+               --- HeadQuarters (HQ)----
+INSERT INTO MORADA (ID_MORADA,LATITUDE,LONGITUDE)
+    VALUES(0,41.177604,-8.607772);
+
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
 
