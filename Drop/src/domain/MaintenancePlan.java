@@ -133,6 +133,7 @@ public class MaintenancePlan implements WorkPlan {
             for (DropPoint dp : lstDropPoint) {
                 Float maintenanceDuration = maintenanceDAO.getDropPointMaintenanceDuration(dp);
                 mapDropPoints.put(dp, maintenanceDuration);
+                //System.out.println("DropPoint: "+dp.getName()+" Dur: "+maintenanceDuration);
             }
             return mapDropPoints;
         }

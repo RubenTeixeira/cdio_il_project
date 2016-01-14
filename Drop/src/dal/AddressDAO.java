@@ -251,6 +251,16 @@ public class AddressDAO extends GenericDAO<Address> {
         return null;
     }
     
-    
+    public Address getHeadQuartersLocation() throws SQLException {
+        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from "
+                + TABLENAME + " where ID_MORADA = 0");
+        Address address = null;
+        if (rs.next()) {
+            address.setId(0);
+            address.setLatitude(rs.getDouble("LATITUDE"));
+            address.setLongitude(rs.getDouble("LONGITUDE"));
+        }
+        return address;
+    }
 
 }
