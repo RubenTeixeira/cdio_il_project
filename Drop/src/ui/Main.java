@@ -27,31 +27,31 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         //utils.ReadAndWriteFile.readFromFile("settings/settings.txt");
-        SQLConnection instance = persistence.OracleDb.getInstance();
-        DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
-        AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
-
-        esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
-
-        HashMap<DropPoint, Float> m = new HashMap<>();
-
-        List<DropPoint> listDropPoints = dao.getListDropPoints();
-        DropPoint get = listDropPoints.get(0);
-        DropPoint get1 = listDropPoints.get(1);
-        DropPoint get2 = listDropPoints.get(2);
-        Float fg = (float) 2.0;
-        Float fg1 = (float) -3.0;
-        Float fg12 = new Float(3.0);
-        m.put(get, fg);
-        m.put(get1, fg1);
-        m.put(get2, fg12);
-
-        List<DropPoint> buildPathWithPriority = gra.buildPathWithPriority(m);
-        System.out.println(buildPathWithPriority);
-        List<Point> buildPathShortestPath = gra.buildPathShortestPath(gra.getPoints().get(0), gra.getPoints().subList(1, 3));
-        for (Point buildPathShortestPath1 : buildPathShortestPath) {
-            System.out.println(gra.getDropPointByPoint(buildPathShortestPath1));
-        }
+//        SQLConnection instance = persistence.OracleDb.getInstance();
+//        DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
+//        AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
+//
+//        esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
+//
+//        HashMap<DropPoint, Float> m = new HashMap<>();
+//
+//        List<DropPoint> listDropPoints = dao.getListDropPoints();
+//        DropPoint get = listDropPoints.get(0);
+//        DropPoint get1 = listDropPoints.get(1);
+//        DropPoint get2 = listDropPoints.get(2);
+//        Float fg = (float) 2.0;
+//        Float fg1 = (float) -3.0;
+//        Float fg12 = new Float(3.0);
+//        m.put(get, fg);
+//        m.put(get1, fg1);
+//        m.put(get2, fg12);
+//
+//        List<DropPoint> buildPathWithPriority = gra.buildPathWithPriority(m);
+//        System.out.println(buildPathWithPriority);
+//        List<Point> buildPathShortestPath = gra.buildPathShortestPath(gra.getPoints().get(0), gra.getPoints().subList(1, 3));
+//        for (Point buildPathShortestPath1 : buildPathShortestPath) {
+//            System.out.println(gra.getDropPointByPoint(buildPathShortestPath1));
+//        }
 
         //gra.show(gra.getPoints(), gra.getPoints(), gra.getPoints());
         
@@ -61,7 +61,7 @@ public class Main {
         //versaoConsola();
         //colaboradorConsola();
         //colaboradorAPP();
-        //gestorConsola();
+        gestorConsola();
     }
 
     public static void menu() {

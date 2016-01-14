@@ -99,8 +99,8 @@ public class RepairDAO extends GenericDAO<Repair>{
     public List<String> getCompletedRepairbyDropPoint(DropPoint droppoint) throws SQLException{
         List<String> lRepair = new ArrayList<>();
         String query = "SELECT * from repair r, incident i, prateleira p, armario a, incident_type t "
-                + "WHERE r.id_incident = i.id_incident"
-                + "AND i.id_incident_type = t.incident_type"
+                + "WHERE r.id_incident = i.id_incident "
+                + "AND i.id_incident_type = t.id_incident_type "
                 + "AND i.id_prateleira = p.id_prateleira "
                 + "AND p.id_armario = a.id_armario "
                 + "AND a.id_droppoint = " + droppoint.getId();
