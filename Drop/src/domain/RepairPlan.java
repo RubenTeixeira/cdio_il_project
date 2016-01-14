@@ -157,9 +157,10 @@ public class RepairPlan implements WorkPlan {
     
     public void updatePlan(Repair finishedRepair) throws SQLException {
         repairDAO.update(finishedRepair);
+        return null;
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        calcPlanPath(initVertex, endVertex);
+        
     }
     
 }
