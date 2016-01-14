@@ -100,7 +100,7 @@ public class MaintenancePlan implements WorkPlan {
         StringBuilder planStr = new StringBuilder();
         int i = 1;
         for (Maintenance maintenance : planPath) {
-            planStr.append(i).append(" - ").append(maintenance).append("\n");
+            planStr.append(i).append(" - Maintenance: ").append(maintenance.getDropPoint().getName()).append("\n");
             i++;
         }
         return planStr.toString();
@@ -133,6 +133,7 @@ public class MaintenancePlan implements WorkPlan {
             for (DropPoint dp : lstDropPoint) {
                 Float maintenanceDuration = maintenanceDAO.getDropPointMaintenanceDuration(dp);
                 mapDropPoints.put(dp, maintenanceDuration);
+                //System.out.println("DropPoint: "+dp.getName()+" Dur: "+maintenanceDuration);
             }
             return mapDropPoints;
         }
@@ -166,7 +167,7 @@ public class MaintenancePlan implements WorkPlan {
     public String getElements() {
         StringBuilder strB = new StringBuilder();
         for (DropPoint dp : dropPointDAO.getListDropPoints())
-            strB.append(dp.getName());
+            strB.append(dp.getName()).append("\n");
         
         return strB.toString();
     }
