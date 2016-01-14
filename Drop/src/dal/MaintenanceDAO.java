@@ -3,6 +3,7 @@ package dal;
 import domain.DropPoint;
 import domain.Maintenance;
 import domain.MaintenancePlan;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -212,6 +213,40 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         }
         return lMaintenance;
 
+    }
+
+    public boolean updateDates(Maintenance maintenance)
+    {
+        CallableStatement callableStatement = null;
+        String insertStoreProc = "{call updateMaintenanceDate(?,?,?)}";
+
+        try {
+            try {
+                callableStatement = con.prepareCall(insertStoreProc);
+
+                callableStatement.setDate(1,new java.sql.Date(maintenance.getStartDate().getTime()));
+                callableStatement.setDate(2,new java.sql.Date(maintenance.getFinishDate().getTime()));
+                callableStatement.setInt(3,maintenance.getId());
+
+                callableStatement.executeUpdate();
+                return true;
+
+            } catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            } finally {
+
+                if(callableStatement != null) {
+                    callableStatement.close();
+                }
+            }
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+        return false;
     }
 
 }

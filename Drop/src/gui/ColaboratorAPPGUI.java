@@ -27,8 +27,8 @@ import ui.Main;
  */
 public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
-    private DropPoint chosenDP;
-    private Maintenance chosenMaintenence;
+    private DropPoint choosenDP;
+    private Maintenance choosenMaintenence;
     private UpdateMaintenanceController updateMaintenanceController;
     private ParcelPickupController seeTokenController;
     private AnomalyReportController anomalyReportController;
@@ -66,7 +66,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void buildTaskListMaintenance() throws SQLException
     {
-        List<String> listTasks = updateMaintenanceController.getTaskOfDropPoint(chosenDP.getId());
+        List<String> listTasks = updateMaintenanceController.getTaskOfDropPoint(choosenDP.getId());
         for (String task : listTasks)
         {
             this.maintenanceTaskModel.addElement(task);
@@ -599,7 +599,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         //CardLayout card = (CardLayout) pRoot.getLayout();
         anomalyReportController = new AnomalyReportController();
         card.show(pRoot, "cardAnomalyReport");
-        lblAnomalyDrop.setText(chosenDP.getName());
+        lblAnomalyDrop.setText(choosenDP.getName());
 
     }//GEN-LAST:event_btnAnomalyReportActionPerformed
 
@@ -619,10 +619,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void btnListMainNextActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnListMainNextActionPerformed
     {//GEN-HEADEREND:event_btnListMainNextActionPerformed
-        chosenMaintenence = (Maintenance) listMaintenance.getSelectedValue();
-        if (chosenMaintenence != null)
+        choosenMaintenence = (Maintenance) listMaintenance.getSelectedValue();
+        if (choosenMaintenence != null)
         {
-            chosenDP = updateMaintenanceController.getDropPointByID(chosenMaintenence.getDropPointID());
+            updateMaintenanceController.selectMaintenance(choosenMaintenence);
+            choosenDP = updateMaintenanceController.getDropPointByID(choosenMaintenence.getDropPointID());
             try
             {
                 buildTaskListMaintenance();
@@ -631,9 +632,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             {
                 Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+            updateMaintenanceController.setStartDateMaintenance();
             //CardLayout card = (CardLayout) pRoot.getLayout();
             card.show(pRoot, "cardMaintenance");
-            lblMaintenanceDP.setText(chosenDP.getName());
+            lblMaintenanceDP.setText(choosenDP.getName());
         } else
         {
             JOptionPane.showMessageDialog(this, "You need to select a Maintenance to continue.",
@@ -660,6 +662,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         {
             this.updateMaintenanceController.setFinishDateMaintenance();
             this.maintenanceListModel.clear();
+            this.maintenanceTaskModel.clear();
+            this.lblTokenViewMaintenance.setText("");
+            this.lblSeeToken.setText("");
+            btnGenerateToken.setEnabled(true);
             try
             {
                 buildListMaintenance();
@@ -692,7 +698,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         //int dropPointID = Integer.parseInt(lblAnomalyDrop.getText());
         String reportText = txtAnomalyText.getText();
 
-        if (!anomalyReportController.beginAnomalyReport(reportText, chosenDP.getId()))
+        if (!anomalyReportController.beginAnomalyReport(reportText, choosenDP.getId()))
         {
             JOptionPane.showMessageDialog(this, "Could not find a DropPoint with the ID provided.", "Not found", JOptionPane.ERROR_MESSAGE);
         } else
@@ -721,7 +727,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         }
         for (Token t : seeTokenController.checkValidity())
         {
-            Delivery delivery = seeTokenController.getDeliveryByReservationIDFromDP(t.getReservationId(), chosenDP);
+            Delivery delivery = seeTokenController.getDeliveryByReservationIDFromDP(t.getReservationId(), choosenDP);
             if (delivery != null)
             {
                 delivery.setAssistantTokenID(newToken.getId());
