@@ -592,7 +592,7 @@ end;
 
                --- HeadQuarters (HQ)----
 INSERT INTO MORADA (ID_MORADA,LATITUDE,LONGITUDE)
-    VALUES (0, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
+    VALUES (0, 'Rua Ciríaco Cardoso',265, '4150-213', 'Porto','41.1594185','-8.6503125');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
