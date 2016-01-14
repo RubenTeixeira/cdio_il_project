@@ -120,7 +120,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel2.setText("DropPoint Maintenance App");
 
         btnMaintenance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnMaintenance.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\MaintenanceIcon.png")); // NOI18N
+        btnMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/MaintenanceIcon.png"))); // NOI18N
         btnMaintenance.setText("Maintenance");
         btnMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnMaintenance.addActionListener(new java.awt.event.ActionListener()
@@ -132,7 +132,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnRepair.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnRepair.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\RepairIcon.png")); // NOI18N
+        btnRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/RepairIcon.png"))); // NOI18N
         btnRepair.setText("Repair");
         btnRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -183,7 +183,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listMaintenance);
 
         btnListMainBack.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListMainBack.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\backIcon.png")); // NOI18N
+        btnListMainBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
         btnListMainBack.setText("Back");
         btnListMainBack.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnListMainBack.addActionListener(new java.awt.event.ActionListener()
@@ -195,7 +195,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnListMainNext.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListMainNext.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\NextIcon.png")); // NOI18N
+        btnListMainNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
         btnListMainNext.setText("Next");
         btnListMainNext.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnListMainNext.setIconTextGap(-65);
@@ -260,7 +260,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtAnomalyText);
 
         btnAnomalyCancel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnAnomalyCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\cancelIcon.png")); // NOI18N
+        btnAnomalyCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/cancelIcon.png"))); // NOI18N
         btnAnomalyCancel.setText("Cancel");
         btnAnomalyCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAnomalyCancel.setPreferredSize(new java.awt.Dimension(67, 27));
@@ -273,7 +273,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnAnomalySend.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnAnomalySend.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\SendIcon.png")); // NOI18N
+        btnAnomalySend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/SendIcon.png"))); // NOI18N
         btnAnomalySend.setText("Send");
         btnAnomalySend.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAnomalySend.setIconTextGap(-67);
@@ -405,7 +405,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel7.setText("Work to do:");
 
         btnBackTaskMaintenance.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnBackTaskMaintenance.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\backIcon.png")); // NOI18N
+        btnBackTaskMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
         btnBackTaskMaintenance.setText("Back");
         btnBackTaskMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnBackTaskMaintenance.addActionListener(new java.awt.event.ActionListener()
@@ -417,7 +417,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         });
 
         btnSubmitMaintenance.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnSubmitMaintenance.setIcon(new javax.swing.ImageIcon("C:\\Users\\André\\Documents\\NetBeansProjects\\cdio-il-dropit-epsylon\\Drop\\settings\\Icons\\loginIcon.png")); // NOI18N
+        btnSubmitMaintenance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/loginIcon.png"))); // NOI18N
         btnSubmitMaintenance.setText("Submit");
         btnSubmitMaintenance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSubmitMaintenance.setIconTextGap(-85);
