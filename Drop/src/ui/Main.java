@@ -167,6 +167,8 @@ public class Main {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());
                     }
                     break;
+                case 3:
+                    new ListRepairUI();
                 case 0:
                     exit(0);
                     break;
@@ -178,9 +180,9 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void colaboradorAPP() throws SQLException {
-        new ColaboratorAPPGUI();
-    }
+//    private static void colaboradorAPP() throws SQLException {
+//        new ColaboratorAPPGUI();
+//    }
 
 }
 

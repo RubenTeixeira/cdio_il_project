@@ -6,7 +6,6 @@
 package dal;
 
 import domain.DropPoint;
-import domain.Incident;
 import domain.Repair;
 import domain.RepairPlan;
 import java.sql.Connection;
@@ -14,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -112,7 +109,7 @@ public class RepairDAO extends GenericDAO<Repair>{
             String repair = "Repair ID: " + rs.getInt("id_repair") + "\n"
                     + "Incident type: " + rs.getString("description") + "\n"
                     + "Date: " + rs.getDate("repair_date") + "\n"
-                    + "Cell ID: " + rs.getInt("id_prateleira");
+                    + "Cell ID: " + rs.getInt("id_prateleira") + "\n";
             
             lRepair.add(repair);
         }               
