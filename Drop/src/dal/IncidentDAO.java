@@ -119,7 +119,8 @@ public class IncidentDAO extends GenericDAO<Incident> {
                                 "    WHERE i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
                                 "    AND p.ID_ARMARIO = a.ID_ARMARIO\n" +
                                 "    AND a.ID_DROPPOINT = d.ID_DROPPOINT\n" +
-                                "    AND d.ID_DROPPOINT = "+dp.getId());
+                                "    AND d.ID_DROPPOINT = "+dp.getId()+
+                                "    AND i.REPAIRED = 0");
         if (rs != null) {
                 try {
                     while (rs.next()) {
@@ -139,7 +140,8 @@ public class IncidentDAO extends GenericDAO<Incident> {
                                 "      WHERE i.ID_INCIDENT_TYPE = t.ID_INCIDENT_TYPE\n" +
                                 "      AND i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
                                 "      AND p.ID_ARMARIO = a.ID_ARMARIO\n" +
-                                "      AND a.ID_DROPPOINT = d.ID_DROPPOINT");
+                                "      AND a.ID_DROPPOINT = d.ID_DROPPOINT\n" +
+                                "      AND i.REPAIRED = 0");
         if (rs != null) {
                 try {
                     while (rs.next()) {

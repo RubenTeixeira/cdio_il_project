@@ -119,8 +119,35 @@ public class RepairDAO extends GenericDAO<Repair>{
         return lRepair;
     }
 
-    public RepairPlan getCurrentRepairPlan()
+    public RepairPlan getCurrentRepairPlan() throws SQLException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        RepairPlan repairPlan = new RepairPlan();
+        
+        ResultSet rs = executeQuery("SELECT * from REPAIR_PLAN pl" +
+                  "                     WHERE pl.REPAIR_PLAN_DATE >= TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')\n" +
+                  "                       AND pl.REPAIR_PLAN_DATE < TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')+1");
+        if (rs.next()) {
+            repairPlan.setId(rs.getInt("ID_REPAIR_PLAN"));
+            repairPlan.setTeamID(rs.getInt("ID_REPAIR_TEAM"));
+            repairPlan.setDate(rs.getDate("REPAIR_PLAN_DATE"));
+        }
+        rs = executeQuery("select r.*, d.* from REPAIR_PLAN pl, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
+                "              where i.REPAIRED = 0\n" +
+                "                and pl.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +
+                "                and pl.ID_REPAIR_PLAN = r.ID_REPAIR_PLAN\n" +
+                "                and r.ID_INCIDENT = i.ID_INCIDENT\n" +
+                "                and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
+                "                and p.ID_ARMARIO = a.ID_ARMARIO\n" +
+                "                and a.ID_DROPPOINT = d.ID_DROPPOINT\n");
+
+        while(rs.next()){
+            Repair repair = new Repair(rs.getInt("ID_INCIDENT"), rs.getInt("VISIT_INDEX"));
+            repair.setId(rs.getInt("ID_REPAIR"));
+            DropPoint dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"), rs.getInt("FREE_DAYS"));
+            repair.setDropPoint(dropPoint);
+            repair.setPlanID(rs.getInt("ID_REPAIR_PLAN"));
+            repairPlan.addRepair(repair);
+        }
+        return repairPlan;
     }
 }

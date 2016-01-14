@@ -68,6 +68,11 @@ public class RepairPlan implements WorkPlan {
     public Date getDate() {return date;}
     public void setDate(Date date) {this.date = date;}
 
+    public boolean addRepair(Repair repair) {
+        if (repair.getPlanID() == this.id)
+            this.planPath.add(repair.getIndex(), repair);
+        return false;
+    }
     
     @Override
     public int hashCode() {
@@ -113,13 +118,13 @@ public class RepairPlan implements WorkPlan {
         this.planPath.clear();
         List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
         List<Incident> lstIncidents;
-        DropPoint dp;
-        int size = lstDropPoints.size();
-        for (int i = 0; i < size; i++) {
-            dp = lstDropPoints.get(i);
+        int i = 0;
+        for (DropPoint dp : lstDropPoints) {
             lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
-            for (Incident in : lstIncidents)
+            for (Incident in : lstIncidents) {
                 this.planPath.add(new Repair(in.getIncident_id(),i));
+                i++;
+            }
         }
     }
     
@@ -138,7 +143,7 @@ public class RepairPlan implements WorkPlan {
             return false;
         
         for (Repair r : this.planPath) {
-            r.setId(repairDAO.getNextId());
+            r.setIncidentID(repairDAO.getNextId());
             r.setPlanID(this.id);
             if (!repairDAO.insertNew(r))
                 return false;

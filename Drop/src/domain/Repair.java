@@ -23,9 +23,9 @@ public class Repair implements Plannable {
     private String observations;
     private String partsUsed;
 
-    public Repair(int incidentID, int planID) {
+    public Repair(int incidentID, int index) {
         this.incidentID = incidentID;
-        this.planID = planID;
+        this.index = index;
     }
 
     public int getId() {
