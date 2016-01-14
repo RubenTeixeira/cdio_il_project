@@ -29,6 +29,7 @@ drop sequence seq_id_Incident;
 drop sequence seq_id_Incident_Type;
 drop sequence seq_id_maintenance;
 drop sequence seq_id_cell_maintenance;
+drop sequence seq_new_id_maintenance;
 
 CREATE TABLE DropPoint (
 	id_DropPoint number(10) NOT NULL,
@@ -262,6 +263,11 @@ START WITH 1
 INCREMENT BY 1
 CACHE 10;
 
+CREATE SEQUENCE seq_new_id_maintenance
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;
 
 -- Chaves primarias
 ALTER TABLE DropPoint ADD PRIMARY KEY (id_DropPoint);
@@ -916,7 +922,14 @@ INSERT INTO Incident_type ( id_Incident_Type, description)
 -- Incidents
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
 VALUES (seq_id_incident.nextval,1,42,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-	
+
+--MAintenances
+insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
+VALUES (seq_new_id_maintenance.nextval,1,1,null,null,1601091);
+
+insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
+VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);	
+
 COMMIT;
 
  
