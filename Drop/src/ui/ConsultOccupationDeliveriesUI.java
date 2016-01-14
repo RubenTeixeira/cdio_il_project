@@ -17,17 +17,17 @@ public class ConsultOccupationDeliveriesUI {
 
     private controller.ConsultOccupationDeliveriesController controller;
 
+
     public ConsultOccupationDeliveriesUI() {
         controller = new ConsultOccupationDeliveriesController(Main.CREDENTIALS_FILE);
         run();
     }
 
-    private void run()  {
-       
-        
+    private void run() {
+
         List<DropPoint> deliveriesConsultationCollectionsDropPoint = controller.deliveriesConsultationCollectionsDropPoint();
         for (DropPoint dp : deliveriesConsultationCollectionsDropPoint) {
-            System.out.println(dp.getId() + ". " +dp.getName());
+            System.out.println(dp.getId() + ". " + dp.getName());
         }
         System.out.println("Seleccione id do DropPoint: \n");
         int droppoint = utils.ReadFromKeyboard.read();
@@ -41,7 +41,6 @@ public class ConsultOccupationDeliveriesUI {
                     + "1. Consultar Entregas\n"
                     + "2. Consultas Recolhas\n"
                     + "3. Consultar Ocupação\n"
-                    + "4. Consultar Incidentes\n"
                     + "0. Voltar\n");
             op = utils.ReadFromKeyboard.read();
             switch (op) {
@@ -63,7 +62,7 @@ public class ConsultOccupationDeliveriesUI {
                 default:
                     System.out.println("Opção inválida");
             }
-        } while (op != 4);
+        } while (op != 0);
     }
 
 }
