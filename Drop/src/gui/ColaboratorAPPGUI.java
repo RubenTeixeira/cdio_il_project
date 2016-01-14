@@ -3,9 +3,11 @@ package gui;
 import controller.AnomalyReportController;
 import controller.ParcelPickupController;
 import controller.UpdateMaintenanceController;
+import controller.UpdateRepairController;
 import domain.Delivery;
 import domain.DropPoint;
 import domain.Maintenance;
+import domain.Repair;
 import domain.Token;
 import domain.TokenAssistant;
 import java.awt.CardLayout;
@@ -29,11 +31,17 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private DropPoint choosenDP;
     private Maintenance choosenMaintenence;
+    
+    private UpdateRepairController updateRepairController;
     private UpdateMaintenanceController updateMaintenanceController;
     private ParcelPickupController seeTokenController;
     private AnomalyReportController anomalyReportController;
+    
     private DefaultListModel maintenanceListModel;
     private DefaultListModel maintenanceTaskModel;
+    private DefaultListModel repairListModel;
+    private DefaultListModel repairIncidentsModel;
+    
     private CardLayout card;
 
     /**
@@ -42,12 +50,20 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     public ColaboratorAPPGUI() throws SQLException
     {
         initComponents();
+        
         updateMaintenanceController = new UpdateMaintenanceController(Main.CREDENTIALS_FILE);
+        updateRepairController = new UpdateRepairController(Main.CREDENTIALS_FILE);
 
         this.maintenanceListModel = new DefaultListModel();
         this.maintenanceTaskModel = new DefaultListModel();
+        this.repairIncidentsModel = new DefaultListModel();
+        this.repairListModel = new DefaultListModel();
+        
         this.listMaintenance.setModel(maintenanceListModel);
         this.listTaskMaintenance.setModel(maintenanceTaskModel);
+        this.listPlanRepair.setModel(repairListModel);
+        this.listIncidentsRepair.setModel(repairIncidentsModel);
+        
         card = (CardLayout) pRoot.getLayout();
 
         setLocationRelativeTo(null);
@@ -73,6 +89,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         }
     }
 
+    private void buildListRepairPlan()
+    {
+        List<Repair> listRepair = updateRepairController.listRepairCurrentDay();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -107,9 +127,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         pListRepair = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        listPlanRepair = new javax.swing.JList();
+        btnBackListRepair = new javax.swing.JButton();
+        btnNextListRepair = new javax.swing.JButton();
         pMaintenance = new javax.swing.JPanel();
         btnAnomalyReport = new javax.swing.JButton();
         btnGenerateToken = new javax.swing.JButton();
@@ -127,6 +147,19 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         lblSeeToken = new javax.swing.JLabel();
         btnBackSeeToken = new javax.swing.JButton();
         pRepair = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        lblRepairDrop = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        listIncidentsRepair = new javax.swing.JList();
+        btnBackRepair = new javax.swing.JButton();
+        btnSubmitRepair = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        txtUsedComponents = new javax.swing.JTextArea();
+        jLabel14 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtObservations = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DropPoint Maintenance APP");
@@ -379,25 +412,25 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel10.setText("Repair plan for today:");
 
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel()
+        listPlanRepair.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        listPlanRepair.setModel(new javax.swing.AbstractListModel()
         {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane4.setViewportView(jList1);
+        jScrollPane4.setViewportView(listPlanRepair);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
-        jButton1.setText("Back");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnBackListRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnBackListRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnBackListRepair.setText("Back");
+        btnBackListRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
-        jButton2.setText("Next");
-        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton2.setIconTextGap(-65);
+        btnNextListRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnNextListRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
+        btnNextListRepair.setText("Next");
+        btnNextListRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnNextListRepair.setIconTextGap(-65);
 
         javax.swing.GroupLayout pListRepairLayout = new javax.swing.GroupLayout(pListRepair);
         pListRepair.setLayout(pListRepairLayout);
@@ -411,9 +444,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                         .addComponent(jLabel10)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pListRepairLayout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBackListRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNextListRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         pListRepairLayout.setVerticalGroup(
@@ -423,13 +456,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addGroup(pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pListRepairLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnNextListRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pListRepairLayout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBackListRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -622,15 +655,98 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         pRepair.setBorder(new javax.swing.border.MatteBorder(null));
         pRepair.setPreferredSize(new java.awt.Dimension(400, 550));
 
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel11.setText("DropPoint: ");
+
+        lblRepairDrop.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRepairDrop.setText("jLabel12");
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setText("Work to do: ");
+
+        listIncidentsRepair.setModel(new javax.swing.AbstractListModel()
+        {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane5.setViewportView(listIncidentsRepair);
+
+        btnBackRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnBackRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnBackRepair.setText("Back");
+        btnBackRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnSubmitRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnSubmitRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/loginIcon.png"))); // NOI18N
+        btnSubmitRepair.setText("Submit");
+        btnSubmitRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnSubmitRepair.setIconTextGap(-85);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setText("Used Components:");
+
+        txtUsedComponents.setColumns(20);
+        txtUsedComponents.setRows(5);
+        jScrollPane6.setViewportView(txtUsedComponents);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel14.setText("Observations: ");
+
+        txtObservations.setColumns(20);
+        txtObservations.setRows(5);
+        jScrollPane7.setViewportView(txtObservations);
+
         javax.swing.GroupLayout pRepairLayout = new javax.swing.GroupLayout(pRepair);
         pRepair.setLayout(pRepairLayout);
         pRepairLayout.setHorizontalGroup(
             pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane7)
+                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pRepairLayout.createSequentialGroup()
+                        .addComponent(btnBackRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(btnSubmitRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pRepairLayout.createSequentialGroup()
+                        .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pRepairLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblRepairDrop))
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         pRepairLayout.setVerticalGroup(
             pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 548, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(lblRepairDrop))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSubmitRepair, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBackRepair, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pRoot.add(pRepair, "cardRepair");
@@ -816,6 +932,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnAnomalyCancel;
     private javax.swing.JButton btnAnomalyReport;
     private javax.swing.JButton btnAnomalySend;
+    private javax.swing.JButton btnBackListRepair;
+    private javax.swing.JButton btnBackRepair;
     private javax.swing.JButton btnBackSeeToken;
     private javax.swing.JButton btnBackTaskMaintenance;
     private javax.swing.JButton btnCleanAnomalyTxt;
@@ -823,12 +941,16 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnListMainBack;
     private javax.swing.JButton btnListMainNext;
     private javax.swing.JButton btnMaintenance;
+    private javax.swing.JButton btnNextListRepair;
     private javax.swing.JButton btnRepair;
     private javax.swing.JButton btnSubmitMaintenance;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnSubmitRepair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -837,16 +959,21 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JLabel lblAnomalyDrop;
     private javax.swing.JLabel lblMaintenanceDP;
+    private javax.swing.JLabel lblRepairDrop;
     private javax.swing.JLabel lblSeeToken;
     private javax.swing.JLabel lblTokenViewMaintenance;
+    private javax.swing.JList listIncidentsRepair;
     private javax.swing.JList listMaintenance;
+    private javax.swing.JList listPlanRepair;
     private javax.swing.JList listTaskMaintenance;
     private javax.swing.JPanel pAnomalyReport;
     private javax.swing.JPanel pInicio;
@@ -857,6 +984,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pRoot;
     private javax.swing.JPanel pSeeToken;
     private javax.swing.JTextArea txtAnomalyText;
+    private javax.swing.JTextArea txtObservations;
+    private javax.swing.JTextArea txtUsedComponents;
     // End of variables declaration//GEN-END:variables
 
 }
