@@ -213,11 +213,12 @@ CREATE TABLE Incident_Type (
 );
 
 CREATE TABLE Incident (
-	id_Incident			number(10),
+	id_Incident		number(10),
 	id_Incident_Type	number(10),
 	id_prateleira		number(10),
 	incident_date		date,
-	reporter			number(10)
+	reporter		number(10),
+        repaired                number(1)
 );
 
 CREATE TABLE Repair (
@@ -971,8 +972,8 @@ insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
 VALUES(3,0,4,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
 VALUES(4,0,5,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
-insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(5,0,6,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN)
+VALUES(5,0,6,1);
 
 
 COMMIT;

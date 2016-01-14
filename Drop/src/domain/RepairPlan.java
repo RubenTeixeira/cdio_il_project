@@ -111,16 +111,16 @@ public class RepairPlan implements WorkPlan {
     
     private void calcPlanPath(Address initVertex, Address endVertex) {
         this.planPath.clear();
-//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
-//        List<Incident> lstIncidents;
-//        DropPoint dp;
-//        int size = lstDropPoints.size();
-//        for (int i = 0; i < size; i++) {
-//            dp = lstDropPoints.get(i);
-//            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
-//            for (Incident in : lstIncidents)
-//                this.planPath.add(new Repair(in.getIncident_id(),i));
-//        }
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
+        List<Incident> lstIncidents;
+        DropPoint dp;
+        int size = lstDropPoints.size();
+        for (int i = 0; i < size; i++) {
+            dp = lstDropPoints.get(i);
+            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
+            for (Incident in : lstIncidents)
+                this.planPath.add(new Repair(in.getIncident_id(),i));
+        }
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
