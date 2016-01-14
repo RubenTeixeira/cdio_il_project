@@ -29,7 +29,7 @@ public class ConsultOccupationDeliveriesUI {
         for (DropPoint dp : deliveriesConsultationCollectionsDropPoint) {
             System.out.println(dp.getId() + ". " + dp.getName());
         }
-        System.out.println("Seleccione id do DropPoint: \n");
+        System.out.println("Select DropPoint ID: \n");
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
 
@@ -37,10 +37,10 @@ public class ConsultOccupationDeliveriesUI {
 
         do {
             System.out.println("---------DropPoint: " + droppoint + "---------\n"
-                    + "Seleccione uma das opções: \n"
-                    + "1. Consultar Entregas\n"
-                    + "2. Consultas Recolhas\n"
-                    + "3. Consultar Ocupação\n"
+                    + "Options: \n"
+                    + "1. List Deliveries\n"
+                    + "2. List Pickups\n"
+                    + "3. Check occupation\n"
                     + "0. Voltar\n");
             op = utils.ReadFromKeyboard.read();
             switch (op) {
@@ -60,7 +60,7 @@ public class ConsultOccupationDeliveriesUI {
                 case 0:
                     break;
                 default:
-                    System.out.println("Opção inválida");
+                    System.out.println("Invalid option");
             }
         } while (op != 0);
     }

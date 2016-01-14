@@ -927,13 +927,26 @@ INSERT INTO Incident_type ( id_Incident_Type, description)
 -- Incidents
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
 VALUES (seq_id_incident.nextval,1,42,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
+VALUES (seq_id_incident.nextval,2,2,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
+VALUES (seq_id_incident.nextval,1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
 VALUES (seq_new_id_maintenance.nextval,1,1,null,null,1601091);
 
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
-VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);	
+VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
+
+--Repair Plan
+insert into REPAIR_PLAN(ID_REPAIR_PLAN, ID_REPAIR_TEAM, REPAIR_PLAN_DATE)
+VALUES (1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+
+--Repairs
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
+VALUES(1,0,2,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+
 
 COMMIT;
 

@@ -23,7 +23,7 @@ class ListRepairUI {
     }
 
     private void run() {
-        
+
         List<DropPoint> deliveriesConsultationCollectionsDropPoint = controller.listDropPoints();
         for (DropPoint dp : deliveriesConsultationCollectionsDropPoint) {
             System.out.println(dp.getId() + ". " + dp.getName());
@@ -32,11 +32,15 @@ class ListRepairUI {
         System.out.println("Seleccione id do DropPoint: \n");
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
-        
+
         List<String> lRep = controller.getRepairCompleted();
+        if (!lRep.isEmpty()) {
+            for (String rep : lRep) {
+                System.out.println(rep);
+            }
+        } 
+        else { System.out.println("No records");
         
-        for (String rep : lRep) {
-            System.out.println(rep);
         }
     }
 

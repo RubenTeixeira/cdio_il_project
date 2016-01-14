@@ -54,7 +54,6 @@ public class Main {
 //        }
 
         //gra.show(gra.getPoints(), gra.getPoints(), gra.getPoints());
-        
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
         //versaoGraficaParaCliente();
@@ -168,7 +167,12 @@ public class Main {
                     }
                     break;
                 case 3:
-                    new ListRepairUI();
+                    try {
+                        new ListRepairUI();
+                    } catch (RuntimeException e) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e.getMessage());
+                    }
+                    break;
                 case 0:
                     exit(0);
                     break;
@@ -183,7 +187,4 @@ public class Main {
 //    private static void colaboradorAPP() throws SQLException {
 //        new ColaboratorAPPGUI();
 //    }
-
 }
-
-

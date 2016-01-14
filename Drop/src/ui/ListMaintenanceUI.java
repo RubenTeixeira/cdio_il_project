@@ -33,10 +33,15 @@ class ListMaintenanceUI {
         System.out.println("Seleccione id do DropPoint: \n");
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
-        
+
         List<String> lMain = controller.getMaintenanceList();
-        for (String main : lMain) {
-            System.out.println(main);
+        if (!lMain.isEmpty()) {
+            for (String main : lMain) {
+                System.out.println(main);
+            }
+        } else {
+            System.out.println("No records.");
+
         }
 
     }
