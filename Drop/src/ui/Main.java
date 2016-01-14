@@ -173,7 +173,7 @@ public class Main {
         } while (op != 0);
     }
 
-    private static void colaboradorAPP() {
+    private static void colaboradorAPP() throws SQLException {
         new ColaboratorAPPGUI();
     }
 
