@@ -5,6 +5,7 @@
  */
 package domain;
 
+import dal.AddressDAO;
 import dal.DropPointDAO;
 import dal.IncidentDAO;
 import dal.RepairDAO;
@@ -32,6 +33,7 @@ public class RepairPlan implements WorkPlan {
     private RepairDAO repairDAO;
     private DropPointDAO dropPointDAO;
     private IncidentDAO incidentDAO;
+    private AddressDAO addressDAO;
 
     /**
      * Empty constructor
@@ -52,6 +54,7 @@ public class RepairPlan implements WorkPlan {
         repairDAO = (RepairDAO) manager.getDAO(Table.REPAIR);
         dropPointDAO = (DropPointDAO) manager.getDAO(Table.DROPPOINT);
         incidentDAO = (IncidentDAO) manager.getDAO(Table.INCIDENT);
+        addressDAO = (AddressDAO) manager.getDAO(Table.ADDRESS);
         graph = new GraphDropPointNet();
     }
     
@@ -100,8 +103,14 @@ public class RepairPlan implements WorkPlan {
     }
 
     @Override
-    public void calcPlanPath() {
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap());
+    public void calcPlanPath() throws SQLException {
+        Address initVertex = addressDAO.getHeadQuartersLocation();
+        Address endVertex = addressDAO.getHeadQuartersLocation();
+        calcPlanPath(initVertex, endVertex);
+    }
+    
+    private void calcPlanPath(Address initVertex, Address endVertex) {
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
         List<Incident> lstIncidents;
         DropPoint dp;
         int size = lstDropPoints.size();
@@ -146,9 +155,12 @@ public class RepairPlan implements WorkPlan {
         return strB.toString();
     }
     
-    public List<Repair> updatePlan(RepairPlan currentPlan, Repair finishedRepair) {
+    public List<Repair> updatePlan(Repair finishedRepair) throws SQLException {
         this.planPath = currentPlan.getPlanPath();
         repairDAO.update(finishedRepair);
+        Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
+        Address endVertex = addressDAO.getHeadQuartersLocation();
+        
     }
     
 }
