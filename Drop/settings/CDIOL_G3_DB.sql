@@ -956,7 +956,7 @@ INSERT INTO Preemptive_DP_Plan (id_pre_plan,id_DropPoint,id_task)
 
 -- MAINTENANCE_PLAN
 INSERT INTO Maintenance_Plan (id_Maint_Plan,id_Maint_Team,maint_Plan_Date)
-	VALUES (1,1,TO_DATE('14-01-2016', 'dd-mm-yyyy'));
+	VALUES (1,1,(sysdate));
 	
 -- Incident Types
 INSERT INTO Incident_type ( id_Incident_Type, description)
@@ -991,7 +991,7 @@ VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
 
 --Repair Plan
 insert into REPAIR_PLAN(ID_REPAIR_PLAN, ID_REPAIR_TEAM, REPAIR_PLAN_DATE)
-VALUES (1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES (1,1,(sysdate));
 
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
