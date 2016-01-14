@@ -1,11 +1,19 @@
 package gui;
 
 import controller.AnomalyReportController;
+import controller.ParcelPickupController;
 import controller.UpdateMaintenanceController;
+import domain.Delivery;
 import domain.DropPoint;
 import domain.Maintenance;
+import domain.Token;
+import domain.TokenAssistant;
 import java.awt.CardLayout;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,10 +30,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private DropPoint chosenDP;
     private Maintenance chosenMaintenence;
     private UpdateMaintenanceController updateMaintenanceController;
+    private ParcelPickupController seeTokenController;
+    private AnomalyReportController anomalyReportController;
     private DefaultListModel maintenanceListModel;
     private DefaultListModel maintenanceTaskModel;
     private CardLayout card;
-    private AnomalyReportController anomalyReportController;
 
     /**
      * Creates new form ColaboratorAPP
@@ -34,7 +43,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     {
         initComponents();
         updateMaintenanceController = new UpdateMaintenanceController(Main.CREDENTIALS_FILE);
-        anomalyReportController = new AnomalyReportController();
+
         this.maintenanceListModel = new DefaultListModel();
         this.maintenanceTaskModel = new DefaultListModel();
         this.listMaintenance.setModel(maintenanceListModel);
@@ -106,6 +115,12 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnBackTaskMaintenance = new javax.swing.JButton();
         btnSubmitMaintenance = new javax.swing.JButton();
+        lblTokenViewMaintenance = new javax.swing.JLabel();
+        pSeeToken = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblSeeToken = new javax.swing.JLabel();
+        btnBackSeeToken = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DropPoint Maintenance APP");
@@ -387,6 +402,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         btnGenerateToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/ReceiveToken.png"))); // NOI18N
         btnGenerateToken.setText("See Token");
         btnGenerateToken.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnGenerateToken.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnGenerateTokenActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("DropPoint: ");
@@ -431,6 +453,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             }
         });
 
+        lblTokenViewMaintenance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout pMaintenanceLayout = new javax.swing.GroupLayout(pMaintenance);
         pMaintenance.setLayout(pMaintenanceLayout);
         pMaintenanceLayout.setHorizontalGroup(
@@ -453,7 +477,8 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                             .addGroup(pMaintenanceLayout.createSequentialGroup()
                                 .addComponent(btnGenerateToken, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblTokenViewMaintenance))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -472,7 +497,9 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGenerateToken, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAnomalyReport, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(lblTokenViewMaintenance)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
                 .addGroup(pMaintenanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBackTaskMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSubmitMaintenance, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -480,6 +507,65 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         );
 
         pRoot.add(pMaintenance, "cardMaintenance");
+
+        pSeeToken.setBorder(new javax.swing.border.MatteBorder(null));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel8.setText("Your Token");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel9.setText("to get a outdated delivery:");
+
+        lblSeeToken.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        lblSeeToken.setText("jLabel10");
+
+        btnBackSeeToken.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnBackSeeToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        btnBackSeeToken.setText("Back");
+        btnBackSeeToken.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnBackSeeTokenActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pSeeTokenLayout = new javax.swing.GroupLayout(pSeeToken);
+        pSeeToken.setLayout(pSeeTokenLayout);
+        pSeeTokenLayout.setHorizontalGroup(
+            pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pSeeTokenLayout.createSequentialGroup()
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(54, 54, 54))
+            .addGroup(pSeeTokenLayout.createSequentialGroup()
+                .addGroup(pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBackSeeToken, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSeeTokenLayout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(lblSeeToken)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pSeeTokenLayout.setVerticalGroup(
+            pSeeTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pSeeTokenLayout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(lblSeeToken)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                .addComponent(btnBackSeeToken, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pRoot.add(pSeeToken, "cardSeeToken");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -511,6 +597,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private void btnAnomalyReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalyReportActionPerformed
     {//GEN-HEADEREND:event_btnAnomalyReportActionPerformed
         //CardLayout card = (CardLayout) pRoot.getLayout();
+        anomalyReportController = new AnomalyReportController();
         card.show(pRoot, "cardAnomalyReport");
         lblAnomalyDrop.setText(chosenDP.getName());
 
@@ -587,7 +674,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private void btnAnomalyCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalyCancelActionPerformed
     {//GEN-HEADEREND:event_btnAnomalyCancelActionPerformed
         card.show(pRoot, "cardMaintenance");
-        
+
     }//GEN-LAST:event_btnAnomalyCancelActionPerformed
 
     private void btnCleanAnomalyTxtActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCleanAnomalyTxtActionPerformed
@@ -599,25 +686,63 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_btnAnomalySendActionPerformed
         int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you would like to send this report?");
         if (confirmation != 0)
+        {
             return;
+        }
         //int dropPointID = Integer.parseInt(lblAnomalyDrop.getText());
         String reportText = txtAnomalyText.getText();
-        
-        if (!anomalyReportController.beginAnomalyReport(reportText, chosenDP.getId())) {
+
+        if (!anomalyReportController.beginAnomalyReport(reportText, chosenDP.getId()))
+        {
             JOptionPane.showMessageDialog(this, "Could not find a DropPoint with the ID provided.", "Not found", JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (!anomalyReportController.sendAnomalyReport()) {
+        } else
+        {
+            if (!anomalyReportController.sendAnomalyReport())
+            {
                 JOptionPane.showMessageDialog(this, "Unable to dispatch the report.\nPlease try again.", "Report not sent", JOptionPane.ERROR_MESSAGE);
-            } else {
+            } else
+            {
                 JOptionPane.showMessageDialog(this, "Report was successfully sent to the authorities.", "Report Successfull", JOptionPane.INFORMATION_MESSAGE);
-            }    
+            }
         }
     }//GEN-LAST:event_btnAnomalySendActionPerformed
+
+    private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateTokenActionPerformed
+    {//GEN-HEADEREND:event_btnGenerateTokenActionPerformed
+        seeTokenController = new ParcelPickupController();
+        String code = seeTokenController.generateRandomToken();
+        DateFormat df = new SimpleDateFormat("yy.MM.dd");
+        Date today = Calendar.getInstance().getTime();
+        String data = df.format(today);
+        Token newToken = new TokenAssistant(seeTokenController.getNextTokenID(), data, data, 1, code, 0);
+        if (seeTokenController.insertNewToken(newToken))
+        {
+            lblSeeToken.setText(code);
+        }
+        for (Token t : seeTokenController.checkValidity())
+        {
+            Delivery delivery = seeTokenController.getDeliveryByReservationIDFromDP(t.getReservationId(), chosenDP);
+            if (delivery != null)
+            {
+                delivery.setAssistantTokenID(newToken.getId());
+                seeTokenController.updateDelivery(delivery);
+            }
+        }
+        card.show(pRoot, "cardSeeToken");
+        btnGenerateToken.setEnabled(false);
+    }//GEN-LAST:event_btnGenerateTokenActionPerformed
+
+    private void btnBackSeeTokenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackSeeTokenActionPerformed
+    {//GEN-HEADEREND:event_btnBackSeeTokenActionPerformed
+        lblTokenViewMaintenance.setText("Your token for a outdated Delivery: "+lblSeeToken.getText());
+        card.show(pRoot, "cardMaintenance");
+    }//GEN-LAST:event_btnBackSeeTokenActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnomalyCancel;
     private javax.swing.JButton btnAnomalyReport;
     private javax.swing.JButton btnAnomalySend;
+    private javax.swing.JButton btnBackSeeToken;
     private javax.swing.JButton btnBackTaskMaintenance;
     private javax.swing.JButton btnCleanAnomalyTxt;
     private javax.swing.JButton btnGenerateToken;
@@ -633,11 +758,15 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblAnomalyDrop;
     private javax.swing.JLabel lblMaintenanceDP;
+    private javax.swing.JLabel lblSeeToken;
+    private javax.swing.JLabel lblTokenViewMaintenance;
     private javax.swing.JList listMaintenance;
     private javax.swing.JList listTaskMaintenance;
     private javax.swing.JPanel pAnomalyReport;
@@ -646,6 +775,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pListRepair;
     private javax.swing.JPanel pMaintenance;
     private javax.swing.JPanel pRoot;
+    private javax.swing.JPanel pSeeToken;
     private javax.swing.JTextArea txtAnomalyText;
     // End of variables declaration//GEN-END:variables
 
