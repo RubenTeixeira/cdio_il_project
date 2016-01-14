@@ -105,6 +105,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         btnAnomalySend = new javax.swing.JButton();
         btnCleanAnomalyTxt = new javax.swing.JButton();
         pListRepair = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         pMaintenance = new javax.swing.JPanel();
         btnAnomalyReport = new javax.swing.JButton();
         btnGenerateToken = new javax.swing.JButton();
@@ -121,6 +126,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         lblSeeToken = new javax.swing.JLabel();
         btnBackSeeToken = new javax.swing.JButton();
+        pRepair = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DropPoint Maintenance APP");
@@ -370,15 +376,61 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         pListRepair.setBorder(new javax.swing.border.MatteBorder(null));
         pListRepair.setPreferredSize(new java.awt.Dimension(400, 550));
 
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel10.setText("Repair plan for today:");
+
+        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jList1.setModel(new javax.swing.AbstractListModel()
+        {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(jList1);
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
+        jButton1.setText("Back");
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
+        jButton2.setText("Next");
+        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButton2.setIconTextGap(-65);
+
         javax.swing.GroupLayout pListRepairLayout = new javax.swing.GroupLayout(pListRepair);
         pListRepair.setLayout(pListRepairLayout);
         pListRepairLayout.setHorizontalGroup(
             pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGroup(pListRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         pListRepairLayout.setVerticalGroup(
             pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 548, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pListRepairLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pListRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pListRepairLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pRoot.add(pListRepair, "cardRepair");
@@ -566,6 +618,22 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         );
 
         pRoot.add(pSeeToken, "cardSeeToken");
+
+        pRepair.setBorder(new javax.swing.border.MatteBorder(null));
+        pRepair.setPreferredSize(new java.awt.Dimension(400, 550));
+
+        javax.swing.GroupLayout pRepairLayout = new javax.swing.GroupLayout(pRepair);
+        pRepair.setLayout(pRepairLayout);
+        pRepairLayout.setHorizontalGroup(
+            pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 398, Short.MAX_VALUE)
+        );
+        pRepairLayout.setVerticalGroup(
+            pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 548, Short.MAX_VALUE)
+        );
+
+        pRoot.add(pRepair, "cardRepair");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -757,7 +825,10 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnMaintenance;
     private javax.swing.JButton btnRepair;
     private javax.swing.JButton btnSubmitMaintenance;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -766,9 +837,11 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblAnomalyDrop;
     private javax.swing.JLabel lblMaintenanceDP;
     private javax.swing.JLabel lblSeeToken;
@@ -780,6 +853,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pListMaintenance;
     private javax.swing.JPanel pListRepair;
     private javax.swing.JPanel pMaintenance;
+    private javax.swing.JPanel pRepair;
     private javax.swing.JPanel pRoot;
     private javax.swing.JPanel pSeeToken;
     private javax.swing.JTextArea txtAnomalyText;
