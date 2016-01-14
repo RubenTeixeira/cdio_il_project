@@ -110,16 +110,16 @@ public class RepairPlan implements WorkPlan {
     }
     
     private void calcPlanPath(Address initVertex, Address endVertex) {
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
-        List<Incident> lstIncidents;
-        DropPoint dp;
-        int size = lstDropPoints.size();
-        for (int i = 0; i < size; i++) {
-            dp = lstDropPoints.get(i);
-            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
-            for (Incident in : lstIncidents)
-                this.planPath.add(new Repair(in.getIncident_id(),i));
-        }
+//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
+//        List<Incident> lstIncidents;
+//        DropPoint dp;
+//        int size = lstDropPoints.size();
+//        for (int i = 0; i < size; i++) {
+//            dp = lstDropPoints.get(i);
+//            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
+//            for (Incident in : lstIncidents)
+//                this.planPath.add(new Repair(in.getIncident_id(),i));
+//        }
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
@@ -156,11 +156,12 @@ public class RepairPlan implements WorkPlan {
     }
     
     public List<Repair> updatePlan(Repair finishedRepair) throws SQLException {
-        this.planPath = currentPlan.getPlanPath();
+        //this.planPath = currentPlan.getPlanPath();
         repairDAO.update(finishedRepair);
+        
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        
+        return null;
     }
     
 }

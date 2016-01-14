@@ -5,11 +5,14 @@
  */
 package dal;
 
+import domain.DropPoint;
 import domain.Repair;
 import domain.RepairPlan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -91,5 +94,28 @@ public class RepairDAO extends GenericDAO<Repair>{
                 }
         }
         return false;
+    }
+    
+    public List<String> getCompletedRepairbyDropPoint(DropPoint droppoint) throws SQLException{
+        List<String> lRepair = new ArrayList<>();
+        String query = "SELECT * from repair r, incident i, prateleira p, armario a, incident_type t "
+                + "WHERE r.id_incident = i.id_incident "
+                + "AND i.id_incident_type = t.id_incident_type "
+                + "AND i.id_prateleira = p.id_prateleira "
+                + "AND p.id_armario = a.id_armario "
+                + "AND a.id_droppoint = " + droppoint.getId();
+        ResultSet rs = executeQuery(query);
+        while(rs.next()){
+            String repair = "Repair ID: " + rs.getInt("id_repair") + "\n"
+                    + "Incident type: " + rs.getString("description") + "\n"
+                    + "Date: " + rs.getDate("repair_date") + "\n"
+                    + "Cell ID: " + rs.getInt("id_prateleira") + "\n";
+            
+            lRepair.add(repair);
+        }               
+        
+        
+        
+        return lRepair;
     }
 }

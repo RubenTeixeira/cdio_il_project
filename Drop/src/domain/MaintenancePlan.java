@@ -112,13 +112,13 @@ public class MaintenancePlan implements WorkPlan {
         Map<DropPoint, Float> map = createDropPointMap();
         Address initVertex = addressDAO.getHeadQuartersLocation();
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map, initVertex, endVertex);
-        
-        for (int i = 0; i < lstDropPoints.size(); i++) {
-            DropPoint dp = lstDropPoints.get(i);
-            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
-            this.planPath.add(maintenance);
-        }
+//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map, initVertex, endVertex);
+//        
+//        for (int i = 0; i < lstDropPoints.size(); i++) {
+//            DropPoint dp = lstDropPoints.get(i);
+//            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
+//            this.planPath.add(maintenance);
+//        }
 
     }
 

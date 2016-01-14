@@ -3,6 +3,7 @@ package dal;
 import domain.DropPoint;
 import domain.Maintenance;
 import domain.MaintenancePlan;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Rúben Teixeira <1140780@isep.ipp.pt>
@@ -118,14 +120,15 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
     @Override
     public boolean insertNew(Maintenance maint) {
         ResultSet rs = executeQuery("INSERT INTO MANUTENCAO (ID_MANUTENCAO,VISIT_INDEX,ID_DROPPOINT,ID_MAINT_PLAN)"
-                                    + " VALUES("+maint.getId()+","+maint.getIndex()+","
-                                                +maint.getDropPoint().getId()+","+maint.getPlanID()+")");
+                + " VALUES(" + maint.getId() + "," + maint.getIndex() + ","
+                + maint.getDropPoint().getId() + "," + maint.getPlanID() + ")");
         if (rs != null) {
-                try {
-                    if (rs.next())
-                        return true;
-                } catch (SQLException ex) {
+            try {
+                if (rs.next()) {
+                    return true;
                 }
+            } catch (SQLException ex) {
+            }
         }
         return false;
     }
@@ -160,18 +163,15 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         return false;
     }
 
-    public List<Maintenance> getListMaintenanceCurrentDay() throws SQLException
-    {
-                List<Maintenance> list = new ArrayList<>();
+    public List<Maintenance> getListMaintenanceCurrentDay() throws SQLException {
+        List<Maintenance> list = new ArrayList<>();
         ResultSet rs = executeQuery("select m.ID_MANUTENCAO,m.ID_DROPPOINT from MAINTENANCE_PLAN p, MANUTENCAO m\n"
                 + "where p.ID_MAINT_PLAN = m.ID_MAINT_PLAN\n"
                 + "and p.MAINT_PLAN_DATE >= TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')\n"
                 + "and p.MAINT_PLAN_DATE < TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')+1\n"
                 + "and m.DATA_INICIO is null");
-        if (rs != null)
-        {
-            while (rs.next())
-            {
+        if (rs != null) {
+            while (rs.next()) {
                 Maintenance m = new Maintenance();
                 m.setId(rs.getInt("ID_MANUTENCAO"));
                 m.setDropPointID(rs.getInt("ID_DROPPOINT"));
@@ -181,58 +181,72 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         return list;
     }
 
-    public List<String> getTasksOfDropPoint(int id) throws SQLException
-    {
+    public List<String> getTasksOfDropPoint(int id) throws SQLException {
         List<String> list = new ArrayList<>();
-        ResultSet rs = executeQuery("select m.DESCRIPTION from MAINTENANCE_TASK m,PREEMPTIVE_DP_PLAN p\n" +
-                                    "where m.ID_TASK = p.ID_TASK\n" +
-                                    "and p.ID_DROPPOINT = "+id);
-        if (rs != null)
-        {
-            while (rs.next())
-            {
+        ResultSet rs = executeQuery("select m.DESCRIPTION from MAINTENANCE_TASK m,PREEMPTIVE_DP_PLAN p\n"
+                + "where m.ID_TASK = p.ID_TASK\n"
+                + "and p.ID_DROPPOINT = " + id);
+        if (rs != null) {
+            while (rs.next()) {
                 list.add(rs.getString("DESCRIPTION"));
             }
         }
         return list;
     }
-    
-        public ArrayList<Maintenance> getCompletedMaintenancebyDropPoint(DropPoint droppoint) {
-        ArrayList<Maintenance> lMaintenance = new ArrayList<Maintenance>();
-        Maintenance maintenance = null;
-        ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO"
+
+    public List<String> getCompletedMaintenancebyDropPoint(DropPoint droppoint) throws SQLException {
+        List<String> lMaintenance = new ArrayList<String>();
+        ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO m, employee e"
                 + "  WHERE ID_DROPPOINT = " + droppoint.getId()
-                + "  AND DATA_FIM = NOT NULL");
+                + " AND m.id_maint_ass = e.e_number"
+        //        + "  AND m.DATA_FIM = NOT NULL"
+        );
         if (rs != null) {
-            try {
-                while (rs.next()) {
-
-                    rs.next();
-                    maintenance = new Maintenance(
-                            rs.getInt("ID_MANUTENCAO"), rs.getInt("VISIT_INDEX"), droppoint, rs.getDate("DATA_INICIO"), rs.getDate("DATA_FIM"), rs.getInt("ID_MAINT_PLAN"));
-
-                }
-                if (maintenance != null) {
-                    rs = executeQuery("SELECT * FROM CELL_MAINTENANCE"
-                            + "     WHERE ID_MAINTENANCE = " + maintenance.getId());
-                    if (rs != null) {
-                        try {
-                            while (rs.next()) {
-                                maintenance.addCellMaintenance(rs.getInt("ID_CELL"));
-                            }
-                        } catch (SQLException ex) {
-                        }
-                    }
-                    lMaintenance.add(maintenance);
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(MaintenanceDAO.class.getName()).log(Level.SEVERE, null, ex);
+            while (rs.next()) {
+                String maintenance = "ID Maintenance: " + rs.getInt("id_manutencao") + "\n"
+                        + "Start Date: " + rs.getDate("data_inicio") + "\n"
+                        + "Finish Date: " + rs.getDate("data_fim") + "\n"
+                        + "Employee: " + rs.getString("e_name") + "\n";
+                
+                lMaintenance.add(maintenance);
             }
-            return lMaintenance;
         }
-        return null;
+        return lMaintenance;
 
     }
-    
-    
+
+    public boolean updateDates(Maintenance maintenance)
+    {
+        CallableStatement callableStatement = null;
+        String insertStoreProc = "{call updateMaintenanceDate(?,?,?)}";
+
+        try {
+            try {
+                callableStatement = con.prepareCall(insertStoreProc);
+
+                callableStatement.setDate(1,new java.sql.Date(maintenance.getStartDate().getTime()));
+                callableStatement.setDate(2,new java.sql.Date(maintenance.getFinishDate().getTime()));
+                callableStatement.setInt(3,maintenance.getId());
+
+                callableStatement.executeUpdate();
+                return true;
+
+            } catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            } finally {
+
+                if(callableStatement != null) {
+                    callableStatement.close();
+                }
+            }
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+        return false;
+    }
+
 }
