@@ -374,7 +374,7 @@ public class GraphDropPointNet {
     public List<Point> getPathLimitedByTime(Point a, List<Point> waypoints, long time) {
         List<Point> shortestPath = computeShortestPath(a, waypoints);
         long temp = 0;
-        calculateTime(shortestPath, time, temp);
+        calculateTime(shortestPath, time, temp, 2);
 
         return shortestPath;
     }
@@ -390,7 +390,7 @@ public class GraphDropPointNet {
         long temp = 0;
         List<Point> pontns = getListOfPointsbyListDropPoints(pathWithPriority);
 
-        calculateTime(pontns, time, temp);
+        calculateTime(pontns, time, temp, 1);
 
         return getListOfDropPointsbyListPoints(pontns);
 
@@ -402,18 +402,23 @@ public class GraphDropPointNet {
      * @param time
      * @param temp
      */
-    private void calculateTime(List<Point> shortestPath, long time, long temp) {
+    private void calculateTime(List<Point> shortestPath, long time, long temp,int step) {
         for (int i = 0; i < shortestPath.size() - 1; i++) {
             Vertex<Point, Branch> vertex = this.dropPointNet.getVertex(shortestPath.get(i));
             Vertex<Point, Branch> vertex1 = this.dropPointNet.getVertex(shortestPath.get(i + 1));
             temp += this.dropPointNet.getEdge(vertex, vertex1).getElement().getDuration();
         }
 
-        if (temp < time) {
+        if ( time > temp ) {
             return;
         } else {
-            shortestPath.remove(shortestPath.size() - 2);
-            calculateTime(shortestPath, time, temp);
+            if( shortestPath.size() - 1 == 2){
+                shortestPath.clear();
+                return;
+            }
+            shortestPath.remove(shortestPath.size() - step);
+            temp=0;
+            calculateTime(shortestPath, time, temp,step);
         }
     }
 
@@ -466,6 +471,10 @@ public class GraphDropPointNet {
         return null;
     }
     
+    
+    public List<DropPoint> buildPathWithPriority(Map<DropPoint, Float> map, Address origem,Address destino,long time){
+        return null;
+    }
     
 
     /**
