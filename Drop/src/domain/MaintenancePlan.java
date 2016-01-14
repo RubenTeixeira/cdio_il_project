@@ -5,6 +5,7 @@
  */
 package domain;
 
+import dal.AddressDAO;
 import dal.DropPointDAO;
 import dal.MaintenanceDAO;
 import dal.Table;
@@ -16,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import persistence.SQLConnection;
 
 /**
@@ -32,6 +31,7 @@ public class MaintenancePlan implements WorkPlan {
     private List<Maintenance> planPath;
     private MaintenanceDAO maintenanceDAO;
     private DropPointDAO dropPointDAO;
+    private AddressDAO addressDAO;
     private GraphDropPointNet graph;
 
     /**
@@ -51,6 +51,7 @@ public class MaintenancePlan implements WorkPlan {
         SQLConnection manager = persistence.OracleDb.getInstance();
         maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
         dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
+        addressDAO = (AddressDAO) manager.getDAO(Table.ADDRESS);
         graph = new GraphDropPointNet();
     }
 
@@ -107,15 +108,17 @@ public class MaintenancePlan implements WorkPlan {
     }
 
     @Override
-    public void calcPlanPath() {
+    public void calcPlanPath() throws SQLException {
         Map<DropPoint, Float> map = createDropPointMap();
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map);
-        
-        for (int i = 0; i < lstDropPoints.size(); i++) {
-            DropPoint dp = lstDropPoints.get(i);
-            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
-            this.planPath.add(maintenance);
-        }
+        Address initVertex = addressDAO.getHeadQuartersLocation();
+        Address endVertex = addressDAO.getHeadQuartersLocation();
+//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map, initVertex, endVertex);
+//        
+//        for (int i = 0; i < lstDropPoints.size(); i++) {
+//            DropPoint dp = lstDropPoints.get(i);
+//            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
+//            this.planPath.add(maintenance);
+//        }
 
     }
 
