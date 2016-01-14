@@ -123,18 +123,18 @@ public class RepairDAO extends GenericDAO<Repair>{
     {
         RepairPlan repairPlan = new RepairPlan();
         
-        ResultSet rs = executeQuery("SELECT * from REPAIR_PLAN pl" +
-                  "                     WHERE pl.REPAIR_PLAN_DATE >= TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')\n" +
-                  "                       AND pl.REPAIR_PLAN_DATE < TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')+1");
+        ResultSet rs = executeQuery("SELECT * from REPAIR_PLAN p" +
+                  "                     WHERE p.REPAIR_PLAN_DATE >= TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')\n" +
+                  "                       AND p.REPAIR_PLAN_DATE < TO_DATE(TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy'),'dd-mm-yyyy')+1");
         if (rs.next()) {
             repairPlan.setId(rs.getInt("ID_REPAIR_PLAN"));
             repairPlan.setTeamID(rs.getInt("ID_REPAIR_TEAM"));
             repairPlan.setDate(rs.getDate("REPAIR_PLAN_DATE"));
         }
-        rs = executeQuery("select r.*, d.* from REPAIR_PLAN pl, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
+        rs = executeQuery("select r.*, d.* from REPAIR_PLAN l, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
                 "              where i.REPAIRED = 0\n" +
-                "                and pl.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +
-                "                and pl.ID_REPAIR_PLAN = r.ID_REPAIR_PLAN\n" +
+                "                and l.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +
+                "                and l.ID_REPAIR_PLAN = r.ID_REPAIR_PLAN\n" +
                 "                and r.ID_INCIDENT = i.ID_INCIDENT\n" +
                 "                and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
                 "                and p.ID_ARMARIO = a.ID_ARMARIO\n" +
