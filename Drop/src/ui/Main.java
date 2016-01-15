@@ -1,12 +1,9 @@
 package ui;
 
 import com.google.maps.model.LatLng;
-import dal.AddressDAO;
-import dal.DropPointDAO;
-import dal.Table;
 import domain.DropPoint;
 import esinf.dropGraph.GraphDropPointNet;
-import esinf.graph.Graph;
+import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
@@ -19,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import maps.domain.Branch;
 import maps.domain.Point;
-import persistence.SQLConnection;
 
 /**
  *
@@ -45,108 +41,108 @@ public class Main {
         
         
         
-        GraphDropPointNet graphDropPointNet = new GraphDropPointNet(false);
-        Point point = new Point(1, "Porto", "Porto");
-        point.setCoordinate(new LatLng(41.1621376, -8.6568725));
-        Point point1 = new Point(2, "Lisboa", "Lisboa");
-        point1.setCoordinate(new LatLng(38.7436057, -9.2302439));
-        Point point2 = new Point(3, "Minho", "Minho");
-        point2.setCoordinate(new LatLng(41.5567729, -8.3991057));
-        Point point3 = new Point(4, "Mirandela", "Mirandela");
-        point3.setCoordinate(new LatLng(41.4780659, -7.213069));
-        Point point4 = new Point(5, "Faro", "Faro");
-        point4.setCoordinate(new LatLng(37.0177845, -7.9749177));
-        
-        graphDropPointNet.insertPoint(point);
-        graphDropPointNet.insertPoint(point1);
-        graphDropPointNet.insertPoint(point2);
-        graphDropPointNet.insertPoint(point3);
-        graphDropPointNet.insertPoint(point4);
-        
-        
-        graphDropPointNet.addRoute(point, point1, new Branch(point, point1, 300, 6));
-        graphDropPointNet.addRoute(point, point2, new Branch(point, point2, 100, 1));
-        graphDropPointNet.addRoute(point, point3, new Branch(point, point3, 125, 2));
-        graphDropPointNet.addRoute(point, point4, new Branch(point, point4, 460, 12));
-        
-        graphDropPointNet.addRoute(point1, point, new Branch(point1, point, 300, 6));
-        graphDropPointNet.addRoute(point1, point2, new Branch(point1, point2, 350, 7));
-        graphDropPointNet.addRoute(point1, point3, new Branch(point1, point3, 360, 7));
-        graphDropPointNet.addRoute(point1, point4, new Branch(point1, point4, 215, 4));
-        
-        graphDropPointNet.addRoute(point2, point1, new Branch(point2, point1, 350, 6));
-        graphDropPointNet.addRoute(point2, point, new Branch(point2, point, 100, 1));
-        graphDropPointNet.addRoute(point2, point3, new Branch(point2, point3, 145, 2));
-        graphDropPointNet.addRoute(point2, point4, new Branch(point2, point4, 550, 12));
-        
-        
-        graphDropPointNet.addRoute(point3, point1, new Branch(point3, point1, 360, 7));
-        graphDropPointNet.addRoute(point3, point, new Branch(point3, point, 125, 2));
-        graphDropPointNet.addRoute(point3, point2, new Branch(point3, point2, 145, 2));
-        //graphDropPointNet.addRoute(point3, point4, new Branch(point3, point4, 500, 12));
-        
-        graphDropPointNet.addRoute(point4, point1, new Branch(point4, point1, 215, 4));
-        graphDropPointNet.addRoute(point4, point, new Branch(point4, point, 460, 12));
-        graphDropPointNet.addRoute(point4, point2, new Branch(point4, point2, 550, 12));
-        graphDropPointNet.addRoute(point4, point3, new Branch(point4, point3, 500, 12));
-        
-        List<DropPoint> list = new ArrayList<DropPoint>(); 
-        DropPoint d1 = new DropPoint();
-        d1.setId(1);
-        d1.setName("Porto");
-        
-        DropPoint d2 = new DropPoint();
-        d2.setId(2);
-        d2.setName("Lisboa");
-        
-        DropPoint d3 = new DropPoint();
-        d3.setId(3);
-        d3.setName("Minho");
-        
-        DropPoint d4 = new DropPoint();
-        d4.setId(4);
-        d4.setName("Mirandela");
-        
-        DropPoint d5 = new DropPoint();
-        d5.setId(5);
-        d5.setName("Faro");
-        
-        
-        
-        list.add(d1);
-        list.add(d2);
-        list.add(d3);
-        list.add(d4);
-        list.add(d5);
-        
-        
-        graphDropPointNet.setLstDrop(list);
-        
-        Map<DropPoint, Float> m = new HashMap<>();
-        
-        float i=3;
-        
-        for (DropPoint list1 : list.subList(0, 3)) {
-            m.put(list1, i);
-            i+=10;
-        }
-        
-        
-        List<Point> arrayList = new ArrayList<Point>();
-        
-        arrayList.add(point3);
-        arrayList.add(point4);
-        
-        
-        
-        //List<DropPoint> pathLimitedByTime = graphDropPointNet.getPathLimitedByTime(m, 15);
-        
-        List<Point> pathLimitedByTime1 = graphDropPointNet.getPathLimitedByTime(point, arrayList, 20);
-       
-        for (Point q : pathLimitedByTime1) {
-            System.out.println(q);
-        }
-        
+//        GraphDropPointNet graphDropPointNet = new GraphDropPointNet(false);
+//        Point point = new Point(1, "Porto", "Porto");
+//        point.setCoordinate(new LatLng(41.1621376, -8.6568725));
+//        Point point1 = new Point(2, "Lisboa", "Lisboa");
+//        point1.setCoordinate(new LatLng(38.7436057, -9.2302439));
+//        Point point2 = new Point(3, "Minho", "Minho");
+//        point2.setCoordinate(new LatLng(41.5567729, -8.3991057));
+//        Point point3 = new Point(4, "Mirandela", "Mirandela");
+//        point3.setCoordinate(new LatLng(41.4780659, -7.213069));
+//        Point point4 = new Point(5, "Faro", "Faro");
+//        point4.setCoordinate(new LatLng(37.0177845, -7.9749177));
+//        
+//        graphDropPointNet.insertPoint(point);
+//        graphDropPointNet.insertPoint(point1);
+//        graphDropPointNet.insertPoint(point2);
+//        graphDropPointNet.insertPoint(point3);
+//        graphDropPointNet.insertPoint(point4);
+//        
+//        
+//        graphDropPointNet.addRoute(point, point1, new Branch(point, point1, 300, 6));
+//        graphDropPointNet.addRoute(point, point2, new Branch(point, point2, 100, 1));
+//        graphDropPointNet.addRoute(point, point3, new Branch(point, point3, 125, 2));
+//        graphDropPointNet.addRoute(point, point4, new Branch(point, point4, 460, 12));
+//        
+//        graphDropPointNet.addRoute(point1, point, new Branch(point1, point, 300, 6));
+//        graphDropPointNet.addRoute(point1, point2, new Branch(point1, point2, 350, 7));
+//        graphDropPointNet.addRoute(point1, point3, new Branch(point1, point3, 360, 7));
+//        graphDropPointNet.addRoute(point1, point4, new Branch(point1, point4, 215, 4));
+//        
+//        graphDropPointNet.addRoute(point2, point1, new Branch(point2, point1, 350, 6));
+//        graphDropPointNet.addRoute(point2, point, new Branch(point2, point, 100, 1));
+//        graphDropPointNet.addRoute(point2, point3, new Branch(point2, point3, 145, 2));
+//        graphDropPointNet.addRoute(point2, point4, new Branch(point2, point4, 550, 12));
+//        
+//        
+//        graphDropPointNet.addRoute(point3, point1, new Branch(point3, point1, 360, 7));
+//        graphDropPointNet.addRoute(point3, point, new Branch(point3, point, 125, 2));
+//        graphDropPointNet.addRoute(point3, point2, new Branch(point3, point2, 145, 2));
+//        graphDropPointNet.addRoute(point3, point4, new Branch(point3, point4, 500, 12));
+//        
+//        graphDropPointNet.addRoute(point4, point1, new Branch(point4, point1, 215, 4));
+//        graphDropPointNet.addRoute(point4, point, new Branch(point4, point, 460, 12));
+//        graphDropPointNet.addRoute(point4, point2, new Branch(point4, point2, 550, 12));
+//        graphDropPointNet.addRoute(point4, point3, new Branch(point4, point3, 500, 12));
+//        
+//        List<DropPoint> list = new ArrayList<DropPoint>(); 
+//        DropPoint d1 = new DropPoint();
+//        d1.setId(1);
+//        d1.setName("Porto");
+//        
+//        DropPoint d2 = new DropPoint();
+//        d2.setId(2);
+//        d2.setName("Lisboa");
+//        
+//        DropPoint d3 = new DropPoint();
+//        d3.setId(3);
+//        d3.setName("Minho");
+//        
+//        DropPoint d4 = new DropPoint();
+//        d4.setId(4);
+//        d4.setName("Mirandela");
+//        
+//        DropPoint d5 = new DropPoint();
+//        d5.setId(5);
+//        d5.setName("Faro");
+//        
+//        
+//        
+//        list.add(d1);
+//        list.add(d2);
+//        list.add(d3);
+//        list.add(d4);
+//        list.add(d5);
+//        
+//        
+//        graphDropPointNet.setLstDrop(list);
+//        
+//        Map<DropPoint, Float> m = new HashMap<>();
+//        
+//        float i=3;
+//        
+//        for (DropPoint list1 : list.subList(0, 3)) {
+//            m.put(list1, i);
+//            i+=10;
+//        }
+//        
+//        
+//        List<Point> arrayList = new ArrayList<Point>();
+//        
+//        arrayList.add(point3);
+//        arrayList.add(point4);
+//        
+//        
+//        
+//        //List<DropPoint> pathLimitedByTime = graphDropPointNet.getPathLimitedByTime(m, 15);
+//        
+//        List<Point> pathLimitedByTime1 = graphDropPointNet.getPathLimitedByTime(point, arrayList, 20);
+//       
+//        for (Point q : pathLimitedByTime1) {
+//            System.out.println(q);
+//        }
+//        
         
         
         
@@ -174,7 +170,7 @@ public class Main {
         //versaoGraficaParaCliente();
         //versaoConsola();
         //colaboradorConsola();
-        //colaboradorAPP();
+        //new ColaboratorAPPGUI();
         //gestorConsola();
     }
 
