@@ -33,15 +33,15 @@ class ListRepairUI {
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
 
-        List<String> lRep = controller.getRepairCompleted();
-        if (!lRep.isEmpty()) {
-            for (String rep : lRep) {
-                System.out.println(rep);
-            }
-        } 
-        else { System.out.println("No records");
-        
-        }
+//        List<String> lRep = controller.getRepairCompleted();
+//        if (!lRep.isEmpty()) {
+//            for (String rep : lRep) {
+//                System.out.println(rep);
+//            }
+//        } 
+//        else { System.out.println("No records");
+//        
+//        }
     }
 
 }

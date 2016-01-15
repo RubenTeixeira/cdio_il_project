@@ -25,6 +25,17 @@ public class Address implements Comparable<Address> {
     }
 
     /**
+     * @param id
+     * @param latitude
+     * @param longitude 
+     */
+    public Address(int id, double latitude, double longitude) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    /**
      * Give it back ID value attribute
      *
      * @return int ID

@@ -147,8 +147,9 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
     }
 
     public boolean insertPlan(MaintenancePlan plan) {
-        ResultSet rs = executeQuery("INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
-                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")");
+        String qry = "INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
+                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")";
+        ResultSet rs = executeQuery(qry);
 
         if (rs != null) {
             try {
@@ -192,8 +193,8 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         return list;
     }
 
-    public List<String> getCompletedMaintenancebyDropPoint(DropPoint droppoint) throws SQLException {
-        List<String> lMaintenance = new ArrayList<String>();
+    public String getCompletedMaintenancebyDropPoint(DropPoint droppoint) throws SQLException {
+        String lMaint = "";
         ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO m, employee e"
                 + "  WHERE ID_DROPPOINT = " + droppoint.getId()
                 + " AND m.id_maint_ass = e.e_number"
@@ -206,10 +207,10 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
                         + "Finish Date: " + rs.getDate("data_fim") + "\n"
                         + "Employee: " + rs.getString("e_name") + "\n";
                 
-                lMaintenance.add(maintenance);
+                lMaint += maintenance + "\n";
             }
         }
-        return lMaintenance;
+        return lMaint;
 
     }
 

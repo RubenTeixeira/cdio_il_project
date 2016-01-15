@@ -54,9 +54,9 @@ public class ListMaintenanceController {
         this.droppoint = dropChosen;
     }
     
-    public List<String> getMaintenanceList(){
+    public String getMaintenanceList(DropPoint dp){
         try {
-            return maintenanceDAO.getCompletedMaintenancebyDropPoint(droppointDAO.get(droppoint));
+            return maintenanceDAO.getCompletedMaintenancebyDropPoint(dp);
         } catch (SQLException ex) {
             Logger.getLogger(ListMaintenanceController.class.getName()).log(Level.SEVERE, null, ex);
         }

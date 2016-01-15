@@ -592,7 +592,7 @@ end;
 
                --- HeadQuarters (HQ)----
 INSERT INTO MORADA (ID_MORADA,LATITUDE,LONGITUDE)
-    VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
+    VALUES(0,'41.1776042','-8.6077722');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
@@ -956,7 +956,7 @@ INSERT INTO Preemptive_DP_Plan (id_pre_plan,id_DropPoint,id_task)
 
 -- MAINTENANCE_PLAN
 INSERT INTO Maintenance_Plan (id_Maint_Plan,id_Maint_Team,maint_Plan_Date)
-	VALUES (1,1,TO_DATE('14-01-2016', 'dd-mm-yyyy'));
+	VALUES (1,1,TO_DATE('15-01-2016', 'dd-mm-yyyy'));
 	
 -- Incident Types
 INSERT INTO Incident_type ( id_Incident_Type, description)
@@ -984,14 +984,14 @@ VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH2
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
-VALUES (seq_new_id_maintenance.nextval,1,1,null,null,1601091);
+VALUES (seq_new_id_maintenance.nextval,1,1,(sysdate),(sysdate),1601091);
 
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
 VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
 
 --Repair Plan
 insert into REPAIR_PLAN(ID_REPAIR_PLAN, ID_REPAIR_TEAM, REPAIR_PLAN_DATE)
-VALUES (1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES (1,1,TO_DATE('15-01-2016 17:00', 'dd-mm-yyyy HH24:MI'));
 
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
