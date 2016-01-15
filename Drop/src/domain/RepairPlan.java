@@ -55,7 +55,7 @@ public class RepairPlan implements WorkPlan {
         dropPointDAO = (DropPointDAO) manager.getDAO(Table.DROPPOINT);
         incidentDAO = (IncidentDAO) manager.getDAO(Table.INCIDENT);
         addressDAO = (AddressDAO) manager.getDAO(Table.ADDRESS);
-        graph = new GraphDropPointNet();
+        
     }
     
     // Getter and Setter
@@ -116,6 +116,7 @@ public class RepairPlan implements WorkPlan {
     
     private void calcPlanPath(Address initVertex, Address endVertex) {
         this.planPath.clear();
+        graph = new GraphDropPointNet();
         List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
         List<Incident> lstIncidents;
         int i = 0;
@@ -126,6 +127,7 @@ public class RepairPlan implements WorkPlan {
                 i++;
             }
         }
+        graph = null;
     }
     
     private Map<DropPoint, Float> createDropPointMap() {

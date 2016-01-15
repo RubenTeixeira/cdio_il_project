@@ -984,7 +984,7 @@ VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH2
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
-VALUES (seq_new_id_maintenance.nextval,1,1,null,null,1601091);
+VALUES (seq_new_id_maintenance.nextval,1,1,(sysdate),(sysdate),1601091);
 
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
 VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
