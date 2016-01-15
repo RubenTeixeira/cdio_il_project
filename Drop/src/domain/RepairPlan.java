@@ -147,7 +147,7 @@ public class RepairPlan implements WorkPlan {
         for (Repair r : this.planPath) {
             removePlannedRepair(r.getIncidentID());
             System.out.println("Inserting :"+r);
-            r.setIncidentID(repairDAO.getNextId());
+            r.setIncidentID(r.getIncidentID());
             r.setPlanID(this.id);
             
             if (!repairDAO.insertNew(r))
@@ -171,7 +171,7 @@ public class RepairPlan implements WorkPlan {
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
         Address endVertex = addressDAO.getHeadQuartersLocation();
         calcPlanPath(initVertex, endVertex);
-
+        submitPlanPath();
     }
 
     private void removePlannedRepair(int incidentID) {
