@@ -4,6 +4,7 @@ import com.google.maps.model.LatLng;
 import dal.AddressDAO;
 import dal.DropPointDAO;
 import dal.Table;
+import domain.Address;
 import domain.DropPoint;
 import esinf.dropGraph.GraphDropPointNet;
 import esinf.graph.Graph;
@@ -11,7 +12,9 @@ import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -37,7 +40,7 @@ public class Main {
 //        DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
 //        AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
 //
-//        esinf.dropGraph.GraphDropPointNet gra = new esinf.dropGraph.GraphDropPointNet();
+       
 //
 //        HashMap<DropPoint, Float> m = new HashMap<>();
 //
@@ -124,32 +127,40 @@ public class Main {
         
         Map<DropPoint, Float> m = new HashMap<>();
         
-        float i=3;
-        
-        for (DropPoint list1 : list.subList(0, 3)) {
-            m.put(list1, i);
-            i+=10;
-        }
+        m.put(d5, (float) 1);
+        m.put(d1, (float) -4);
+        m.put(d2, (float) 5);
+                
         
         
         List<Point> arrayList = new ArrayList<Point>();
         
-        arrayList.add(point3);
-        arrayList.add(point4);
+         arrayList.add(point);
+         
+         arrayList.add(point1);
+         
+         arrayList.add(point4);
         
         
         
-        //List<DropPoint> pathLimitedByTime = graphDropPointNet.getPathLimitedByTime(m, 15);
+        //List<DropPoint> buildPathWithPriority = graphDropPointNet.getPathLimitedByTime(m, 20);
         
-        List<Point> pathLimitedByTime1 = graphDropPointNet.getPathLimitedByTime(point, arrayList, 20);
-       
-        for (Point q : pathLimitedByTime1) {
-            System.out.println(q);
+        //System.out.println(buildPathWithPriority);
+        
+        //List<Point> computeShortestPath = graphDropPointNet.computeShortestPath(point3, arrayList);
+        //List<Point> pathLimitedByTime = graphDropPointNet.getPathLimitedByTime(point3, arrayList, 24);
+         
+         Deque<Point> shortPath = new LinkedList<>();
+        graphDropPointNet.minimumDistance(point, point4, shortPath);
+         
+       // List<DropPoint> listOfDropPointsbyListPoints = graphDropPointNet.getListOfDropPointsbyListPoints(pathLimitedByTime);
+        
+        for (Point listOfDropPointsbyListPoint : shortPath) {
+            System.out.println(listOfDropPointsbyListPoint.getName());
         }
         
         
-        
-        
+        //List<DropPoint> pathLimitedByTime = graphDropPointNet.getPathLimitedByTime(m, 15);
 //        List<DropPoint> listDropPoints = dao.getListDropPoints();
 //        DropPoint get = listDropPoints.get(0);
 //        DropPoint get1 = listDropPoints.get(1);
@@ -167,7 +178,6 @@ public class Main {
 //        for (Point buildPathShortestPath1 : buildPathShortestPath) {
 //            System.out.println(gra.getDropPointByPoint(buildPathShortestPath1));
 //        }
-
         //gra.show(gra.getPoints(), gra.getPoints(), gra.getPoints());
         //Edge route = RequestAPI.getEdgeWithDistance(41.1796524, -8.1729746, 41.181332, -8.1731463);
         //System.out.println(route.getDistance());
