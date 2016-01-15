@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import maps.domain.Branch;
@@ -83,7 +84,7 @@ public class GraphDropPointNet {
      * @param address Address
      * @param isDirected boolean
      */
-    public GraphDropPointNet(List<DropPoint> lstDrop, 
+    public GraphDropPointNet(List<DropPoint> lstDrop,
             List<Address> address, boolean isDirected) {
         this.setLstDrop(lstDrop);
         this.setAddress(address);
@@ -191,8 +192,6 @@ public class GraphDropPointNet {
         points = new ArrayList<>();
         edges = new ArrayList<>();
 
-        
-        
         for (DropPoint dropPoint : lstDrop) {
             int id = dropPoint.getId();
             for (Address addres : address) {
@@ -209,7 +208,6 @@ public class GraphDropPointNet {
         }
 
         RequestAPI instance = maps.domain.RequestAPI.getInstance();
-        
 
         DistanceMatrix matrix = instance.getDistanceBetweenTwoPoints(points, points);
 
@@ -257,11 +255,11 @@ public class GraphDropPointNet {
     /**
      * The key in the net of the DropPoint
      *
-     * @param droppoint
+     * @param point
      * @return the key
      */
-    public int keyPoint(Point droppoint) {
-        Vertex vert = dropPointNet.getVertex(droppoint);
+    public int keyPoint(Point point) {
+        Vertex vert = dropPointNet.getVertex(point);
         if (vert != null) {
             return vert.getKey();
         }
@@ -269,12 +267,12 @@ public class GraphDropPointNet {
     }
 
     /**
-     * Get the DropPoint by key
+     * Get the vertex by key
      *
      * @param key the key
      * @return DropPoint
      */
-    public Vertex<Point, Branch> dropBrunchByKey(int key) {
+    public Vertex<Point, Branch> getVertexByKey(int key) {
         int nElem = dropPointNet.numVertices();
         if (key > -1 && key < nElem) {
             return dropPointNet.getVertex(key);
@@ -411,7 +409,7 @@ public class GraphDropPointNet {
      * @return List Point
      */
     public List<Point> getPathLimitedByTime(Point a, List<Point> waypoints, long time) {
-        List<Point> shortestPath = computeShortestPath(a, waypoints);
+        List<Point> shortestPath = computeShortestPath(a, a, waypoints);
         long temp = 0;
         calculateTime(shortestPath, time, temp, 2);
 
@@ -426,6 +424,10 @@ public class GraphDropPointNet {
      * @return List DropPoint
      */
     public List<DropPoint> getPathLimitedByTime(Map<DropPoint, Float> map, long time) {
+        if (time <= 0) {
+            return null;
+        }
+
         List<DropPoint> pathWithPriority = buildPathWithPriority(map);
         long temp = 0;
         List<Point> pontns = getListOfPointsbyListDropPoints(pathWithPriority);
@@ -451,14 +453,14 @@ public class GraphDropPointNet {
             temp += this.dropPointNet.getEdge(vertex, vertex1).getElement().getDuration();
         }
 
-        if (time > temp) {
+        if (time >= temp) {
             return;
         } else {
-            if (shortestPath.size() - 1 == 2) {
-                shortestPath.clear();
-                return;
+            if (step == 2) {
+                shortestPath.remove(1);
+            } else {
+                shortestPath.remove(shortestPath.size() - step);
             }
-            shortestPath.remove(shortestPath.size() - step);
             temp = 0;
             calculateTime(shortestPath, time, temp, step);
         }
@@ -508,6 +510,16 @@ public class GraphDropPointNet {
         return dropPriority;
     }
 
+    public Point getPointByAddress(Address address) {
+        for (Point point : this.points) {
+            if (address.getLongitude() == point.getCoordinate().lat
+                    && address.getLongitude() == point.getCoordinate().lng) {
+                return point;
+            }
+        }
+        return null;
+    }
+
     /**
      *
      *
@@ -518,14 +530,20 @@ public class GraphDropPointNet {
      */
     public List<DropPoint> buildPathWithPriority(Map<DropPoint, Float> map,
             Address source, Address destination) {
-        //PARA TESTES
+
         HashMap<DropPoint, Float> passToHash = new HashMap<>(map);
         LinkedHashMap<DropPoint, Float> sortedMap = sortHashMapByValuesD(passToHash);
 
         ArrayList<DropPoint> dropPriority = new ArrayList<>(sortedMap.keySet());
-        Deque<Point> aux = new LinkedList<>();
-        Deque<Point> shortPath = new LinkedList<>();
-        double minimumDistance = 0;
+
+        Point sourcePoint = getPointByAddress(source);
+        Point destinationPoint = getPointByAddress(destination);
+
+        DropPoint sourceDropPoint = getDropPointByPoint(sourcePoint);
+        DropPoint destinyDropPoint = getDropPointByPoint(destinationPoint);
+
+        dropPriority.add(0, sourceDropPoint);
+        dropPriority.add(destinyDropPoint);
 
         return dropPriority;
     }
@@ -540,16 +558,25 @@ public class GraphDropPointNet {
      */
     public List<DropPoint> buildPathWithPriority(Map<DropPoint, Float> map,
             Address source, Address destination, long time) {
-        //////PARA TESTE
         HashMap<DropPoint, Float> passToHash = new HashMap<>(map);
         LinkedHashMap<DropPoint, Float> sortedMap = sortHashMapByValuesD(passToHash);
 
         ArrayList<DropPoint> dropPriority = new ArrayList<>(sortedMap.keySet());
-        Deque<Point> aux = new LinkedList<>();
-        Deque<Point> shortPath = new LinkedList<>();
-        double minimumDistance = 0;
 
-        return dropPriority;
+        Point sourcePoint = getPointByAddress(source);
+        Point destinationPoint = getPointByAddress(destination);
+        List<Point> wayPoints = this.getListOfPointsbyListDropPoints(dropPriority);
+
+        DropPoint sourceDropPoint = getDropPointByPoint(sourcePoint);
+        DropPoint destinyDropPoint = getDropPointByPoint(destinationPoint);
+
+        dropPriority.add(0, sourceDropPoint);
+        dropPriority.add(destinyDropPoint);
+
+        List<Point> pathLimitedByTime = this.getPathLimitedByTime(sourcePoint,
+                wayPoints, time);
+
+        return this.getListOfDropPointsbyListPoints(pathLimitedByTime);
     }
 
     /**
@@ -596,8 +623,8 @@ public class GraphDropPointNet {
      * @param wayPoints Vertices
      * @return List Point
      */
-    public List<Point> computeShortestPath(Point a, List<Point> wayPoints) {
-        ArrayList<Deque<Point>> allPath = allPath(a, a);
+    public List<Point> computeShortestPath(Point a, Point b, List<Point> wayPoints) {
+        ArrayList<Deque<Point>> allPath = allPath(a, b);
         List<Deque<Point>> aux = new ArrayList<>();
 
         for (Deque<Point> stack : allPath) {
@@ -655,8 +682,7 @@ public class GraphDropPointNet {
         }
         return distance;
     }
-    
-  
+
     /**
      * Build an interactive map that we can test the waypoints face on start
      * point and end point
@@ -670,6 +696,38 @@ public class GraphDropPointNet {
         maps.GUI.Waypoints.setEnd(destiny);
         maps.GUI.Waypoints.setWaypoints(waypoints);
         maps.GUI.Waypoints.main(null);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.dropPointNet);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GraphDropPointNet other = (GraphDropPointNet) obj;
+        if (!Objects.equals(this.dropPointNet, other.dropPointNet)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "GraphDropPointNet{"
+                + "dropPointNet=" + dropPointNet
+                + ", edges=" + edges
+                + ", lstDrop=" + lstDrop
+                + ", address=" + address
+                + ", points=" + points + '}';
     }
 
 }
