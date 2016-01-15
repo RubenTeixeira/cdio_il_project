@@ -30,6 +30,7 @@ drop sequence seq_id_Incident_Type;
 drop sequence seq_id_maintenance;
 drop sequence seq_id_cell_maintenance;
 drop sequence seq_new_id_maintenance;
+drop sequence seq_id_repair;
 
 CREATE TABLE DropPoint (
 	id_DropPoint number(10) NOT NULL,
@@ -224,7 +225,7 @@ CREATE TABLE Incident (
 CREATE TABLE Repair (
 	id_Repair number(10),
   visit_index number(5),
-	id_Incident number(10),
+	id_Incident number(10) UNIQUE,
 	id_Repair_Plan number(10),
 	repair_date date,
 	observations varchar2(255),
@@ -266,6 +267,12 @@ INCREMENT BY 1
 CACHE 10;
 
 CREATE SEQUENCE seq_new_id_maintenance
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;
+
+CREATE SEQUENCE seq_id_repair
 MINVALUE 1
 START WITH 1
 INCREMENT BY 1
@@ -982,6 +989,15 @@ VALUES (seq_id_incident.nextval,3,11,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH2
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
 VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
 
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,1,10,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,2,14,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,3,28,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,4,31,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
 VALUES (seq_new_id_maintenance.nextval,1,1,(sysdate),(sysdate),1601091);
@@ -995,15 +1011,15 @@ VALUES (1,1,TO_DATE('15-01-2016 17:00', 'dd-mm-yyyy HH24:MI'));
 
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(1,0,2,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES(seq_id_repair.nextval,0,2,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(2,0,3,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES(seq_id_repair.nextval,0,3,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(3,0,4,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES(seq_id_repair.nextval,0,4,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(4,0,5,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES(seq_id_repair.nextval,0,5,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN)
-VALUES(5,0,6,1);
+VALUES(seq_id_repair.nextval,0,6,1);
 
 
 COMMIT;

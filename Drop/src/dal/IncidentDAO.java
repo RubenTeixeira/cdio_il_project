@@ -105,7 +105,8 @@ public class IncidentDAO extends GenericDAO<Incident> {
 
     @Override
     public void delete(Incident obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet rs = executeQuery("delete from REPAIR r WHERE r.ID_INCIDENT = "+obj.getIncident_id());
+            
     }
 
     @Override
@@ -155,5 +156,6 @@ public class IncidentDAO extends GenericDAO<Incident> {
         }
         return lstincidents;
     }
+
 
 }

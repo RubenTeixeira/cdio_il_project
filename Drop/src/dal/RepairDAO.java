@@ -6,6 +6,7 @@
 package dal;
 
 import domain.DropPoint;
+import domain.Incident;
 import domain.Repair;
 import domain.RepairPlan;
 import java.sql.Connection;
@@ -29,7 +30,7 @@ public class RepairDAO extends GenericDAO<Repair>{
     @Override
     public boolean insertNew(Repair repair) {
         ResultSet rs = executeQuery("INSERT INTO REPAIR (ID_REPAIR,ID_REPAIR_PLAN,ID_INCIDENT,VISIT_INDEX)\n" +
-                                  "    VALUES ("+repair.getId()+","+repair.getPlanID()+","
+                                  "    VALUES (seq_id_repair.nextval,"+repair.getPlanID()+","
                                                 +repair.getIncidentID()+","+repair.getIndex()+")");
         if (rs != null) {
                 try {
@@ -87,7 +88,7 @@ public class RepairDAO extends GenericDAO<Repair>{
 
     public boolean insertPlan(RepairPlan plan) {
         ResultSet rs = executeQuery("INSERT INTO REPAIR_PLAN (ID_REPAIR_PLAN,REPAIR_PLAN_DATE,ID_REPAIR_TEAM)\n" +
-                                    "    VALUES ("+plan.getId()+","+plan.getDate()+","+plan.getTeamID()+")");
+                                    "    VALUES ("+plan.getId()+",(sysdate),"+plan.getTeamID()+")");
         
         if (rs != null) {
                 try {
@@ -181,5 +182,9 @@ public class RepairDAO extends GenericDAO<Repair>{
                   id=rs.getInt("ID_DROPPOINT");
         }
         return id;
+    }
+
+    public void deletePlannedRepair(int incidentID) {
+        ResultSet rs = executeQuery("delete from REPAIR r WHERE r.ID_INCIDENT = "+incidentID);
     }
 }

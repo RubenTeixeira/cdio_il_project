@@ -148,7 +148,7 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
 
     public boolean insertPlan(MaintenancePlan plan) {
         String qry = "INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
-                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")";
+                + "    VALUES (" + plan.getId() + ",(sysdate)," + plan.getTeamID() + ")";
         ResultSet rs = executeQuery(qry);
 
         if (rs != null) {

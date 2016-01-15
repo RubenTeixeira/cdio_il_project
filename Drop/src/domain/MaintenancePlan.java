@@ -159,12 +159,13 @@ public class MaintenancePlan implements WorkPlan {
         this.planDate = new Date();
         if (!maintenanceDAO.insertPlan(this))
             return false;
-        
+        System.out.println("Inserted New MainetenancePlan;");
         for (Maintenance m : this.planPath) {
             m.setId(maintenanceDAO.getNextId());
             m.setPlanID(this.id);
             if (!maintenanceDAO.insertNew(m))
                 return false;
+            System.out.println("Inserted maintenance");
         }
         
         return true;
