@@ -53,11 +53,11 @@ public class UpdateRepairController {
         
     }
 
-    public void updateRepairInfo(Date date, String partUsed, String observ)
+    public void updateRepairInfo(Date date, String partUsed, String observ) throws SQLException
     {
         this.repair.setRepairDate(date);
         this.repair.setPartsUsed(partUsed);
         this.repair.setObservations(observ);
-        this.repairDAO.update(this.repair);
+        this.repairPlan.updatePlan(this.repair);
     }
 }

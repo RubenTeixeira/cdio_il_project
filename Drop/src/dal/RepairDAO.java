@@ -43,7 +43,10 @@ public class RepairDAO extends GenericDAO<Repair>{
 
     @Override
     public boolean update(Repair obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet rs = executeQuery("UPDATE REPAIR set REPAIR_DATE = TO_DATE('"+new java.sql.Date(obj.getRepairDate().getTime())+"', 'yyyy-mm-dd')"
+                + ",OBSERVATIONS = '"+obj.getObservations()+"', PARTS_USED = '"+obj.getPartsUsed()+"'"
+        + " where id_repair = "+obj.getId());
+        return rs != null;
     }
 
     @Override
@@ -166,12 +169,17 @@ public class RepairDAO extends GenericDAO<Repair>{
 
     public int getCorrespondingDropPointID(Repair r) throws SQLException
     {
+        int id = 0;
         ResultSet rs = executeQuery("select d.ID_DROPPOINT FROM Repair r, Incident i, Prateleira p, Armario a, DropPoint d\n" +
                             "Where r.ID_REPAIR = "+r.getId()+
                             " and r.ID_INCIDENT = i.ID_INCIDENT\n" +
                             "and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
                             "and p.ID_ARMARIO = a.ID_ARMARIO\n" +
-                            "and a.ID_DROPPOINT = d.ID_DROPPOINT;");
-        return rs.getInt("ID_DROPPOINT");
+                            "and a.ID_DROPPOINT = d.ID_DROPPOINT");
+        while (rs.next())
+        {
+                  id=rs.getInt("ID_DROPPOINT");
+        }
+        return id;
     }
 }

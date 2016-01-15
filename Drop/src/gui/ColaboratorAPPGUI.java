@@ -1018,7 +1018,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         int opt = JOptionPane.showConfirmDialog(this, "Are you sure you want submit?", "Confirm Submission", JOptionPane.YES_NO_OPTION);
         if (opt == 0)
         {
-            this.updateRepairController.updateRepairInfo(new Date(),txtUsedComponents.getText(),txtObservations.getText());
+            try
+            {
+                this.updateRepairController.updateRepairInfo(new Date(),txtUsedComponents.getText(),txtObservations.getText());
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.repairIncidentsModel.clear();
             this.repairListModel.clear();
             this.txtObservations.setText("");
