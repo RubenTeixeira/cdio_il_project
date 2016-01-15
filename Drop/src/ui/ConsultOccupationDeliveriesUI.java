@@ -45,16 +45,16 @@ public class ConsultOccupationDeliveriesUI {
             op = utils.ReadFromKeyboard.read();
             switch (op) {
                 case 1:
-                    System.out.println(controller.getListRegisterDelivered());
+                    System.out.println(controller.getListRegisterDelivered(null));
                     utils.ReadFromKeyboard.pressEnter();
                     break;
 
                 case 2:
-                    System.out.println(controller.getListRegistrationCollected());
+                    System.out.println(controller.getListRegistrationCollected(null));
                     utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 3:
-                    System.out.println(controller.getOccupation());
+                    System.out.println(controller.getOccupation(null));
                     utils.ReadFromKeyboard.pressEnter();
                     break;
                 case 0:

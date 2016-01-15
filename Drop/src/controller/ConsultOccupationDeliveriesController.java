@@ -38,6 +38,7 @@ public class ConsultOccupationDeliveriesController {
             Logger.getLogger(ConsultOccupationDeliveriesController.class.getName()).log(Level.SEVERE,
                     "Connection failed.", ex);
         }
+        
     }
 
     public List<DropPoint> deliveriesConsultationCollectionsDropPoint() {
@@ -49,16 +50,16 @@ public class ConsultOccupationDeliveriesController {
         this.idDropPoint = id;
     }
 
-    public String getListRegisterDelivered() {
-        return deliveryDao.deliveriesList(dropList.get(idDropPoint));
+    public String getListRegisterDelivered(DropPoint dp) {
+        return deliveryDao.deliveriesList(dp);
     }
 
-    public String getListRegistrationCollected() {
-        return deliveryDao.collectedList(dropList.get(idDropPoint));
+    public String getListRegistrationCollected(DropPoint dp) {
+        return deliveryDao.collectedList(dp);
     }
 
-    public String getOccupation() {
-        return dropDao.consultOccupation(dropList.get(idDropPoint-1));
+    public String getOccupation(DropPoint dp) {
+        return dropDao.consultOccupation(dp);
     }
 
 }

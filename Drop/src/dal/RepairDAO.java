@@ -96,8 +96,8 @@ public class RepairDAO extends GenericDAO<Repair>{
         return false;
     }
     
-    public List<String> getCompletedRepairbyDropPoint(DropPoint droppoint) throws SQLException{
-        List<String> lRepair = new ArrayList<>();
+    public String getCompletedRepairbyDropPoint(DropPoint droppoint) throws SQLException{
+        String lRepair = "";
         String query = "SELECT * from repair r, incident i, prateleira p, armario a, incident_type t "
                 + "WHERE r.id_incident = i.id_incident "
                 + "AND i.id_incident_type = t.id_incident_type "
@@ -111,7 +111,7 @@ public class RepairDAO extends GenericDAO<Repair>{
                     + "Date: " + rs.getDate("repair_date") + "\n"
                     + "Cell ID: " + rs.getInt("id_prateleira") + "\n";
             
-            lRepair.add(repair);
+            lRepair += repair + "\n";
         }               
         
         

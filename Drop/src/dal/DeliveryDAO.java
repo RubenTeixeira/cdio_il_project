@@ -242,7 +242,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
             String str = "";
             while (executeQuery.next()) {
 
-                str += " ID:: " + executeQuery.getString("id_entrega") + " Delivery date: " + executeQuery.getString("data_fecha_prateleira") + ". ID Cell: " + executeQuery.getString("id_prateleira") +  "\n";
+                str += " ID: " + executeQuery.getString("id_entrega") + " Delivery date: " + executeQuery.getString("data_fecha_prateleira") + ". ID Cell: " + executeQuery.getString("id_prateleira") +  "\n";
                 aux.add(str);
             }
             if (str.isEmpty()) {
@@ -277,7 +277,7 @@ public class DeliveryDAO extends GenericDAO<Delivery> {
             String str = "";
             while (executeQuery.next()) {
 
-                str += "Token: " + executeQuery.getString("id_recolha") + " Delivery date: " + executeQuery.getString("DATA_FECHA_PRATELEIRA") + ". ID Cell: " + executeQuery.getString("id_prateleira") + "\n";
+                str += "PickUp ID: " + executeQuery.getString("id_recolha") + " Delivery date: " + executeQuery.getString("DATA_FECHA_PRATELEIRA") + ". ID Cell: " + executeQuery.getString("id_prateleira") + "\n";
 
             }
 

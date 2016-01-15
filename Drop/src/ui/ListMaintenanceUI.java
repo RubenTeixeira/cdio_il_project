@@ -6,8 +6,8 @@
 package ui;
 
 import controller.ListMaintenanceController;
+import dal.DropPointDAO;
 import domain.DropPoint;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,15 +34,15 @@ class ListMaintenanceUI {
         int droppoint = utils.ReadFromKeyboard.read();
         controller.selectDropPoint(droppoint);
 
-        List<String> lMain = controller.getMaintenanceList();
-        if (!lMain.isEmpty()) {
-            for (String main : lMain) {
-                System.out.println(main);
-            }
-        } else {
-            System.out.println("No records.");
-
-        }
+//        String lMain = controller.getMaintenanceList(controller.getMaintenanceList());
+//        if (!lMain.isEmpty()) {
+//            for (String main : lMain) {
+//                System.out.println(main);
+//            }
+//        } else {
+//            System.out.println("No records.");
+//
+//        }
 
     }
 

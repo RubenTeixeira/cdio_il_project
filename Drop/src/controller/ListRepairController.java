@@ -54,9 +54,9 @@ public class ListRepairController {
         this.droppoint = dropChosen;
     }
     
-    public List<String> getRepairCompleted(){
+    public String getRepairCompleted(DropPoint dp){
         try {
-            return repairDAO.getCompletedRepairbyDropPoint(droppointDAO.get(droppoint));
+            return repairDAO.getCompletedRepairbyDropPoint(dp);
         } catch (SQLException ex) {
             Logger.getLogger(ListRepairController.class.getName()).log(Level.SEVERE, null, ex);
         }

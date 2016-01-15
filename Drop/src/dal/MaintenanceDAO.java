@@ -194,8 +194,8 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
         return list;
     }
 
-    public List<String> getCompletedMaintenancebyDropPoint(DropPoint droppoint) throws SQLException {
-        List<String> lMaintenance = new ArrayList<String>();
+    public String getCompletedMaintenancebyDropPoint(DropPoint droppoint) throws SQLException {
+        String lMaint = "";
         ResultSet rs = executeQuery("SELECT * FROM MANUTENCAO m, employee e"
                 + "  WHERE ID_DROPPOINT = " + droppoint.getId()
                 + " AND m.id_maint_ass = e.e_number"
@@ -208,10 +208,10 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
                         + "Finish Date: " + rs.getDate("data_fim") + "\n"
                         + "Employee: " + rs.getString("e_name") + "\n";
                 
-                lMaintenance.add(maintenance);
+                lMaint += maintenance + "\n";
             }
         }
-        return lMaintenance;
+        return lMaint;
 
     }
 
