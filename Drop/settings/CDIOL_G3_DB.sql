@@ -591,8 +591,8 @@ end;
   --MORADA -> INSERT INTO Morada (ID_MORADA,RUA,CODPOSTAL,LOCALIDADE) VALUES (Int, String, String, String);
 
                --- HeadQuarters (HQ)----
-INSERT INTO MORADA (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE)
-    VALUES (0, 'Rua Ciríaco Cardoso',265, '4150-213', 'Porto','41.1594185','-8.6503125');
+INSERT INTO MORADA (ID_MORADA,LATITUDE,LONGITUDE)
+    VALUES(0,'41.1776042','-8.6077722');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
@@ -956,7 +956,7 @@ INSERT INTO Preemptive_DP_Plan (id_pre_plan,id_DropPoint,id_task)
 
 -- MAINTENANCE_PLAN
 INSERT INTO Maintenance_Plan (id_Maint_Plan,id_Maint_Team,maint_Plan_Date)
-	VALUES (1,1,(sysdate));
+	VALUES (1,1,TO_DATE('15-01-2016', 'dd-mm-yyyy'));
 	
 -- Incident Types
 INSERT INTO Incident_type ( id_Incident_Type, description)
@@ -991,7 +991,7 @@ VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
 
 --Repair Plan
 insert into REPAIR_PLAN(ID_REPAIR_PLAN, ID_REPAIR_TEAM, REPAIR_PLAN_DATE)
-VALUES (1,1,(sysdate));
+VALUES (1,1,TO_DATE('15-01-2016 17:00', 'dd-mm-yyyy HH24:MI'));
 
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
