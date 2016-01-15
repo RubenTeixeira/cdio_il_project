@@ -134,6 +134,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRepairActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -474,7 +477,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="cardRepair"/>
+              <CardConstraints cardName="cardListRepair"/>
             </Constraint>
           </Constraints>
 
@@ -570,6 +573,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackListRepairActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnNextListRepair">
               <Properties>
@@ -587,6 +593,9 @@
                 </Property>
                 <Property name="iconTextGap" type="int" value="-65"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNextListRepairActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -936,7 +945,7 @@
                               <Component id="btnSubmitRepair" min="-2" pref="160" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -1045,6 +1054,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackRepairActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSubmitRepair">
               <Properties>
@@ -1062,6 +1074,9 @@
                 </Property>
                 <Property name="iconTextGap" type="int" value="-85"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubmitRepairActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
               <Properties>

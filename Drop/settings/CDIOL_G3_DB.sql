@@ -153,7 +153,7 @@ create table Employee (
 
 create table Manutencao (
 	id_manutencao	number(10) NOT NULL,
-  visit_index number(5),
+        visit_index number(5),
 	id_DropPoint 	number(10),
 	id_Maint_Plan	number(10),
 	id_Maint_Ass	number(10),
@@ -213,11 +213,12 @@ CREATE TABLE Incident_Type (
 );
 
 CREATE TABLE Incident (
-	id_Incident			number(10),
+	id_Incident		number(10),
 	id_Incident_Type	number(10),
 	id_prateleira		number(10),
 	incident_date		date,
-	reporter			number(10)
+	reporter		number(10),
+        repaired                number(1) DEFAULT 0
 );
 
 CREATE TABLE Repair (
@@ -337,10 +338,40 @@ ALTER TABLE Incident ADD CONSTRAINT FK_Incid_reporter_Empl FOREIGN KEY (reporter
 ALTER TABLE Repair ADD CONSTRAINT FK_Repair_idIncd_Incd FOREIGN KEY (id_Incident) REFERENCES Incident (id_Incident);
 ALTER TABLE Repair ADD CONSTRAINT FK_Repair_idRpPlan_RpPlan FOREIGN KEY (id_Repair_Plan) REFERENCES Repair_Plan (id_Repair_Plan);
 
+----------------TRIGGERS---------------------
+ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE'; --necessario para nao dar erro de compilacao
+
+---- Triggers para atualizar incidente para reparado
+create or replace TRIGGER TRG_INCIDENTE_REPARACAO
+BEFORE INSERT or UPDATE ON REPAIR
+for each row
+
+DECLARE
+  idIncident INCIDENT.ID_INCIDENT%TYPE;
+
+BEGIN
+  IF :NEW.REPAIR_DATE IS NOT NULL THEN
+      --Atualizacao do estado de incidente;
+      begin
+        select ID_INCIDENT INTO idIncident
+          from INCIDENT
+         where ID_INCIDENT = :new.ID_INCIDENT;
+       
+          update INCIDENT i
+             set i.REPAIRED = 1
+          where i.ID_INCIDENT = idIncident;
+      exception
+        when others then
+          raise_application_error(-20001, 'Nao foi possÌvel atualizar o estado de incidente');
+      end;
+  END IF;
+exception
+  when others then
+    raise_application_error(-20002, sqlerrm(sqlcode));
+END;
+/
 
 -- TRIGGER PARA MUDAR O VALOR DE OCUPA´AO DA PRATELEIRA CONSOANTE UMA ENTREGA
-
-ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE'; --necessario para nao dar erro de compilacao
 
 CREATE OR REPLACE TRIGGER TRG_PRATELEIRA_OCUPACAO_E
 BEFORE INSERT or UPDATE ON ENTREGA 
@@ -561,7 +592,7 @@ end;
 
                --- HeadQuarters (HQ)----
 INSERT INTO MORADA (ID_MORADA,LATITUDE,LONGITUDE)
-    VALUES(0,41.177604,-8.607772);
+    VALUES(0,'41.1776042','-8.6077722');
 
 INSERT INTO Morada (ID_MORADA,RUA,NUMERO,CODPOSTAL,LOCALIDADE,LATITUDE,LONGITUDE) 
   VALUES (1, 'Rua Dr. António Bernardino de Almeida',431, '4200-072', 'Porto','41.1778497','-8.6102893');
@@ -925,7 +956,7 @@ INSERT INTO Preemptive_DP_Plan (id_pre_plan,id_DropPoint,id_task)
 
 -- MAINTENANCE_PLAN
 INSERT INTO Maintenance_Plan (id_Maint_Plan,id_Maint_Team,maint_Plan_Date)
-	VALUES (1,1,TO_DATE('14-01-2016', 'dd-mm-yyyy'));
+	VALUES (1,1,TO_DATE('15-01-2016', 'dd-mm-yyyy'));
 	
 -- Incident Types
 INSERT INTO Incident_type ( id_Incident_Type, description)
@@ -938,29 +969,29 @@ INSERT INTO Incident_type ( id_Incident_Type, description)
 	VALUES(seq_id_incident_type.nextval, 'Broken lock');
 	
 -- Incidents
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,1,42,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,2,2,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,3,34,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,3,11,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
-INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter)
-VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,1,42,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,2,2,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,3,34,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,3,11,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
+VALUES (seq_id_incident.nextval,1,23,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
-VALUES (seq_new_id_maintenance.nextval,1,1,null,null,1601091);
+VALUES (seq_new_id_maintenance.nextval,1,1,(sysdate),(sysdate),1601091);
 
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)
 VALUES (seq_new_id_maintenance.nextval,2,1,null,null,1601091);
 
 --Repair Plan
 insert into REPAIR_PLAN(ID_REPAIR_PLAN, ID_REPAIR_TEAM, REPAIR_PLAN_DATE)
-VALUES (1,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+VALUES (1,1,TO_DATE('15-01-2016 17:00', 'dd-mm-yyyy HH24:MI'));
 
 --Repairs
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
@@ -971,8 +1002,8 @@ insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
 VALUES(3,0,4,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
 insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
 VALUES(4,0,5,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
-insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN,REPAIR_DATE)
-VALUES(5,0,6,1,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'));
+insert into REPAIR(ID_REPAIR,VISIT_INDEX,ID_INCIDENT,ID_REPAIR_PLAN)
+VALUES(5,0,6,1);
 
 
 COMMIT;
@@ -1075,3 +1106,4 @@ and p.id_temperatura = r.ID_TEMPERATURA and p.id_tipo_dimensao = r.ID_TIPO_DIMEN
  and r.id_reserva = t.id_reserva
 and t.codigo = 'LKO43qRF' and t.ATIVO = 1)
 and ROWNUM = 1;*/
+

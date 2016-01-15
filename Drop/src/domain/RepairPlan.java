@@ -55,7 +55,7 @@ public class RepairPlan implements WorkPlan {
         dropPointDAO = (DropPointDAO) manager.getDAO(Table.DROPPOINT);
         incidentDAO = (IncidentDAO) manager.getDAO(Table.INCIDENT);
         addressDAO = (AddressDAO) manager.getDAO(Table.ADDRESS);
-        graph = new GraphDropPointNet();
+        
     }
     
     // Getter and Setter
@@ -68,6 +68,11 @@ public class RepairPlan implements WorkPlan {
     public Date getDate() {return date;}
     public void setDate(Date date) {this.date = date;}
 
+    public boolean addRepair(Repair repair) {
+        if (repair.getPlanID() == this.id)
+            this.planPath.add(repair.getIndex(), repair);
+        return false;
+    }
     
     @Override
     public int hashCode() {
@@ -111,16 +116,18 @@ public class RepairPlan implements WorkPlan {
     
     private void calcPlanPath(Address initVertex, Address endVertex) {
         this.planPath.clear();
-//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
-//        List<Incident> lstIncidents;
-//        DropPoint dp;
-//        int size = lstDropPoints.size();
-//        for (int i = 0; i < size; i++) {
-//            dp = lstDropPoints.get(i);
-//            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
-//            for (Incident in : lstIncidents)
-//                this.planPath.add(new Repair(in.getIncident_id(),i));
-//        }
+        graph = new GraphDropPointNet();
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
+        List<Incident> lstIncidents;
+        int i = 0;
+        for (DropPoint dp : lstDropPoints) {
+            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
+            for (Incident in : lstIncidents) {
+                this.planPath.add(new Repair(in.getIncident_id(),i));
+                i++;
+            }
+        }
+        graph = null;
     }
     
     private Map<DropPoint, Float> createDropPointMap() {
@@ -138,7 +145,7 @@ public class RepairPlan implements WorkPlan {
             return false;
         
         for (Repair r : this.planPath) {
-            r.setId(repairDAO.getNextId());
+            r.setIncidentID(repairDAO.getNextId());
             r.setPlanID(this.id);
             if (!repairDAO.insertNew(r))
                 return false;

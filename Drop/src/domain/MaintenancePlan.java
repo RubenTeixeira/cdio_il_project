@@ -52,7 +52,7 @@ public class MaintenancePlan implements WorkPlan {
         maintenanceDAO = (MaintenanceDAO) manager.getDAO(Table.MANUTENCAO);
         dropPointDAO = (DropPointDAO)manager.getDAO(Table.DROPPOINT);
         addressDAO = (AddressDAO) manager.getDAO(Table.ADDRESS);
-        graph = new GraphDropPointNet();
+        
     }
 
     // Getter and Setter
@@ -112,14 +112,18 @@ public class MaintenancePlan implements WorkPlan {
         Map<DropPoint, Float> map = createDropPointMap();
         Address initVertex = addressDAO.getHeadQuartersLocation();
         Address endVertex = addressDAO.getHeadQuartersLocation();
-//        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map, initVertex, endVertex);
-//        
-//        for (int i = 0; i < lstDropPoints.size(); i++) {
-//            DropPoint dp = lstDropPoints.get(i);
-//            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
-//            this.planPath.add(maintenance);
-//        }
-
+        long workHoursinSeconds = 28800;
+        
+        graph = new GraphDropPointNet();
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(map, initVertex, endVertex, workHoursinSeconds);
+        
+        for (int i = 0; i < lstDropPoints.size(); i++) {
+            DropPoint dp = lstDropPoints.get(i);
+            Maintenance maintenance = new Maintenance(i, dp, null, null, 0);
+            this.planPath.add(maintenance);
+        }
+        
+        graph = null;
     }
 
     /**

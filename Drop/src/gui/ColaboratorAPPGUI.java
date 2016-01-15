@@ -31,17 +31,18 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private DropPoint choosenDP;
     private Maintenance choosenMaintenence;
-    
+    private Repair choosenRepair;
+
     private UpdateRepairController updateRepairController;
     private UpdateMaintenanceController updateMaintenanceController;
     private ParcelPickupController seeTokenController;
     private AnomalyReportController anomalyReportController;
-    
+
     private DefaultListModel maintenanceListModel;
     private DefaultListModel maintenanceTaskModel;
     private DefaultListModel repairListModel;
     private DefaultListModel repairIncidentsModel;
-    
+
     private CardLayout card;
 
     /**
@@ -50,7 +51,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
     public ColaboratorAPPGUI() throws SQLException
     {
         initComponents();
-        
+
         updateMaintenanceController = new UpdateMaintenanceController(Main.CREDENTIALS_FILE);
         updateRepairController = new UpdateRepairController(Main.CREDENTIALS_FILE);
 
@@ -58,12 +59,12 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         this.maintenanceTaskModel = new DefaultListModel();
         this.repairIncidentsModel = new DefaultListModel();
         this.repairListModel = new DefaultListModel();
-        
+
         this.listMaintenance.setModel(maintenanceListModel);
         this.listTaskMaintenance.setModel(maintenanceTaskModel);
         this.listPlanRepair.setModel(repairListModel);
         this.listIncidentsRepair.setModel(repairIncidentsModel);
-        
+
         card = (CardLayout) pRoot.getLayout();
 
         setLocationRelativeTo(null);
@@ -89,10 +90,24 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         }
     }
 
-    private void buildListRepairPlan()
+    private void buildListRepairPlan() throws SQLException
     {
         List<Repair> listRepair = updateRepairController.listRepairCurrentDay();
+        for (Repair repair : listRepair)
+        {
+            this.repairListModel.addElement(repair);
+        }
     }
+
+    private void buildIncidentListRepair() throws SQLException
+    {
+        List<String> listIncidents = updateRepairController.getIncidentsByRepair(choosenRepair);
+        for (String incident : listIncidents)
+        {
+            repairIncidentsModel.addElement(incident);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,6 +204,13 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         btnRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/RepairIcon.png"))); // NOI18N
         btnRepair.setText("Repair");
         btnRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnRepair.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnRepairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pInicioLayout = new javax.swing.GroupLayout(pInicio);
         pInicio.setLayout(pInicioLayout);
@@ -425,12 +447,26 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         btnBackListRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
         btnBackListRepair.setText("Back");
         btnBackListRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnBackListRepair.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnBackListRepairActionPerformed(evt);
+            }
+        });
 
         btnNextListRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnNextListRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/NextIcon.png"))); // NOI18N
         btnNextListRepair.setText("Next");
         btnNextListRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnNextListRepair.setIconTextGap(-65);
+        btnNextListRepair.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnNextListRepairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pListRepairLayout = new javax.swing.GroupLayout(pListRepair);
         pListRepair.setLayout(pListRepairLayout);
@@ -466,7 +502,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        pRoot.add(pListRepair, "cardRepair");
+        pRoot.add(pListRepair, "cardListRepair");
 
         pMaintenance.setBorder(new javax.swing.border.MatteBorder(null));
         pMaintenance.setPreferredSize(new java.awt.Dimension(400, 550));
@@ -676,12 +712,26 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
         btnBackRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/backIcon.png"))); // NOI18N
         btnBackRepair.setText("Back");
         btnBackRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnBackRepair.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnBackRepairActionPerformed(evt);
+            }
+        });
 
         btnSubmitRepair.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnSubmitRepair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/utils/Images/loginIcon.png"))); // NOI18N
         btnSubmitRepair.setText("Submit");
         btnSubmitRepair.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSubmitRepair.setIconTextGap(-85);
+        btnSubmitRepair.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSubmitRepairActionPerformed(evt);
+            }
+        });
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel13.setText("Used Components:");
@@ -712,14 +762,14 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                         .addComponent(btnSubmitRepair, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pRepairLayout.createSequentialGroup()
-                        .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pRepairLayout.createSequentialGroup()
+                        .addGroup(pRepairLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pRepairLayout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblRepairDrop))
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -764,20 +814,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-//private void ggggg()
-//    {
-//        chosenDP = (DropPoint) listDropPoints.getSelectedValue();
-//        if (chosenDP != null)
-//        {
-//            //CardLayout card = (CardLayout) pRoot.getLayout();
-//            card.show(pRoot, "cardMenu");
-//            lblChosenDP.setText(chosenDP.getName());
-//        } else
-//        {
-//            JOptionPane.showMessageDialog(this, "You need to select a DropPoint to continue.",
-//                    "Selection Error", JOptionPane.INFORMATION_MESSAGE, null);
-//        }
-//    }
+
     private void btnAnomalyReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAnomalyReportActionPerformed
     {//GEN-HEADEREND:event_btnAnomalyReportActionPerformed
         //CardLayout card = (CardLayout) pRoot.getLayout();
@@ -816,7 +853,7 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
             {
                 Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-            updateMaintenanceController.setStartDateMaintenance();
+            //updateMaintenanceController.setStartDateMaintenance();
             //CardLayout card = (CardLayout) pRoot.getLayout();
             card.show(pRoot, "cardMaintenance");
             lblMaintenanceDP.setText(choosenDP.getName());
@@ -924,9 +961,84 @@ public class ColaboratorAPPGUI extends javax.swing.JFrame {
 
     private void btnBackSeeTokenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackSeeTokenActionPerformed
     {//GEN-HEADEREND:event_btnBackSeeTokenActionPerformed
-        lblTokenViewMaintenance.setText("Your token for a outdated Delivery: "+lblSeeToken.getText());
+        lblTokenViewMaintenance.setText("Your token for a outdated Delivery: " + lblSeeToken.getText());
         card.show(pRoot, "cardMaintenance");
     }//GEN-LAST:event_btnBackSeeTokenActionPerformed
+
+    private void btnRepairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRepairActionPerformed
+    {//GEN-HEADEREND:event_btnRepairActionPerformed
+        try
+        {
+            buildListRepairPlan();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        card.show(pRoot, "cardListRepair");
+    }//GEN-LAST:event_btnRepairActionPerformed
+
+    private void btnBackListRepairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackListRepairActionPerformed
+    {//GEN-HEADEREND:event_btnBackListRepairActionPerformed
+        repairListModel.clear();
+        card.show(pRoot, "cardInicio");
+    }//GEN-LAST:event_btnBackListRepairActionPerformed
+
+    private void btnNextListRepairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnNextListRepairActionPerformed
+    {//GEN-HEADEREND:event_btnNextListRepairActionPerformed
+        choosenRepair = (Repair) listPlanRepair.getSelectedValue();
+        if (choosenRepair != null)
+        {
+            updateRepairController.selectRepair(choosenRepair);
+            try
+            {
+                choosenDP = updateRepairController.getDropPointByRepair(choosenRepair);
+                buildIncidentListRepair();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //CardLayout card = (CardLayout) pRoot.getLayout();
+            lblRepairDrop.setText(choosenDP.getName());
+            card.show(pRoot, "cardRepair");
+        } else
+        {
+            JOptionPane.showMessageDialog(this, "You need to select a Repair to continue.",
+                    "Selection Error", JOptionPane.INFORMATION_MESSAGE, null);
+        }
+    }//GEN-LAST:event_btnNextListRepairActionPerformed
+
+    private void btnBackRepairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackRepairActionPerformed
+    {//GEN-HEADEREND:event_btnBackRepairActionPerformed
+        repairIncidentsModel.clear();
+        card.show(pRoot, "cardListRepair");
+    }//GEN-LAST:event_btnBackRepairActionPerformed
+
+    private void btnSubmitRepairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSubmitRepairActionPerformed
+    {//GEN-HEADEREND:event_btnSubmitRepairActionPerformed
+        int opt = JOptionPane.showConfirmDialog(this, "Are you sure you want submit?", "Confirm Submission", JOptionPane.YES_NO_OPTION);
+        if (opt == 0)
+        {
+            try
+            {
+                this.updateRepairController.updateRepairInfo(new Date(),txtUsedComponents.getText(),txtObservations.getText());
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.repairIncidentsModel.clear();
+            this.repairListModel.clear();
+            this.txtObservations.setText("");
+            this.txtUsedComponents.setText("");
+            try
+            {
+                buildListRepairPlan();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ColaboratorAPPGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            card.show(pRoot, "cardListRepair");
+        }
+    }//GEN-LAST:event_btnSubmitRepairActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnomalyCancel;

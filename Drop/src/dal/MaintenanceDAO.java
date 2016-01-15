@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -149,8 +147,9 @@ public class MaintenanceDAO extends GenericDAO<Maintenance> {
     }
 
     public boolean insertPlan(MaintenancePlan plan) {
-        ResultSet rs = executeQuery("INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
-                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")");
+        String qry = "INSERT INTO MAINTENANCE_PLAN (ID_MAINT_PLAN,MAINT_PLAN_DATE,ID_MAINT_TEAM)\n"
+                + "    VALUES (" + plan.getId() + "," + plan.getPlanDate() + "," + plan.getTeamID() + ")";
+        ResultSet rs = executeQuery(qry);
 
         if (rs != null) {
             try {

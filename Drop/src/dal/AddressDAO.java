@@ -256,14 +256,12 @@ public class AddressDAO extends GenericDAO<Address> {
     }
 
     public Address getAddressWithLatLongById(int id) throws SQLException {
-        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from "
-                + TABLENAME + " where ID_MORADA = "+id);
-        Address address = null;
-        if (rs.next()) {
-            address.setId(id);
-            address.setLatitude(rs.getDouble("LATITUDE"));
-            address.setLongitude(rs.getDouble("LONGITUDE"));
-        }
-        return address;
+        ResultSet rs = executeQuery("select LATITUDE, LONGITUDE from Morada"+
+                                    " where ID_MORADA = "+id);
+        
+        if (rs.next())
+            return new Address(id, rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
+
+        return null;
     }
 }
