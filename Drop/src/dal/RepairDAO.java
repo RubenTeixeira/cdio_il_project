@@ -43,8 +43,8 @@ public class RepairDAO extends GenericDAO<Repair>{
 
     @Override
     public boolean update(Repair obj) {
-        ResultSet rs = executeQuery("UPDATE REPAIR set REPAIR_DATE = TO_DATE('"+obj.getRepairDate()+"', 'dd-mm-yyyy')"
-                + ",OBSERVATIONS = "+obj.getObservations()+",PARTS_USED = "+obj.getPartsUsed()+""
+        ResultSet rs = executeQuery("UPDATE REPAIR set REPAIR_DATE = TO_DATE('"+new java.sql.Date(obj.getRepairDate().getTime())+"', 'yyyy-mm-dd')"
+                + ",OBSERVATIONS = '"+obj.getObservations()+"', PARTS_USED = '"+obj.getPartsUsed()+"'"
         + " where id_repair = "+obj.getId());
         return rs != null;
     }
