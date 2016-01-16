@@ -9,6 +9,7 @@ import com.google.maps.model.DistanceMatrix;
 import dal.AddressDAO;
 import dal.DropPointDAO;
 import dal.Table;
+
 import domain.Address;
 import domain.DropPoint;
 import esinf.graph.Graph;
@@ -124,7 +125,7 @@ public class GraphDropPointNet {
      *
      * @param edges
      */
-    public void setEdges(List<Branch> edges) {
+    private void setEdges(List<Branch> edges) {
         this.edges = edges;
     }
 
@@ -170,6 +171,12 @@ public class GraphDropPointNet {
      * @return List Point
      */
     public List<Point> getPoints() {
+        Iterator<Vertex<Point, Branch>> iterator = this.dropPointNet.vertices().iterator();
+        List<Point> points = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            points.add(iterator.next().getElement());
+        }
         return points;
     }
 
@@ -178,7 +185,7 @@ public class GraphDropPointNet {
      *
      * @param points
      */
-    public void setPoints(List<Point> points) {
+    private void setPoints(List<Point> points) {
         this.points = points;
     }
 
@@ -239,6 +246,20 @@ public class GraphDropPointNet {
      */
     public void insertPoint(Point pointToInsert) {
         this.dropPointNet.insertVertex(pointToInsert);
+    }
+
+    public void insertListOfVertices(List<Point> vert) {
+        this.setPoints(vert);
+        for (Point vertex : vert) {
+            insertPoint(vertex);
+        }
+    }
+
+    public void inserListOfEdges(List<Branch> edges) {
+        this.setEdges(edges);
+        for (Branch edge : edges) {
+            this.dropPointNet.insertEdge(edge.getOrigin(), edge.getDestiny(), edge, edge.getDistance());
+        }
     }
 
     /**
