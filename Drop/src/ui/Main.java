@@ -39,7 +39,8 @@ public class Main {
 //        DropPointDAO dao = (DropPointDAO) instance.getDAO(Table.DROPPOINT);
 //        AddressDAO adressDao = (AddressDAO) instance.getDAO(Table.ADDRESS);
 //
-       
+      
+        
 //
 //        HashMap<DropPoint, Float> m = new HashMap<>();
 //
