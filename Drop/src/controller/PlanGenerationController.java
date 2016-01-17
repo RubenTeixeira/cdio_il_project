@@ -60,7 +60,7 @@ public class PlanGenerationController {
     }
 
     public void submitPlan() {
-        this.plan.submitPlanPath();
+        this.plan.submitNewPlanPath();
     }
 
 }

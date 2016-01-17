@@ -28,6 +28,10 @@ public class Repair implements Plannable {
         this.index = index;
     }
 
+    public Repair(int incidentID) {
+        this.incidentID = incidentID;
+    }
+
     public int getId() {
         return id;
     }

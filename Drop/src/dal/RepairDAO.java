@@ -72,6 +72,19 @@ public class RepairDAO extends GenericDAO<Repair>{
         }
         return -1;
     }
+    
+    public int getNextVisitIndex() {
+        String query = "select nvl(max(VISIT_INDEX),0)+1 as vIndex from Repair";
+        ResultSet rs = executeQuery(query);
+        if (rs != null) {
+            try {
+                rs.next();
+                return rs.getInt("vIndex");
+            } catch (SQLException ex) {
+            }
+        }
+        return -1;
+    }
 
     public int getNextPlanId() {
         String query = "select nvl(max(id_Repair_Plan),0)+1 as id from Repair_Plan";
