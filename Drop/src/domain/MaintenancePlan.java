@@ -152,7 +152,7 @@ public class MaintenancePlan implements WorkPlan {
      * @return true if successfull, false otherwise
      */
     @Override
-    public boolean submitPlanPath() {
+    public boolean submitNewPlanPath() {
 
         this.id = maintenanceDAO.getNextPlanId();
         this.teamID = 1; // still testing
@@ -179,7 +179,5 @@ public class MaintenancePlan implements WorkPlan {
         
         return strB.toString();
     }
-    
-    
     
 }

@@ -73,6 +73,140 @@ public class RepairPlan implements WorkPlan {
             this.planPath.add(repair.getIndex(), repair);
         return false;
     }
+
+    /**
+     * Default Plan path calculation, using the HeadQuarters as
+     * start and finish location. Calls private method.
+     * @throws SQLException 
+     */
+    @Override
+    public void calcPlanPath() throws SQLException {
+        Address initVertex = addressDAO.getHeadQuartersLocation();
+        Address endVertex = addressDAO.getHeadQuartersLocation();
+        calcPlanPath(initVertex, endVertex);
+    }
+    
+    /**
+     * Actual Plan Path calculation. Builds Plan from scratch or rebuilds Plan if
+     * unresolved Repairs are found making it so that if new Incidents with far more priority
+     * arise, they will make it into the plan sooner.
+     * @param initVertex
+     * @param endVertex
+     * @throws SQLException 
+     */
+    private void calcPlanPath(Address initVertex, Address endVertex) throws SQLException {
+        this.planPath.clear();
+        graph = new GraphDropPointNet();
+        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
+        List<Incident> lstIncidents;
+        int i = 0;
+        for (DropPoint dp : lstDropPoints) {
+            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
+            
+            for (Incident in : lstIncidents) {
+                Repair r = new Repair(in.getIncident_id());
+                r.setDropPoint(dp);
+                this.planPath.add(r);
+                i++;
+            }
+        }
+        graph = null;
+    }
+    
+    /**
+     * Builds a list of DropPoints having unresolved incidents
+     * then submits it to SLA.buildPriorityMap() which returns
+     * an HashMap with key DropPoint and a float containing the sum
+     * of the distance as time and the the repair priority (the lesser the more priority)
+     * @return Map<DropPoint, Float>
+     */
+    private Map<DropPoint, Float> createDropPointMap() {
+        List<DropPoint> lstDropPoints = dropPointDAO.getDropPointsWithIncidents();
+        return SLA.buildPriorityMap(lstDropPoints);
+    }
+
+    /**
+     * Registers this RepairPlan associating and saving all its Repair elements
+     * on the DataBase
+     * @return true if successfull, false otherwise
+     */
+    @Override
+    public boolean submitNewPlanPath() {
+        this.teamID = 1; // testing purposes
+        this.id = repairDAO.getNextPlanId();
+        
+        if (!repairDAO.insertPlan(this))
+            return false;
+        
+        return submitPlanPath();
+        
+    }
+    
+    private boolean submitPlanPath() {
+        
+        for (Repair r : this.planPath) {
+            removePlannedRepair(r.getIncidentID());
+            System.out.println("Inserting :"+r);
+            r.setPlanID(this.id);
+            
+            if (!repairDAO.insertNew(r))
+                return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Method used to list the available Incidents, including
+     * the ones with Repairs already planned for.
+     * @return String containing all the unrepaired Incidents
+     */
+    @Override
+    public String getElements() {
+        StringBuilder strB = new StringBuilder();
+        for (String in : incidentDAO.getAllIncidents())
+            strB.append(in).append("\n");
+        
+        return strB.toString();
+    }
+    
+    /**
+     * Updates this RepairPlan by updating on the DataBase the now finished Repair
+     * and then re-calculating the plan path with the new starting vertex being 
+     * the current Repair location (DropPoint address)
+     * @param finishedRepair
+     * @throws SQLException 
+     */
+    public void updatePlan(Repair finishedRepair) throws SQLException {
+        repairDAO.update(finishedRepair);
+        this.setId(finishedRepair.getId());
+        Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
+        Address endVertex = addressDAO.getHeadQuartersLocation();
+        calcPlanPath(initVertex, endVertex);
+        submitPlanPath();
+    }
+
+    /**
+     * Removes an already planned for Repair object from DataBase if
+     * existant for given Incident ID
+     * Usefull for replanning
+     * @param incidentID 
+     */
+    private void removePlannedRepair(int incidentID) {
+        System.out.println("Deleting Repair from incidentID :"+incidentID);
+        repairDAO.deletePlannedRepair(incidentID);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder planStr = new StringBuilder();
+        int i = 1;
+        for (Repair repair : planPath) {
+            planStr.append(i).append(" - ").append(repair.getDropPoint().getName()).append(" - IncidentID").append(repair.getIncidentID()).append("\n");
+            i++;
+        }
+        return planStr.toString();
+    }
     
     @Override
     public int hashCode() {
@@ -95,88 +229,4 @@ public class RepairPlan implements WorkPlan {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder planStr = new StringBuilder();
-        int i = 1;
-        for (Repair repair : planPath) {
-            planStr.append(i).append(" - ").append(repair.getDropPoint().getName()).append(" - IncidentID").append(repair.getIncidentID()).append("\n");
-            i++;
-        }
-        return planStr.toString();
-    }
-
-    @Override
-    public void calcPlanPath() throws SQLException {
-        Address initVertex = addressDAO.getHeadQuartersLocation();
-        Address endVertex = addressDAO.getHeadQuartersLocation();
-        calcPlanPath(initVertex, endVertex);
-    }
-    
-    private void calcPlanPath(Address initVertex, Address endVertex) {
-        this.planPath.clear();
-        graph = new GraphDropPointNet();
-        List<DropPoint> lstDropPoints = graph.buildPathWithPriority(createDropPointMap(), initVertex, endVertex);
-        List<Incident> lstIncidents;
-        int i = 0;
-        for (DropPoint dp : lstDropPoints) {
-            lstIncidents = incidentDAO.getIncidentsFromDropPoint(dp);
-            for (Incident in : lstIncidents) {
-                this.planPath.add(new Repair(in.getIncident_id(),i));
-                i++;
-            }
-        }
-        graph = null;
-    }
-    
-    private Map<DropPoint, Float> createDropPointMap() {
-        List<DropPoint> lstDropPoints = dropPointDAO.getDropPointsWithIncidents();
-        return SLA.buildPriorityMap(lstDropPoints);
-    }
-
-    @Override
-    public boolean submitPlanPath() {
-        this.date = new Date();
-        this.teamID = 1; // testing purposes
-        this.id = repairDAO.getNextPlanId();
-        
-        if (!repairDAO.insertPlan(this))
-            return false;
-        
-        for (Repair r : this.planPath) {
-            removePlannedRepair(r.getIncidentID());
-            System.out.println("Inserting :"+r);
-            r.setIncidentID(repairDAO.getNextId());
-            r.setPlanID(this.id);
-            
-            if (!repairDAO.insertNew(r))
-                return false;
-        }
-        
-        return true;
-    }
-
-    @Override
-    public String getElements() {
-        StringBuilder strB = new StringBuilder();
-        for (String in : incidentDAO.getAllIncidents())
-            strB.append(in).append("\n");
-        
-        return strB.toString();
-    }
-    
-    public void updatePlan(Repair finishedRepair) throws SQLException {
-        repairDAO.update(finishedRepair);
-        Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
-        Address endVertex = addressDAO.getHeadQuartersLocation();
-        calcPlanPath(initVertex, endVertex);
-
-    }
-
-    private void removePlannedRepair(int incidentID) {
-        System.out.println("Deleting Repair from incidentID :"+incidentID);
-        repairDAO.deletePlannedRepair(incidentID);
-    }
-    
 }

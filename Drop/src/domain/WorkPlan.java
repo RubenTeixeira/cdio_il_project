@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public interface WorkPlan {
 
     void calcPlanPath() throws SQLException ;
-    boolean submitPlanPath();
+    boolean submitNewPlanPath();
     String getElements();
     
     @Override
