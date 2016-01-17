@@ -1,27 +1,12 @@
 package ui;
 
-import com.google.maps.model.LatLng;
-import dal.AddressDAO;
-import dal.DropPointDAO;
-import dal.Table;
-import domain.Address;
-import domain.DropPoint;
-import esinf.dropGraph.GraphDropPointNet;
 import gui.ColaboratorAPPGUI;
 import gui.DropGUI;
 import static java.lang.System.exit;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import maps.domain.Branch;
-import maps.domain.Point;
 
 /**
  *
@@ -175,7 +160,7 @@ public class Main {
         //versaoGraficaParaCliente();
         //versaoConsola();
         //colaboradorConsola();
-        //new ColaboratorAPPGUI();
+        new ColaboratorAPPGUI();
         //gestorConsola();
     }
 

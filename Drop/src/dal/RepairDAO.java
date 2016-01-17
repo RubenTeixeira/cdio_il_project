@@ -6,10 +6,10 @@
 package dal;
 
 import domain.DropPoint;
-import domain.Incident;
 import domain.Repair;
 import domain.RepairPlan;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class RepairDAO extends GenericDAO<Repair>{
     public boolean insertNew(Repair repair) {
         ResultSet rs = executeQuery("INSERT INTO REPAIR (ID_REPAIR,ID_REPAIR_PLAN,ID_INCIDENT,VISIT_INDEX)\n" +
                                   "    VALUES (seq_id_repair.nextval,"+repair.getPlanID()+","
-                                                +repair.getIncidentID()+","+repair.getIndex()+")");
+                                                +repair.getIncidentID()+","+getNextVisitIndex(repair)+")");
         if (rs != null) {
                 try {
                     if (rs.next())
@@ -73,8 +73,10 @@ public class RepairDAO extends GenericDAO<Repair>{
         return -1;
     }
     
-    public int getNextVisitIndex() {
-        String query = "select nvl(max(VISIT_INDEX),0)+1 as vIndex from Repair";
+    public int getNextVisitIndex(Repair repair) {
+        String query = "SELECT nvl(MAX(VISIT_INDEX),0)+1 AS vIndex\n" +
+                "          FROM REPAIR r\n" +
+                "         WHERE r.ID_REPAIR_PLAN = "+repair.getPlanID();
         ResultSet rs = executeQuery(query);
         if (rs != null) {
             try {
@@ -99,18 +101,31 @@ public class RepairDAO extends GenericDAO<Repair>{
         return -1;
     }
 
-    public boolean insertPlan(RepairPlan plan) {
-        ResultSet rs = executeQuery("INSERT INTO REPAIR_PLAN (ID_REPAIR_PLAN,REPAIR_PLAN_DATE,ID_REPAIR_TEAM)\n" +
-                                    "    VALUES ("+plan.getId()+",(sysdate),"+plan.getTeamID()+")");
+    public void insertPlan(RepairPlan plan) throws SQLException {
+        PreparedStatement stmnt;
+        PreparedStatement stmntAux;
+        String qry;
+        this.con.setAutoCommit(false);
+        qry = "INSERT INTO REPAIR_PLAN (ID_REPAIR_PLAN,REPAIR_PLAN_DATE,ID_REPAIR_TEAM)\n" +
+                                    "    VALUES ("+plan.getId()+",(sysdate),"+plan.getTeamID()+")";
+        stmnt = this.con.prepareStatement(qry);
         
-        if (rs != null) {
-                try {
-                    if (rs.next())
-                        return true;
-                } catch (SQLException ex) {
+        if (stmnt.executeUpdate() > 0) {
+            int visiIndex = 0;
+            for (Repair r : plan.getPlanPath()) {
+                qry = "INSERT INTO REPAIR (ID_REPAIR,ID_REPAIR_PLAN,ID_INCIDENT,VISIT_INDEX)\n" +
+                                                  "    VALUES (seq_id_repair.nextval,"+plan.getId()+","
+                                                        +r.getIncidentID()+","+ ++visiIndex +")";
+                stmntAux = this.con.prepareStatement(qry);
+                System.out.println("INSERTING: "+qry);
+                if (stmntAux.executeUpdate() == 0) {
+                    this.con.rollback();
                 }
+            }
+
         }
-        return false;
+        this.con.commit();
+        this.con.setAutoCommit(true);
     }
     
     public String getCompletedRepairbyDropPoint(DropPoint droppoint) throws SQLException{
@@ -147,23 +162,25 @@ public class RepairDAO extends GenericDAO<Repair>{
             repairPlan.setId(rs.getInt("ID_REPAIR_PLAN"));
             repairPlan.setTeamID(rs.getInt("ID_REPAIR_TEAM"));
             repairPlan.setDate(rs.getDate("REPAIR_PLAN_DATE"));
-        }
-        rs = executeQuery("select r.*, d.* from REPAIR_PLAN l, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
-                "              where i.REPAIRED = 0\n" +
-                "                and l.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +
-                "                and l.ID_REPAIR_PLAN = r.ID_REPAIR_PLAN\n" +
-                "                and r.ID_INCIDENT = i.ID_INCIDENT\n" +
-                "                and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
-                "                and p.ID_ARMARIO = a.ID_ARMARIO\n" +
-                "                and a.ID_DROPPOINT = d.ID_DROPPOINT\n");
+            System.out.println("RepairPlan: "+repairPlan.getId()+" - "+repairPlan.getDate());
+            rs = executeQuery("select r.*, d.* from REPAIR_PLAN l, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
+                    "              where i.REPAIRED = 0\n" +
+                    "                and l.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +
+                    "                and l.ID_REPAIR_PLAN = r.ID_REPAIR_PLAN\n" +
+                    "                and r.ID_INCIDENT = i.ID_INCIDENT\n" +
+                    "                and i.ID_PRATELEIRA = p.ID_PRATELEIRA\n" +
+                    "                and p.ID_ARMARIO = a.ID_ARMARIO\n" +
+                    "                and a.ID_DROPPOINT = d.ID_DROPPOINT\n" +
+                    "                ORDER BY r.VISIT_INDEX ASC");
 
-        while(rs.next()){
-            Repair repair = new Repair(rs.getInt("ID_INCIDENT"), rs.getInt("VISIT_INDEX"));
-            repair.setId(rs.getInt("ID_REPAIR"));
-            DropPoint dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"), rs.getInt("FREE_DAYS"));
-            repair.setDropPoint(dropPoint);
-            repair.setPlanID(rs.getInt("ID_REPAIR_PLAN"));
-            repairPlan.addRepair(repair);
+            while(rs.next()){
+                Repair repair = new Repair(rs.getInt("ID_INCIDENT"), rs.getInt("VISIT_INDEX"));
+                repair.setId(rs.getInt("ID_REPAIR"));
+                DropPoint dropPoint = new DropPoint(rs.getInt("ID_DROPPOINT"), rs.getString("NOME_DROPPOINT"), rs.getInt("ID_MORADA"), rs.getInt("FREE_DAYS"));
+                repair.setDropPoint(dropPoint);
+                repair.setPlanID(rs.getInt("ID_REPAIR_PLAN"));
+                repairPlan.addRepair(repair);
+            }
         }
         return repairPlan;
     }
@@ -197,7 +214,9 @@ public class RepairDAO extends GenericDAO<Repair>{
         return id;
     }
 
-    public void deletePlannedRepair(int incidentID) {
-        ResultSet rs = executeQuery("delete from REPAIR r WHERE r.ID_INCIDENT = "+incidentID);
+    public void deletePlannedRepairs(int planID) {
+        executeQuery("delete from REPAIR r WHERE r.ID_REPAIR_PLAN = "+planID);
+        executeQuery("delete from Repair_Plan p WHERE p.ID_REPAIR_PLAN = "+planID);
     }
+
 }

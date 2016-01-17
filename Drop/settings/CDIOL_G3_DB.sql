@@ -225,7 +225,7 @@ CREATE TABLE Incident (
 CREATE TABLE Repair (
 	id_Repair number(10),
   visit_index number(5),
-	id_Incident number(10) UNIQUE,
+	id_Incident number(10),
 	id_Repair_Plan number(10),
 	repair_date date,
 	observations varchar2(255),
@@ -411,12 +411,12 @@ BEGIN
       where ID_PRATELEIRA = idPrateleira;
   exception
     when others then
-      raise_application_error(-20001, 'Nao foi possÃvel atualizar o estado da prateleira');
+      raise_application_error(-20003, 'Nao foi possÃvel atualizar o estado da prateleira');
   end;
   
 exception
   when others then
-    raise_application_error(-20002, sqlerrm(sqlcode));
+    raise_application_error(-20004, sqlerrm(sqlcode));
 END;
 /
 
@@ -466,12 +466,12 @@ BEGIN
       where ID_PRATELEIRA = idPrateleira;
   exception
     when others then
-      raise_application_error(-20001, 'N„o foi possÌvel atualizar o estado da prateleira');
+      raise_application_error(-20005, 'N„o foi possÌvel atualizar o estado da prateleira');
   end;
   
 exception
   when others then
-    raise_application_error(-20002, sqlerrm(sqlcode));
+    raise_application_error(-20006, sqlerrm(sqlcode));
 END;
 /
 
@@ -493,12 +493,12 @@ BEGIN
       where ID_PRATELEIRA = :new.id_prateleira;
   exception
     when others then
-      raise_application_error(-20004, 'N„o foi possÌvel atualizar o estado da prateleira');
+      raise_application_error(-20007, 'N„o foi possÌvel atualizar o estado da prateleira');
   end;
   
 exception
   when others then
-    raise_application_error(-20003, sqlerrm(sqlcode));
+    raise_application_error(-20008, sqlerrm(sqlcode));
 END;
 /
 
@@ -997,7 +997,7 @@ VALUES (seq_id_incident.nextval,2,14,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH2
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
 VALUES (seq_id_incident.nextval,3,28,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
 INSERT INTO Incident (id_Incident, id_Incident_Type, id_prateleira, incident_date, reporter, REPAIRED)
-VALUES (seq_id_incident.nextval,4,31,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
+VALUES (seq_id_incident.nextval,2,31,TO_DATE('23-10-2015 17:00', 'dd-mm-yyyy HH24:MI'),1601091,0);
 
 --Maintenances
 insert into MANUTENCAO(ID_MANUTENCAO,ID_DROPPOINT,id_maint_plan,data_inicio,data_fim,id_maint_ass)

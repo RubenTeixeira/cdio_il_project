@@ -213,6 +213,7 @@ public class PlanGenerationGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Could not initiate a connection with the DataBase.\nPlease try again later.", "Connection Error", JOptionPane.ERROR_MESSAGE);
         else
             txt_StartingList.setText(controller.getStartingList());
+        txt_GeneratedList.setText("");
     }//GEN-LAST:event_btn_MaintenanceActionPerformed
 
     private void btn_GenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GenerateActionPerformed
@@ -235,6 +236,7 @@ public class PlanGenerationGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Could not initiate a connection with the DataBase.\nPlease try again later.", "Connection Error", JOptionPane.ERROR_MESSAGE);
         else
             txt_StartingList.setText(controller.getStartingList());
+        txt_GeneratedList.setText("");
     }//GEN-LAST:event_btn_RepairActionPerformed
 
     private void btn_SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SubmitActionPerformed

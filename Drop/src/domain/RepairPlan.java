@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistence.SQLConnection;
 
 /**
@@ -75,7 +77,7 @@ public class RepairPlan implements WorkPlan {
      */
     public boolean addRepair(Repair repair) {
         if (repair.getPlanID() == this.id)
-            this.planPath.add(repair.getIndex(), repair);
+            this.planPath.add(repair.getIndex()-1, repair);
         return false;
     }
 
@@ -140,9 +142,6 @@ public class RepairPlan implements WorkPlan {
         this.teamID = 1; // testing purposes
         this.id = repairDAO.getNextPlanId();
         
-        if (!repairDAO.insertPlan(this))
-            return false;
-        
         return submitPlanPath();
         
     }
@@ -152,15 +151,13 @@ public class RepairPlan implements WorkPlan {
      * @return true if successfull, false otherwise
      */
     private boolean submitPlanPath() {
-        for (Repair r : this.planPath) {
-            removePlannedRepair(r.getIncidentID());
-            System.out.println("Inserting :"+r);
-            r.setPlanID(this.id);
-            
-            if (!repairDAO.insertNew(r))
-                return false;
+        removePlannedRepairs();
+        try {
+            repairDAO.insertPlan(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(RepairPlan.class.getName()).log(Level.SEVERE, "Error saving Plan!", ex);
+            return false;
         }
-        
         return true;
     }
 
@@ -187,22 +184,23 @@ public class RepairPlan implements WorkPlan {
      */
     public void updatePlan(Repair finishedRepair) throws SQLException {
         repairDAO.update(finishedRepair);
-        this.setId(finishedRepair.getId());
+        this.setId(finishedRepair.getPlanID());
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
+        System.out.println(initVertex);
         Address endVertex = addressDAO.getHeadQuartersLocation();
+        System.out.println(endVertex);
         calcPlanPath(initVertex, endVertex);
         submitPlanPath();
     }
-
+    
     /**
      * Removes an already planned for Repair object from DataBase if
      * existant for given Incident ID
      * Usefull for replanning
      * @param incidentID 
      */
-    private void removePlannedRepair(int incidentID) {
-        System.out.println("Deleting Repair from incidentID :"+incidentID);
-        repairDAO.deletePlannedRepair(incidentID);
+    private void removePlannedRepairs() {
+        repairDAO.deletePlannedRepairs(this.id);
     }
     
     @Override
