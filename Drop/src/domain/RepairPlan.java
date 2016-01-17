@@ -68,6 +68,11 @@ public class RepairPlan implements WorkPlan {
     public Date getDate() {return date;}
     public void setDate(Date date) {this.date = date;}
 
+    /**
+     * Adds a Repair to this RepairPlan planPath
+     * @param repair
+     * @return true if successfull, false otherwise
+     */
     public boolean addRepair(Repair repair) {
         if (repair.getPlanID() == this.id)
             this.planPath.add(repair.getIndex(), repair);
@@ -127,7 +132,7 @@ public class RepairPlan implements WorkPlan {
 
     /**
      * Registers this RepairPlan associating and saving all its Repair elements
-     * on the DataBase
+     * on the DataBase. Calls private method submitPlanPath()
      * @return true if successfull, false otherwise
      */
     @Override
@@ -142,8 +147,11 @@ public class RepairPlan implements WorkPlan {
         
     }
     
+    /**
+     * Actual Plan submission
+     * @return true if successfull, false otherwise
+     */
     private boolean submitPlanPath() {
-        
         for (Repair r : this.planPath) {
             removePlannedRepair(r.getIncidentID());
             System.out.println("Inserting :"+r);
