@@ -117,7 +117,6 @@ public class RepairDAO extends GenericDAO<Repair>{
                                                   "    VALUES (seq_id_repair.nextval,"+plan.getId()+","
                                                         +r.getIncidentID()+","+ ++visiIndex +")";
                 stmntAux = this.con.prepareStatement(qry);
-                System.out.println("INSERTING: "+qry);
                 if (stmntAux.executeUpdate() == 0) {
                     this.con.rollback();
                 }
@@ -162,7 +161,7 @@ public class RepairDAO extends GenericDAO<Repair>{
             repairPlan.setId(rs.getInt("ID_REPAIR_PLAN"));
             repairPlan.setTeamID(rs.getInt("ID_REPAIR_TEAM"));
             repairPlan.setDate(rs.getDate("REPAIR_PLAN_DATE"));
-            System.out.println("RepairPlan: "+repairPlan.getId()+" - "+repairPlan.getDate());
+
             rs = executeQuery("select r.*, d.* from REPAIR_PLAN l, REPAIR r, INCIDENT i, PRATELEIRA p, ARMARIO a, DROPPOINT d\n" +
                     "              where i.REPAIRED = 0\n" +
                     "                and l.ID_REPAIR_PLAN = "+repairPlan.getId()+"\n" +

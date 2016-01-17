@@ -186,9 +186,7 @@ public class RepairPlan implements WorkPlan {
         repairDAO.update(finishedRepair);
         this.setId(finishedRepair.getPlanID());
         Address initVertex = addressDAO.getAddressWithLatLongById(finishedRepair.getDropPoint().getIdAddress());
-        System.out.println(initVertex);
         Address endVertex = addressDAO.getHeadQuartersLocation();
-        System.out.println(endVertex);
         calcPlanPath(initVertex, endVertex);
         submitPlanPath();
     }
