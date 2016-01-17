@@ -209,7 +209,7 @@ public class MaintenancePickupGUI extends JFrame {
                         if (outStream != null) {
                             outStream.close();
                         }
-                        controller.savePhoto(dest.getAbsolutePath());
+                        controller.savePhoto(dest.getParent());
                         JOptionPane.showMessageDialog(
                                 MaintenancePickupGUI.this,
                                 "Gravado com sucesso.",

@@ -61,8 +61,7 @@ public class ConsultOccupationDeliveriesControllerTest {
     @Test
     public void testSelectDropPoint() {
         System.out.println("selectDropPoint");
-        int id = 0;
-        ConsultOccupationDeliveriesController instance = null;
+        int id = 1;
         instance.selectDropPoint(id);
     }
 
@@ -72,20 +71,9 @@ public class ConsultOccupationDeliveriesControllerTest {
     @Test
     public void testGetListRegisterDelivered() {
         System.out.println("getListRegisterDelivered");
-        ConsultOccupationDeliveriesController instance = null;
-        String result = instance.getListRegisterDelivered();
+        List<DropPoint> drop = this.instance.deliveriesConsultationCollectionsDropPoint();
+        String result = instance.getListRegisterDelivered(drop.get(0));
         assertTrue(!result.isEmpty());
-        
-    }
-
-    /**
-     * Test of getListRegistrationCollected method, of class ConsultOccupationDeliveriesController.
-     */
-    @Test
-    public void testGetListRegistrationCollected() {
-        System.out.println("getListRegistrationCollected");
-        String result = instance.getListRegistrationCollected();
-        assertTrue(result.isEmpty());
         
     }
 
@@ -95,7 +83,8 @@ public class ConsultOccupationDeliveriesControllerTest {
     @Test
     public void testGetOccupation() {
         System.out.println("getOccupation");
-        String result = instance.getOccupation();
+        List<DropPoint> drop = this.instance.deliveriesConsultationCollectionsDropPoint();
+        String result = instance.getOccupation(drop.get(0));
         assertTrue(!result.isEmpty());
     }
     
