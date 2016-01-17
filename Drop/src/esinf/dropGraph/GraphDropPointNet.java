@@ -533,7 +533,7 @@ public class GraphDropPointNet {
 
     public Point getPointByAddress(Address address) {
         for (Point point : this.points) {
-            if (address.getLongitude() == point.getCoordinate().lat
+            if (address.getLatitude()== point.getCoordinate().lat
                     && address.getLongitude() == point.getCoordinate().lng) {
                 return point;
             }
