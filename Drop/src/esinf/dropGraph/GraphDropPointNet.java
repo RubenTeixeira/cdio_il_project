@@ -213,6 +213,20 @@ public class GraphDropPointNet {
                 }
             }
         }
+        
+        for (Address a : address) {
+            if(a.getId()==0){
+                Point point = new Point(a.getLatitude(), a.getLongitude());
+                point.setName("Headquarters");
+                point.setIdDropPoint(0);
+                points.add(point);
+                DropPoint dropPoint = new DropPoint();
+                dropPoint.setId(0);
+                dropPoint.setName("headquarters");
+                dropPoint.setIdAddress(0);
+                lstDrop.add(dropPoint);
+            }
+        }
 
         RequestAPI instance = maps.domain.RequestAPI.getInstance();
 
