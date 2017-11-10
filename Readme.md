@@ -2,4 +2,4 @@
 
 2015-2016 Edition
 
-2nd year students
+2nd year ISEP students
